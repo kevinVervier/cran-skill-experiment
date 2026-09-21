@@ -46,6 +46,13 @@ cp -r "${RUNS_ROOT}/arms/${ARM}/pkg" "${RUN_DIR}/pkg"
 # criteria and the whole design.
 CHECK_DIR="$(cd "${RUN_DIR}/pkg" && pwd)"
 while [ "${CHECK_DIR}" != "/" ]; do
+  case "${CHECK_DIR}" in
+    /[A-Za-z]) break ;;   # drive root (e.g. /c on Git-Bash/MSYS) -- dirname's
+  esac                    # "/" above it is an unrelated mount (MSYS's own
+                          # install dir), not a real Windows ancestor; walking
+                          # into it produces "//<file>", which MSYS resolves as
+                          # a UNC path that always reports as an existing
+                          # (phantom) directory, a false positive on every run.
   CHECK_DIR="$(dirname "${CHECK_DIR}")"
   for f in CLAUDE.md AGENTS.md CLAUDE.local.md; do
     if [ -e "${CHECK_DIR}/${f}" ]; then
