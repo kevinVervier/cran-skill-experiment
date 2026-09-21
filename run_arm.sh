@@ -31,6 +31,15 @@ export CLAUDE_CONFIG_DIR="${RUN_DIR}/claude-config"
 mkdir -p "${CLAUDE_CONFIG_DIR}"
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
 
+# Login state lives on this host as an OAuth credential file under the normal
+# ~/.claude surface, not an API key. Relocating CLAUDE_CONFIG_DIR isolates
+# memory/skills/CLAUDE.md/settings/hooks as intended, but it also orphans that
+# credential file, leaving every run logged out. Carry over only the
+# credential file itself -- everything else stays freshly isolated per-run.
+if [ -f "${HOME}/.claude/.credentials.json" ]; then
+  cp "${HOME}/.claude/.credentials.json" "${CLAUDE_CONFIG_DIR}/.credentials.json"
+fi
+
 # Fresh tree from the frozen export. Never reuse a previous run's tree.
 rm -rf "${RUN_DIR}/pkg"
 cp -r "${RUNS_ROOT}/arms/${ARM}/pkg" "${RUN_DIR}/pkg"
@@ -106,13 +115,19 @@ fi
 # --- Arm dependency layer ----------------------------------------------------
 # Installs whatever the arm's DESCRIPTION declares, from the pinned snapshot.
 # Versions identical across arms; dependency SET may differ.
-R -q -e "
-  d <- tryCatch(desc::desc_get_deps('${RUN_DIR}/pkg'), error = function(e) NULL)
-  if (!is.null(d)) {
-    p <- setdiff(unique(d\$package), c('R', rownames(installed.packages())))
-    if (length(p)) install.packages(p)
-  }
-" > "${RUN_DIR}/dep_install.log" 2>&1
+# Written to a temp .R file and run with Rscript rather than `R -q -e "<multi-line>"`:
+# a multi-line -e argument crashes native Windows R when invoked via Git Bash (MSYS
+# argv translation bug, unrelated to R or the package) -- see verify_env.sh, which
+# hit the same issue first.
+DEPS_R="${RUN_DIR}/_deps_install.R"
+cat > "${DEPS_R}" <<EOF
+d <- tryCatch(desc::desc_get_deps('${RUN_DIR}/pkg'), error = function(e) NULL)
+if (!is.null(d)) {
+  p <- setdiff(unique(d\$package), c('R', rownames(installed.packages())))
+  if (length(p)) install.packages(p)
+}
+EOF
+Rscript "${DEPS_R}" > "${RUN_DIR}/dep_install.log" 2>&1
 
 # ============================================================================
 # COLD-START CALIBRATION  — do not skip
