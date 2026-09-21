@@ -1,0 +1,106 @@
+── R CMD build ─────────────────────────────────────────────────────────────────
+* checking for file 'C:\Users\Shadow\Bricoles\cran-skill-experiment\baseline\pkg/DESCRIPTION' ... OK
+* preparing 'orthoMTL':
+* checking DESCRIPTION meta-information ... OK
+* installing the package to build vignettes
+* creating vignettes ... OK
+* checking for LF line-endings in source and make files and shell scripts
+* checking for empty or unneeded directories
+* building 'orthoMTL_0.1.0.tar.gz'
+
+── R CMD check ─────────────────────────────────────────────────────────────────
+* using log directory 'C:/Users/Shadow/AppData/Local/Temp/Rtmp0aNMYA/file28c07769743/orthoMTL.Rcheck'
+* using R version 4.5.3 (2026-03-11 ucrt)
+* using platform: x86_64-w64-mingw32
+* R was compiled by
+    gcc.exe (GCC) 14.3.0
+    GNU Fortran (GCC) 14.3.0
+* running under: Windows 11 x64 (build 26200)
+* using session charset: UTF-8
+* using option '--as-cran'
+* checking for file 'orthoMTL/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'orthoMTL' version '0.1.0'
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ...Warning: unable to access index for repository https://CRAN.R-project.org/src/contrib:
+  cannot open URL 'https://CRAN.R-project.org/src/contrib/PACKAGES'
+Warning in url(sprintf("%s/src/contrib/PACKAGES.gz", u), "rb") :
+  URL 'https://CRAN.R-project.org/src/contrib/PACKAGES.gz': status was 'Could not resolve hostname'
+NB: need Internet access to use CRAN incoming checks
+ [49s] NOTE
+Maintainer: 'Kevin Vervier <kevin.vervier@novartis.com>'
+Found the following (possibly) invalid URLs:
+  URL: https://www.gnu.org/licenses/gpl-3.0
+    From: README.md
+    Status: Error
+    Message: libcurl error code 28:
+      	Failed to connect to www.gnu.org port 443 after 21255 ms: Could not connect to server
+* checking package namespace information ... OK
+* checking package dependencies ...Warning: unable to access index for repository https://CRAN.R-project.org/src/contrib:
+  cannot open URL 'https://CRAN.R-project.org/src/contrib/PACKAGES'
+ OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'orthoMTL' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking 'build' directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... OK
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking installed files from 'inst/doc' ... OK
+* checking files in 'vignettes' ... OK
+* checking examples ... OK
+* checking examples with --run-donttest ... OK
+* checking for unstated dependencies in 'tests' ... OK
+* checking tests ...
+  Running 'testthat.R'
+ OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [32s] OK
+* checking PDF version of manual ... OK
+* checking HTML version of manual ... OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 1 NOTE
+See
+  'C:/Users/Shadow/AppData/Local/Temp/Rtmp0aNMYA/file28c07769743/orthoMTL.Rcheck/00check.log'
+for details.
+[91mERROR: Unknown command "TMPDIR=C:/Users/Shadow/AppData/Local/Temp/RtmpSagfNj/file43ac46f86b49". Did you mean command "install"?[39m
+Warning message:
+In system2("quarto", "-V", stdout = TRUE, env = paste0("TMPDIR=",  :
+  running command '"quarto" TMPDIR=C:/Users/Shadow/AppData/Local/Temp/RtmpSagfNj/file43ac46f86b49 -V' had status 1
+ERRORS: 0 
+WARNINGS: 0 
+NOTES: 1 

@@ -1,0 +1,107 @@
+---
+title: "Manuals & Documentation Issues"
+subtitle: "The Manuals & Documentation Issues chapter provides recipes on help documentation files, using **roxygen2**, and creating examples, vignettes, and tests."
+format: 
+  html:
+    css: style.css
+---
+
+# Missing `\value`-tags in .Rd-files
+
+## Problem
+
+Every .Rd file should have an `\value`-tag stating what the output of the function is. Even if nothing is returned, the `\value`-tag is necessary for CRAN.
+
+## Solution
+
+Often it is enough to simply add the missing `\value`-tags. If the function doesn't return anything, write that as your `\value`-tag.
+
+### Details
+
+::: {.callout-note title="CRAN Review Communication" appearance="simple" icon=false collapse=true}
+
+Please add \\value to .Rd files regarding exported methods and explain the functions results in the documentation. Please write about the structure of the output (class) and also what the output means. (If a function does not return a value, please document that too, e.g., \\value\{No return value, called for side effects\} or similar)
+
+:::
+
+CRAN wants a `\value`-tag for every .Rd-file containing info about the structure of the output (class) and also what the output means.
+
+Adding a short explanation for each function helps users understand effects of the function call. This prevents unexpected outputs and helps to create a better workflow when using the function.
+
+The only exception are .Rd-files for data sets, marked with the `\docType{data}`-tag. Since these are no functions, no `\value`-tag is necessary.
+
+Sometimes functions don't return one specific value but are rather called for their side effects. In that case the `\value`-tag should state this.
+
+``` default
+\value{No return value, called for side effects}
+```
+
+When using 'roxygen2' to render the .Rd-files, an `@return`-tag must be added in the corresponding .R-file. This will create the `\value`-tag automatically when rendering.
+
+``` default
+#' @return What your function returns.
+```
+
+For more details on 'roxygen2' check the ['roxygen2' section](#repeated-rejections-of-issues-in-manuals-if-using-roxygen2).
+
+------------------------------------------------------------------------
+
+# Repeated Rejections of Issues in Manuals If Using 'roxygen2' {#repeated-rejections-of-issues-in-manuals-if-using-roxygen2}
+
+## Problem
+
+The CRAN team rejected your package for issues regarding the manuals a second time, even if you already changed them according to their suggestions.
+
+## Solution
+
+Implement your changes in the corresponding .R-files instead of the .Rd-files. Before resubmitting render the .Rd-files again using `roxygenize()`.
+
+### Details
+
+::: {.callout-note title="CRAN Review Communication" appearance="simple" icon=false collapse=true}
+
+Since you are using 'roxygen2', please make sure to add a @return-tag in the corresponding .R-file and re-roxygenize() your .Rd-files.
+
+:::
+
+If you decide to render your manuals with ['roxygen2'](https://cran.r-project.org/web/packages/roxygen2/index.html), the .Rd-files can be rendered using the function [`roxygenize()`](https://roxygen2.r-lib.org/reference/roxygenize.html). If changes are implemented directly in the .Rd-file, they will be overwritten during the next render. Similarly, changes in the 'roxygen2'-section of .R-files will not transfer to the .Rd-files without a re-rendering.
+
+::: callout-tip
+To avoid this mistake, make sure to **always** call `roxygenize()` before submitting your package.
+:::
+
+If you want to know more on how to use 'roxygen2' to create your manuals, take a look at their [website](https://roxygen2.r-lib.org/index.html).
+
+::: callout-note
+When using 'devtools', the function [`devtools::document()`](https://www.rdocumentation.org/packages/devtools/versions/2.4.5/topics/document) acts as a wrapper for `roxygenize()` and can be used to render the .Rd-files.
+:::
+
+---------------------------------------------------------
+
+# Overall Checktime
+
+## Problem
+
+Automatic CRAN tests give a NOTE saying the overall checktime of your package is too long.
+
+## Solution 
+
+Reduce the length and quantity of your examples, vignettes and tests.
+
+### Details
+
+::: {.callout-note title="CRAN NOTE" icon=false}
+
+Check: Overall checktime, Result: NOTE\
+&emsp; Overall checktime 20 min > 10 min
+
+  
+:::
+
+
+Unwrapped examples, vignettes and tests of packages are run frequently on CRAN's test servers. The overall time it takes to run all of them should therefore be less than 10 minutes in total. 
+
+Write vignettes and tests with fewer iterations, run them on small toy data or provide precomputed results. Focus on writing sensible test and documentation, retaining high code coverage instead of disabling test or removing examples. 
+
+
+

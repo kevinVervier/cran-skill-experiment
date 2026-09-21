@@ -1,0 +1,137 @@
+# CRAN skill-file experiment — project instructions
+
+## What this is
+
+A controlled comparison of agent-assisted R package preparation with and without a CRAN skill file.
+Subject package: `orthoMTL`. Output: an R/Pharma 2026 lightning talk.
+
+**This is a measurement instrument, not a software project.** Changes that would improve a normal
+codebase — tidying the prompt, reusing a cached tree, fixing a scoring edge case mid-run — destroy
+the comparison. Read the invariants before touching anything.
+
+Full design: `skill-experiment-preregistration.md`. It is the spec. Where this file and the
+pre-registration disagree, the pre-registration wins.
+
+## Invariants — do not violate without an explicit instruction from Kevin
+
+1. **`FROZEN_PROMPT.txt` is frozen.** Once run 1 starts, it does not change. Not for typos, not for
+   clarity. If it must change, every prior run is void.
+2. **Never reuse an output tree.** Each run starts from a fresh copy of `arms/<ARM>/pkg`.
+3. **No `.git` in any arm tree.** History is readable and contains the answers.
+4. **Arm `A0` gets no instruction file at any level** — not in the tree, not in a parent directory,
+   not in `CLAUDE_CONFIG_DIR`. It is the control.
+5. **`CLAUDE_CONFIG_DIR` is fresh per run.** Auto memory disabled. No state crosses runs. Note this
+   relocates the `~/.claude` surface only — it does NOT stop the project tree walk.
+5b. **No `CLAUDE.md`, `AGENTS.md` or `CLAUDE.local.md` anywhere above an arm tree.** `run_arm.sh`
+   walks the ancestry to `/` and aborts if it finds one. Never disable that check.
+6. **Do not run arm-by-arm.** Block-randomised interleaving only (`orchestrate.sh`).
+7. **Do not unblind before scoring is committed.** `.blind_map.csv` stays out of the scoring
+   directory.
+8. **Do not submit anything to CRAN.** Ever, for any reason.
+9. **The environment is fixed once recorded.** Originally: a base image, built once, never rebuilt
+   mid-experiment. **Amended 2026-09-18:** no container is available on this host (see
+   `ENVIRONMENT.md` for why — Shadow/Blade cloud PC, no nested virtualization). The toolchain was
+   installed natively instead and recorded in `ENVIRONMENT.md`. Same rule, native form: do not
+   upgrade, reinstall, or reconfigure R/TeX/pandoc/qpdf/Ghostscript/Claude Code on this host once
+   block 2 starts. Changing any of them mid-experiment voids every prior run, exactly as an image
+   rebuild would have.
+10. **Never edit the accepted-version baseline** or the frozen test suite.
+
+## Layout
+
+**Two sibling roots, deliberately separate.** See `KICKOFF.md` for why — the short version is that
+`CLAUDE.md` walks up the directory tree, so an arm placed under this folder would inherit this file.
+
+Shape below is illustrative (three siblings under one parent). On this machine the two roots are
+not literal siblings under a shared parent — see the resolved paths after the diagram — but the
+invariant that matters is unchanged: nothing above `$RUNS_ROOT` may carry an instruction file.
+
+```
+~/work/
+├── orthoMTL/                      # existing clone — READ-ONLY SOURCE, never the session cwd
+│
+├── cran-skill-experiment/         # $EXP_ROOT — session starts here
+│   ├── CLAUDE.md                  # this file
+│   ├── KICKOFF.md
+│   ├── skill-experiment-preregistration.md
+│   ├── seed-and-pilot.md
+│   ├── rejection-ledger.md        # ANSWER KEY — never reaches an arm
+│   ├── criterion-corpus.md        # ANSWER KEY
+│   ├── criterion-corpus-longtail.md   # ANSWER KEY
+│   ├── FROZEN_PROMPT.txt
+│   ├── Dockerfile                 # UNUSED for this run — see ENVIRONMENT.md
+│   ├── ENVIRONMENT.md             # native toolchain record, replaces the image digest
+│   ├── verify_env.sh
+│   ├── run_arm.sh
+│   ├── orchestrate.sh
+│   ├── scoring/
+│   │   ├── extract_findings.R
+│   │   └── static_rules/
+│   ├── snapshot/                  # offline CRAN docs — pointed to via $CRAN_DOCS_PATH, seen by EVERY arm
+│   ├── baseline/                  # accepted version + its check output
+│   └── frozen-tests/              # held-out suite — never under $RUNS_ROOT
+│
+└── cran-exp-runs/                 # $RUNS_ROOT — NO instruction file anywhere above the arm trees
+    ├── arms/
+    │   ├── A0/pkg/                # control — no skill file
+    │   ├── A1/pkg/  + cran-extrachecks        (checklist)
+    │   ├── A2/pkg/  + cran-submit             (process + adversarial)
+    │   ├── A3/pkg/  + r-package-development   (general, not CRAN)
+    │   ├── A4/pkg/  + Kevin's hindsight skill (ORACLE — not a competitor)
+    │   └── A5/pkg/  + raw handbook text       (distillation control)
+    ├── runs/                      # per-run artifacts
+    └── blinded/                   # opaque-ID trees for scoring
+```
+
+Both scripts require the roots as environment variables:
+
+```bash
+export EXP_ROOT=~/work/cran-skill-experiment
+export RUNS_ROOT=~/work/cran-exp-runs
+```
+
+**Resolved paths on this machine** (2026-09-18): `EXP_ROOT` did not move — it's
+`C:\Users\Shadow\Bricoles\cran-skill-experiment` (`/c/Users/Shadow/Bricoles/cran-skill-experiment`
+in Git Bash), and its own `CLAUDE.md` at the root is intentional. `RUNS_ROOT` is
+`C:\Users\Shadow\cran-exp-runs` (`/c/Users/Shadow/cran-exp-runs`) — a dedicated top-level folder,
+not under `Bricoles\` (which has its own portfolio-level `CLAUDE.md` that would otherwise sit
+directly above it, tripping invariant 5b). In practice:
+
+```bash
+export EXP_ROOT=/c/Users/Shadow/Bricoles/cran-skill-experiment
+export RUNS_ROOT=/c/Users/Shadow/cran-exp-runs
+```
+
+## Sequencing
+
+Nothing runs until `verify_env.sh` passes on the accepted version. If the baseline cannot complete
+`R CMD check --as-cran` with manual and vignettes building, the environment is under-provisioned and
+every arm would burn turns on the same toolchain failure.
+
+**Status (2026-09-18): `verify_env.sh` passes natively** — see `ENVIRONMENT.md`. Still open before
+block 2 can start: block network egress to `cran.r-project.org` (not yet done on this native host;
+was previously a container network policy — see pre-registration §6).
+
+Then: freeze checklist (pre-registration §12) → pilot (n=1 per arm, results discarded if anything
+changes afterwards) → blocks 2–5.
+
+## Things that look like bugs but are not
+
+- **Arms diverge in DESCRIPTION dependencies.** Intended. Versions are pinned; the dependency *set*
+  is allowed to vary. Do not standardise it.
+- **The cold-start calibration prompt seems wasteful.** It measures each arm's context floor, which
+  is what separates skill file quality from skill file length. Do not remove it.
+- **Baseline check output may contain NOTEs.** The pinned environment differs from CRAN's. Findings
+  are scored *relative to* baseline, not absolutely.
+- **`A4` will probably win.** It was written from this package's own failure history. It is reported
+  as an upper bound, never in a ranking.
+- **The ledger has only two findings.** That is complete, not partial: there were two rejection
+  rounds, both human review. The mutation set is built from the criterion corpus, not from the
+  ledger.
+
+## Reporting posture
+
+Kevin's standing preference: flag the uncomfortable implication first, then the path forward.
+Defensibility over impressiveness. If a result is weak, ambiguous, or undercuts the talk's premise,
+say so directly — a null finding stated plainly is worth more here than a clean bar chart nobody
+believes.

@@ -1,0 +1,21 @@
+Frozen held-out test suite -- provenance (per skill-experiment-preregistration.md §5)
+
+Full tests/ tree here is exported from Novartis/orthoMTL origin/main
+(dc91503391c820bb4589fe13afa7e517e8beb542, 2026-08-07).
+
+12 of the 17 test files already existed at C0 (681675f201c810eca668c0528996aaf24b432e0e)
+and were RETAINED in every arm's exported tree -- an arm is expected to keep these passing,
+per FROZEN_PROMPT.txt's "preserve what the package does."
+
+The following 5 files did NOT exist at C0 -- added later, during the real CRAN-prep effort.
+These are the actual held-out behavioural oracle: withheld from every arm, run only by the
+harness against each arm's output tree post-hoc.
+
+  tests/testthat/test-cv_metric.R
+  tests/testthat/test-metrics_general.R
+  tests/testthat/test-predict_type.R
+  tests/testthat/test-schedule.R
+  tests/testthat/test-simulate_modes.R
+
+Determined via: git log --diff-filter=A -- tests/  (and a C0-vs-HEAD file-list diff, both
+in agreement). No test file was removed between C0 and HEAD.

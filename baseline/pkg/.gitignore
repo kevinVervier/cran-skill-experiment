@@ -1,0 +1,25 @@
+.httr-oauth
+
+# R package artifacts
+*.Rcheck/
+*.tar.gz
+*.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+src/*.o
+src/*.so
+src/*.dll
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE
+.Rproj.user/
+*.Rproj
+
+# roxygen2 output (NAMESPACE and man/*.Rd ARE committed — see CLAUDE.md)
+# Only the vignette/build byproducts below are ignored.
+/doc/
+/Meta/

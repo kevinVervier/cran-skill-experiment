@@ -1,0 +1,16 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^data-raw$
+^doc$
+^Meta$
+^validation$
+^KANBAN\.md$
+^CLAUDE\.md$
+^\.github$
+^\.claude$
+^cran-comments\.md$
+^\.build_out$
+^\.check_out$
+^\.[^/]*\.R$
+^\.build_path\.txt$

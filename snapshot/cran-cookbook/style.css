@@ -1,0 +1,25 @@
+hr {
+    border: none;
+    border-radius: 4px;
+    height: 5px;
+    background-color: #2780e3;
+}
+
+
+.cell-output {
+    background-color: rgba(128, 128, 128, 0.3);
+    border-radius: 4px;
+  }
+
+img[src*='#left'] {
+    float: left;
+}
+img[src*='#right'] {
+    float: right;
+    width: 300;
+    height: 300;
+}
+img[src*='#center'] {
+    display: block;
+    margin: auto;
+}

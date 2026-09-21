@@ -1,0 +1,56 @@
+project:
+  type: website
+
+execute:
+  freeze: auto
+
+website:
+  title: The CRAN Cookbook
+  site-url: https://contributor.r-project.org/cran-cookbook
+  repo-url: https://github.com/r-devel/cran-cookbook
+  favicon: favicon.png
+  reader-mode: true
+  page-navigation: true
+  back-to-top-navigation: true
+
+  page-footer:
+    center: "The CRAN Cookbook (2025)"
+
+  sidebar:
+    title: The CRAN Cookbook
+    logo: "CRAN Cookbook Hex Sticker.png"
+    style: "docked"
+    background: light
+    search: true
+    pinned: true
+    align: center
+    contents:
+      - index.qmd
+      - preface.qmd
+      - general_issues.qmd
+      - docs_issues.qmd
+      - code_issues.qmd
+      - description_issues.qmd
+      - resources.qmd
+    tools:
+      - icon: bug-fill
+        text: Report a Bug
+        href:  https://github.com/r-devel/cran-cookbook/issues
+        aria-label: Bug
+      - icon: file-plus-fill
+        text: Contribute a Community Recipe
+        href:  https://github.com/r-devel/cran-cookbook/discussions/categories/community-contributions
+        aria-label: Contribute
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: [cosmo, theme-dark.scss]
+    css: style.css
+    toc: true
+    include-in-header: plausible.html
+
+
+
+

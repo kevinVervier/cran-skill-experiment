@@ -1,0 +1,15 @@
+Offline CRAN docs snapshot -- capture date 2026-09-18
+
+cran-cookbook/                    git clone of github.com/r-devel/cran-cookbook
+                                   commit: 975290326e80da64220ee62dfe369ea9d5091927
+                                   .git stripped after clone (tree only, per experiment invariant 3)
+
+cran-repository-policy.html       https://cran.r-project.org/web/packages/policies.html
+                                   fetched 2026-09-18T07:24:42Z
+
+cran-submission-checklist.html    https://cran.r-project.org/web/packages/submission_checklist.html
+                                   fetched 2026-09-18T07:24:42Z
+
+This is the HANDBOOK provenance boundary (preregistration §5.1.4): a criterion derivable from
+these three sources is HANDBOOK; anything else is COMMUNITY. Every arm sees this directory,
+A0 included (mounted at CRAN_DOCS_PATH per FROZEN_PROMPT.txt).

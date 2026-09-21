@@ -1,0 +1,120 @@
+./DESCRIPTION:10:License: GPL-3 + file LICENSE
+./R/bootstrap.R:32:#' @param seed Base random seed. Each repeat uses \code{set.seed(i)}
+./R/bootstrap.R:43:#'       (coefficient value), \code{group} (\code{"real"} or
+./R/bootstrap.R:49:#'     \item{obj_real}{Numeric vector of final objective values for
+./R/bootstrap.R:51:#'     \item{obj_null}{Numeric vector of final objective values for
+./R/bootstrap.R:65:#' distribution of coefficient values reflecting estimation variability.
+./R/bootstrap.R:86:#' set.seed(42)
+./R/bootstrap.R:174:    set.seed(i)
+./R/bootstrap.R:217:    set.seed(i)
+./R/coef.R:16:#' set.seed(42)
+./R/constraint_matrices.R:12:#' @param diag_val A numeric value for the diagonal of \code{K}.
+./R/constraint_matrices.R:13:#'   Default: \code{0.5}. This value is typically overridden during
+./R/cv_orthoMTL.R:17:#'   values in \code{diag_vals} during the search.
+./R/cv_orthoMTL.R:25:#' @param diag_vals A numeric vector of diagonal values for the
+./R/cv_orthoMTL.R:80:#' set.seed(42)
+./R/cv_orthoMTL.R:154:    set.seed(seed)
+./R/cv_orthoMTL.R:173:    # Single dummy value — not searched, not used by orthoMTL
+./R/data_preparation.R:7:#'   considered cut-off values
+./R/metrics.R:12:#' @param pred.label.mat A numeric matrix of predicted response values
+./R/metrics.R:16:#' @return A numeric value between 0 and 1 (higher is better).
+./R/metrics.R:17:#'   A value of 0.5 indicates random concordance.
+./R/metrics.R:45:#' set.seed(42)
+./R/metrics.R:103:      #   Investigate impact on reported C-index values.
+./R/nnmaxheap.R:29:    return(max(m, 0))   # non-negative projection of single value
+./R/orthoMTL.R:12:#' @param W_0 a matrix of initial values for the regression coefficients, default is NULL, as not provided and will be randomly attributed
+./R/orthoMTL.R:15:#' @param disjoint a logical value indicating whether the response variables should have disjoint supports, default is FALSE
+./R/orthoMTL.R:16:#' @param logistic a logical value indicating whether logistic regression should be used instead of linear regression, default is FALSE
+./R/orthoMTL.R:17:#' @param enet a logical value indicating whether elastic net regularization should be used instead of L1 regularization, default is FALSE
+./R/orthoMTL.R:18:#' @param survival a logical value indicating whether survival analysis should be performed, default is FALSE
+./R/orthoMTL.R:34:#' set.seed(42)
+./R/orthoMTL.R:73:  set.seed(seed)
+./R/orthoMTL.R:82:  if(lambda <0) stop('Regularization parameter lambda needs to be positive value \n')
+./R/orthoMTL.R:93:      # in the disjoint case, we initiate with a random matrix with positive values
+./R/orthoMTL.R:111:    stop("Regularization parameter lambda1 needs to be positive value", call. = FALSE)
+./R/orthoMTL.R:115:  new <- Inf # new objective value
+./R/plot.R:20:#' set.seed(42)
+./R/plot.R:81:#' Values near 0 indicate similar coefficient profiles; values near 1
+./R/plot.R:97:#' set.seed(42)
+./R/plot.R:177:#' set.seed(42)
+./R/plot.R:303:    # Safely convert: only reorder numerically if all values can be parsed as numbers
+./R/predict.R:25:#' \code{nnmaxheap_C()} to enforce non-negative, non-increasing values
+./R/predict.R:38:#' set.seed(42)
+./R/print.R:14:#' set.seed(42)
+./R/print.R:66:#' set.seed(42)
+./R/simulate.R:166:  set.seed(seed)
+./R/simulate.R:214:  # Each template is a vector of length numTasks, normalised to max |value| = 1
+./R/simulate.R:363:#'   \code{max(abs(values)) == 1}.
+./R/simulate.R:381:  # Normalise to max |value| = 1
+./R/survival_utils.R:26:#'   names are set to the threshold values. Contains \code{1}, \code{0},
+./R/survival_utils.R:27:#'   and \code{NA} values as described above.
+./R/survival_utils.R:30:#'   values into a binary censoring indicator matrix.
+./R/survival_utils.R:36:#' set.seed(42)
+./R/survival_utils.R:46:    stop("SurvTime vector should be positive values only", call. = FALSE)
+./R/survival_utils.R:49:    stop("Event vector is encoded as binary values", call. = FALSE)
+./R/survival_utils.R:78:#'   \code{NA} values for censored observations.
+./R/survival_utils.R:89:#' set.seed(42)
+./R/survUtils.R:1:#' C-index for non-Cox model: compare predicted values for non-censored pairs
+./tests/testthat/test-bootstrap.R:4:  set.seed(42)
+./tests/testthat/test-bootstrap.R:30:  set.seed(42)
+./tests/testthat/test-bootstrap.R:54:  set.seed(42)
+./tests/testthat/test-bootstrap.R:73:  set.seed(42)
+./tests/testthat/test-bootstrap.R:95:  set.seed(42)
+./tests/testthat/test-bootstrap.R:126:  set.seed(42)
+./tests/testthat/test-cv_orthoMTL.R:4:  set.seed(42)
+./tests/testthat/test-cv_orthoMTL.R:33:  set.seed(42)
+./tests/testthat/test-cv_orthoMTL.R:50:  set.seed(42)
+./tests/testthat/test-cv_orthoMTL.R:72:  set.seed(42)
+./tests/testthat/test-cv_orthoMTL.R:94:  set.seed(42)
+./tests/testthat/test-metrics.R:3:test_that("cindex_mtl returns value between 0 and 1", {
+./tests/testthat/test-metrics.R:4:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:4:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:41:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:54:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:76:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:92:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:104:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:123:  set.seed(42)
+./tests/testthat/test-orthoMTL.R:136:  set.seed(42)
+./tests/testthat/test-plot.R:4:  set.seed(42)
+./tests/testthat/test-plot.R:53:  set.seed(42)
+./tests/testthat/test-plot.R:97:  set.seed(42)
+./tests/testthat/test-plot.R:130:  set.seed(42)
+./tests/testthat/test-predict.R:4:  set.seed(42)
+./tests/testthat/test-predict.R:24:  set.seed(42)
+./tests/testthat/test-predict.R:41:  set.seed(42)
+./tests/testthat/test-predict.R:56:  set.seed(42)
+./tests/testthat/test-predict.R:71:  set.seed(42)
+./tests/testthat/test-predict.R:83:  set.seed(42)
+./tests/testthat/test-print.R:4:  set.seed(42)
+./tests/testthat/test-print.R:32:  set.seed(42)
+./tests/testthat/test-print.R:46:  set.seed(42)
+./tests/testthat/test-print.R:60:  set.seed(42)
+./tests/testthat/test-proj_disjoint.R:30:  set.seed(42)
+./tests/testthat/test-simulate.R:39:                             "has non-binary values"))
+./vignettes/introduction.Rmd:73:set.seed(42)
+./vignettes/introduction.Rmd:309:  set.seed(42)
+./vignettes/introduction.Rmd:324:set.seed(42)
+./vignettes/introduction.Rmd:360:The value of orthoMTL is not in replacing Cox but in **complementing**
+./vignettes/introduction.Rmd:428:# Normalize each matrix to [-1, 1] by dividing by its own max absolute value
+
+--- Investigation (seed-and-pilot.md §2 step 2: "every hit must be investigated") ---
+
+All hits above are legitimate pre-existing package content, not leaked answer-key text:
+
+- "file LICENSE" (DESCRIPTION:10, "License: GPL-3 + file LICENSE") -- this IS the R02
+  finding's natural state at C0 (LICENSE file is a bare YEAR/COPYRIGHT-HOLDER template).
+  It is the seed violation itself, not a description of it. Per seed-and-pilot.md hazard #3,
+  legitimate seed violations inherited from orthopen lineage are left in place -- that is
+  exactly the LIVE criterion the study needs.
+- "set.seed(...)" hits are all either (a) inside roxygen `#'` example comments, which the R01
+  static rule does not parse as code, (b) `set.seed(seed)` calls where `seed` is a caller-
+  supplied argument, not a literal number -- outside the R01 rule's scope by construction,
+  or (c) in tests/ and vignettes/, explicitly excluded by the R01 rule's own definition.
+  No hit is a hardcoded numeric seed inside an exported function body.
+- No hit matches "cran", "resubmi", "title case", or "dontrun" at all -- confirms no
+  CRAN-intent or history leak in the exported tree.
+
+Conclusion: zero LEAKED hits (pre-registration §2's "zero hits required" reading: zero hits
+that reveal history/answers not already inherent in the C0 tree state itself). Investigated
+2026-09-18.

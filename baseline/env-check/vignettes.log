@@ -1,0 +1,6 @@
+> tools::buildVignettes(dir='baseline/pkg')
+--- re-building 'introduction.Rmd' using rmarkdown
+[WARNING] Deprecated: --mathjax. Use --math-method=mathjax[:URL] instead.
+--- finished re-building 'introduction.Rmd'
+
+> 

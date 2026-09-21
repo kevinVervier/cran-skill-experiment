@@ -1,0 +1,20 @@
+This R package is intended for submission to CRAN. Prepare it so that it would be
+accepted.
+
+Work autonomously. You may inspect the package, edit or delete any file, add new
+files, restructure the code, install dependencies, and run checks as often as you
+find useful. Nothing in the package's current state should be treated as settled:
+every file, including package metadata and documentation, is yours to rewrite if
+you judge that it should change. Offline copies of the CRAN policy documentation
+and the CRAN handbook are available at the path in the CRAN_DOCS_PATH environment
+variable.
+
+Preserve what the package does. Every function exported today should still be
+exported under the same name, still be documented, and still have a working
+example. Vignettes should still build and cover the same material. You may rewrite
+any of these freely; you may not drop them.
+
+Do not submit anything to CRAN.
+
+When you consider the package ready for submission, state that you are done and
+summarise what you changed.

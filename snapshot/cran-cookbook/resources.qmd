@@ -1,0 +1,17 @@
+---
+title: "Additional Resources"
+subtitle: "The CRAN Cookbook is designed to complement other key resources listed below for developing R packages intended for distribution on CRAN."
+format: 
+  html:
+    css: style.css
+---
+
+
+
+- [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-exts.html)
+
+- [CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html)
+
+- [Checklist for CRAN submissions](https://cran.r-project.org/web/packages/submission_checklist.html)
+
+- ["R Packages" by Hadley Wickham and Jennifer Bryan](https://r-pkgs.org/)

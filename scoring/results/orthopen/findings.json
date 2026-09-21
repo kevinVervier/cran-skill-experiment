@@ -1,0 +1,31 @@
+{
+  "blind_id": "orthopen",
+  "check_outcome": "COMPLETE_FINDINGS",
+  "n_errors": 1,
+  "n_warnings": 0,
+  "n_notes": 1,
+  "n_environment_findings": 1,
+  "residual_burden": 1,
+  "residual_categories": "description_meta",
+  "all_findings": [
+    {
+      "tool": "R_CMD_check",
+      "severity": "NOTE",
+      "category": "description_meta",
+      "raw": "checking CRAN incoming feasibility ...Warning in url(sprintf(\"%s/src/contrib/PACKAGES.gz\", u), \"rb\") :\nMaintainer: 'Kevin Vervier <kevin-vervier@uiowa.edu>'\n\nPackage has a VignetteBuilder field but no prebuilt vignette index.\n\nThe Description field should not start with the package name,\n  'This package' or similar.\n\nThe Date field is over a month old."
+    },
+    {
+      "tool": "spelling",
+      "severity": "NOTE",
+      "category": "spelling",
+      "raw": "al, contraints, et, forall, ij, imax, improvment, lbrace, neq, rbrace, tW"
+    }
+  ],
+  "environment_findings": [
+    {
+      "tool": "R_CMD_check",
+      "severity": "ERROR",
+      "raw": "checking package dependencies ...Warning: unable to access index for repository https://CRAN.R-project.org/src/contrib:\n  cannot open URL 'https://CRAN.R-project.org/src/contrib/PACKAGES'\n ERROR\nPackage required but not available: 'Iso'\n\nSee section 'The DESCRIPTION file' in the 'Writing R Extensions'\nmanual."
+    }
+  ]
+}
