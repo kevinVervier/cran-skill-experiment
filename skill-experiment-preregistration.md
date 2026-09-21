@@ -980,7 +980,7 @@ plan for it explicitly rather than taking it out of the three weeks.
       `ENVIRONMENT.md` and the `extract_findings.R` environment-finding fix, 2026-09-20).
 - [x] Replicate count fixed — **confirmed by Kevin 2026-09-20**: pilot 1/arm (6) + 4 further/arm
       (24) = 30 total, spending the full `≤30` cap exactly (§6.3).
-- [ ] This file committed; commit hash: `____________` — no git repo exists yet for
-      `cran-skill-experiment/` (`git rev-parse` confirms). Needs a repo initialised first.
+- [x] This file committed; commit hash: `a37d6dfa97f4a1248275812f556d303a113d99bf` — repo
+      initialised and root commit made 2026-09-21 (176 files, harness as of pilot day).
 
 **No run starts until every box is ticked.**
