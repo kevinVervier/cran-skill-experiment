@@ -157,11 +157,20 @@ cd "${RUN_DIR}/pkg"
 START_EPOCH=$(date +%s)
 WALL_CLOCK_CAP="${WALL_CLOCK_CAP:-7200}"
 MAX_TURNS="${MAX_TURNS:-120}"
-# STUCK_LOOP (section 6): consecutive assistant turns with no Edit/Write tool
-# call. Deliberately loose -- reading the skill file, the snapshot, and the
-# package before touching anything is NORMAL early in a run and must not
-# trigger this. It exists for the run that never recovers: repeating the same
-# failing check, re-reading the same file, with no forward progress.
+# STUCK_LOOP (section 6, redesigned 2026-09-21 after the live pilot killed all
+# 6/6 arms in their first 8-11 turns -- see git log for the postmortem).
+# Original design counted ANY 8 consecutive non-Edit/Write turns from turn 1,
+# which is indistinguishable from normal opening exploration (survey the
+# package, check for NAMESPACE/man, read DESCRIPTION) and fired on every run
+# before it did anything. Redesigned with two changes:
+#   1. GATED: the detector does not arm until the agent's first Edit/Write, or
+#      its first "R CMD check"/"rcmdcheck" invocation -- i.e. only after the
+#      run has actually started working. Pure exploration never trips it.
+#   2. REPETITION, not silence: once armed, it fires on the same tool+input
+#      (same file re-read, same command re-run) repeating STUCK_LOOP_TURNS
+#      times in a row -- the literal "re-reading the same file, repeating the
+#      same failing check, no forward progress" scenario the original comment
+#      described, rather than merely the absence of an edit.
 STUCK_LOOP_TURNS="${STUCK_LOOP_TURNS:-8}"
 
 # stream-json requires --verbose. tee the raw bytes before parsing: if a parse
@@ -197,7 +206,9 @@ disown "${BACKSTOP_PID}" 2>/dev/null || true
 # doesn't have to re-derive them from an exit code.
 rm -f "${RUN_DIR}/.termination_live"
 (
-  consecutive_no_edit=0
+  armed=0
+  last_sig=""
+  repeat_count=0
   last_line_count=0
   while kill -0 "${CLAUDE_PID}" 2>/dev/null; do
     sleep 5
@@ -212,22 +223,39 @@ rm -f "${RUN_DIR}/.termination_live"
     [ "${line_count}" -gt "${last_line_count}" ] || continue
     new_lines=$(tail -n "+$(( last_line_count + 1 ))" "${RUN_DIR}/stream.jsonl" 2>/dev/null)
     last_line_count=${line_count}
-    new_assistant_turns=$(printf '%s' "${new_lines}" | jq -rs \
-      '[.[] | select(.type=="assistant")] | length' 2>/dev/null || echo 0)
-    [ "${new_assistant_turns}" -gt 0 ] || continue
-    new_modifying=$(printf '%s' "${new_lines}" | jq -rs \
-      '[.[] | select(.type=="assistant") | .message.content[]? | select(.type=="tool_use") | .name]
-       | map(select(. == "Edit" or . == "Write")) | length' 2>/dev/null || echo 0)
-    if [ "${new_modifying}" -gt 0 ]; then
-      consecutive_no_edit=0
-    else
-      consecutive_no_edit=$(( consecutive_no_edit + new_assistant_turns ))
-    fi
-    if [ "${consecutive_no_edit}" -ge "${STUCK_LOOP_TURNS}" ]; then
-      echo "STUCK_LOOP" > "${RUN_DIR}/.termination_live"
-      kill "${CLAUDE_PID}" 2>/dev/null
-      break
-    fi
+    # One record per assistant turn: a signature of its tool calls (name+input,
+    # so a re-read of the same file or a re-run of the same command matches),
+    # and whether that turn itself counts as "progress" (Edit/Write, or a
+    # check invocation) for arming purposes.
+    new_records=$(printf '%s' "${new_lines}" | jq -c '
+      select(.type=="assistant") |
+      {
+        sig: ([.message.content[]? | select(.type=="tool_use") | (.name + ":" + (.input | tostring))] | join("|")),
+        progress: (
+          ([.message.content[]? | select(.type=="tool_use") | .name] | any(. == "Edit" or . == "Write"))
+          or
+          ([.message.content[]? | select(.type=="tool_use" and .name=="Bash") | (.input.command // "")]
+           | any(test("R CMD check|rcmdcheck"; "i")))
+        )
+      }' 2>/dev/null)
+    [ -n "${new_records}" ] || continue
+    while IFS= read -r rec; do
+      [ -n "${rec}" ] || continue
+      sig=$(printf '%s' "${rec}" | jq -r '.sig' 2>/dev/null)
+      prog=$(printf '%s' "${rec}" | jq -r '.progress' 2>/dev/null)
+      [ "${prog}" = "true" ] && armed=1
+      if [ "${armed}" -eq 1 ] && [ -n "${sig}" ] && [ "${sig}" = "${last_sig}" ]; then
+        repeat_count=$(( repeat_count + 1 ))
+      else
+        repeat_count=1
+      fi
+      last_sig="${sig}"
+      if [ "${armed}" -eq 1 ] && [ "${repeat_count}" -ge "${STUCK_LOOP_TURNS}" ]; then
+        echo "STUCK_LOOP" > "${RUN_DIR}/.termination_live"
+        kill "${CLAUDE_PID}" 2>/dev/null
+        break 2
+      fi
+    done <<< "${new_records}"
   done
 ) &
 WATCHER_PID=$!
