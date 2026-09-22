@@ -1,0 +1,24 @@
+# Editor/session state
+.claude/
+.vscode/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# R artifacts from scratch runs in this repo (baseline/env-check/*.log is
+# tracked deliberately -- this is only for anything run ad hoc afterwards)
+.Rhistory
+.RData
+.Rproj.user/
+*.Rcheck/
+
+# Rendered build output, redundant with the tracked .qmd sources + _freeze/
+snapshot/cran-cookbook/website/
+
+# Local secrets
+.env
+
+# Blinding (pre-registration section 7/9) -- must never be committed here
+.blind_map.csv
