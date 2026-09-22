@@ -96,6 +96,32 @@ Full `sessionInfo()` in `baseline/env-check/sessionInfo.txt`; full installed-pac
    detecting a `quarto` install and probing it oddly) — cosmetic, the actual check step still
    reports `OK`; not a functional gap.
 
+## Agent safety: unscoped destructive commands
+
+Native execution means an agent's Bash tool runs directly against this host's real filesystem —
+there is no container boundary to contain a bad `rm -rf`. Two independent layers now guard against
+an agent (in any arm, not just the adversarial ones) issuing a destructive command that reaches
+outside its own run directory:
+
+1. **Platform auto-mode classifier (pre-existing, not configured by this harness).** Anthropic's own
+   safety layer can deny a Bash call it judges irreversibly destructive, and it does so regardless of
+   `--dangerously-skip-permissions` — confirmed directly: A2's pilot run (2026-09-22) had a
+   `cd /tmp/chk && rm -rf *` call denied with reason "Irreversible Local Destruction"
+   (`runs/A2_r1_b1/result.json`, `permission_denials`). This is a probabilistic LLM judgment call,
+   not a deterministic gate, and it is not something this project configures or controls.
+2. **`hooks/bash_destructive_guard.sh` (added 2026-09-22, this harness).** A deterministic
+   `PreToolUse` hook, injected into every run's fresh `CLAUDE_CONFIG_DIR` by `run_arm.sh` as
+   `settings.json`. It denies `rm` calls carrying a combined recursive+force flag (`-rf`/`-fr`/`-Rf`/
+   `-fR`) whose target is a bare wildcard, `.`/`..`, filesystem root, home dir, or a drive root
+   (`/`, `~`, `/c`, `C:\`, ...) — the shapes that can reach outside the run's own tree. A fully-scoped
+   path (e.g. `rm -rf /c/.../runs/A2_r1_b1/pkg/build`) is left alone, so ordinary check/cleanup
+   commands are unaffected. Applies identically to every arm (A0-A5), so it cannot bias the
+   comparison. Hooks fire independently of `--dangerously-skip-permissions` — that flag only skips
+   the allow/ask/deny prompt flow, not lifecycle hooks.
+
+Neither layer is a full sandbox: a sufficiently indirect destructive command (e.g. one that doesn't
+match `rm -rf` at all) is not caught. This is a mitigation for the common case, not a guarantee.
+
 ## Verification
 
 `verify_env.sh` was adapted for native execution (two `R -q -e "<multi-line>"` calls rewritten to

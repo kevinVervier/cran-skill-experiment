@@ -40,6 +40,33 @@ if [ -f "${HOME}/.claude/.credentials.json" ]; then
   cp "${HOME}/.claude/.credentials.json" "${CLAUDE_CONFIG_DIR}/.credentials.json"
 fi
 
+# --- Destructive-command guard (defense in depth) ----------------------------
+# The platform's own auto-mode classifier already blocks some rm -rf calls
+# even under --dangerously-skip-permissions (observed directly: it denied an
+# agent's `rm -rf *` in the A2 pilot run) -- but that's a probabilistic LLM
+# judgment call, not a deterministic gate. This hook adds a second,
+# deterministic layer: it blocks rm -rf/-fr only when the target is an
+# unscoped wildcard/root/home (see hooks/bash_destructive_guard.sh), leaving
+# scoped deletes untouched. Same settings.json shape for every arm, so it
+# cannot bias the A0-A5 comparison.
+cat > "${CLAUDE_CONFIG_DIR}/settings.json" <<EOF
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${EXP_ROOT}/hooks/bash_destructive_guard.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+EOF
+
 # Fresh tree from the frozen export. Never reuse a previous run's tree.
 rm -rf "${RUN_DIR}/pkg"
 cp -r "${RUNS_ROOT}/arms/${ARM}/pkg" "${RUN_DIR}/pkg"
@@ -129,6 +156,24 @@ if (!is.null(d)) {
 EOF
 Rscript "${DEPS_R}" > "${RUN_DIR}/dep_install.log" 2>&1
 
+# --- Tool surface (pilot postmortem 2026-09-21) -------------------------------
+# --allowedTools only auto-approves permission PROMPTS; it never restricted which
+# tools exist. Combined with --dangerously-skip-permissions (required for a
+# headless run — no one is present to click through prompts), the permission
+# system is bypassed entirely, so the allowlist had no effect on tool
+# availability. The pilot's A4 run proves it: its stream.jsonl system-init event
+# lists the full default surface — Task (subagents), PowerShell, ToolSearch,
+# WebSearch, the Cron*/SendMessage/ScheduleWakeup tools — plus two live
+# claude.ai account MCP servers (Claude Docs connected, Google Drive
+# needs-auth), none of which are in "Bash,Read,Edit,Write,Glob,Grep,WebFetch".
+# --tools is the flag that actually restricts the built-in tool set; keep
+# --allowedTools too since it's harmless documentation of intent and still
+# meaningful if this ever runs without --dangerously-skip-permissions.
+# --strict-mcp-config with no --mcp-config drops the account MCP servers, which
+# come from the login credential rather than CLAUDE_CONFIG_DIR and so survive
+# the config-dir isolation in section 6.5 undisturbed otherwise.
+CLAUDE_TOOLS="Bash,Read,Edit,Write,Glob,Grep,WebFetch"
+
 # ============================================================================
 # COLD-START CALIBRATION  — do not skip
 # ----------------------------------------------------------------------------
@@ -136,11 +181,16 @@ Rscript "${DEPS_R}" > "${RUN_DIR}/dep_install.log" 2>&1
 # any work. That fixed cost scales with skill file length, so raw token totals
 # partly measure how VERBOSE an arm's skill file is, not how effective it is.
 #
-# Measure it: a null prompt in this exact arm configuration. Report tokens both
-# raw and net of this floor. See pre-registration section 12.
+# Measure it: a null prompt in this exact arm configuration — same tool surface
+# as the main run, so the floor being measured doesn't itself vary by arm.
+# Report tokens both raw and net of this floor. See pre-registration section 12.
 # ============================================================================
 claude -p "Reply with the single word: ready" \
   --output-format json \
+  --tools "${CLAUDE_TOOLS}" \
+  --allowedTools "${CLAUDE_TOOLS}" \
+  --strict-mcp-config \
+  --dangerously-skip-permissions \
   > "${RUN_DIR}/coldstart.json" 2> "${RUN_DIR}/coldstart.err"
 
 jq -r '{
@@ -188,7 +238,9 @@ claude -p "$(cat "${EXP_ROOT}/FROZEN_PROMPT.txt")" \
   --output-format stream-json \
   --verbose \
   --max-turns "${MAX_TURNS}" \
-  --allowedTools "Bash,Read,Edit,Write,Glob,Grep,WebFetch" \
+  --tools "${CLAUDE_TOOLS}" \
+  --allowedTools "${CLAUDE_TOOLS}" \
+  --strict-mcp-config \
   --dangerously-skip-permissions \
   > >(tee "${RUN_DIR}/stream.jsonl" | jq -c 'select(.type=="result")' > "${RUN_DIR}/result.json") \
   2> "${RUN_DIR}/agent.err" &
@@ -264,6 +316,16 @@ wait "${CLAUDE_PID}" 2>/dev/null
 EXIT_CODE=$?
 kill "${WATCHER_PID}" "${BACKSTOP_PID}" 2>/dev/null
 wait "${WATCHER_PID}" 2>/dev/null
+
+# `wait "${CLAUDE_PID}"` above only waits for claude itself -- the
+# `> >(tee ... | jq ... > result.json)` process substitution on line 218 is a
+# separate, untracked child of this shell that can still be flushing to disk
+# after claude exits, especially under host resource contention. Reading
+# result.json before it finishes silently truncates the file (observed:
+# exactly 4096 bytes, mid-string) and corrupts termination classification
+# below with no error surfaced. A bare `wait` blocks for all remaining
+# children of this shell; BACKSTOP_PID is disowned so it is not among them.
+wait
 
 END_EPOCH=$(date +%s)
 cd - > /dev/null
