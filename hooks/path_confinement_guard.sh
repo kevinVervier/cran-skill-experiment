@@ -30,11 +30,18 @@
 # helper script (fix_cat.R, fix_msg.py) one level above pkg/, a completely
 # ordinary scratch-file pattern, still fully inside their own isolated tree.
 # Restricting to pkg/ alone blocked that as a false positive and cost both
-# arms extra turns working around it. RUN_DIR/claude-config is the one
-# exception carved back OUT of that allowed root: it holds this arm's OAuth
-# credential plus the settings.json/hook source that implement this very
-# guard, and letting an arm read its own hook implementation would invite a
-# targeted bypass.
+# arms extra turns working around it.
+#
+# Exactly two files under RUN_DIR/claude-config are carved back OUT of that
+# allowed root: .credentials.json (this arm's OAuth token) and settings.json
+# (names this very hook and its env-var wiring). Earlier this blocked the
+# WHOLE claude-config directory, which was itself a false positive caught
+# live in block 2: Claude Code spills large tool output to
+# claude-config/projects/*/tool-results/*.txt and instructs the model to
+# read it back from there -- a normal, load-bearing CLI mechanism (the exact
+# pattern this session hit its own large tool outputs with). A1 hit this in
+# block 2 and lost that output. Narrowing to the two files that actually
+# matter fixes it without reopening the credential/hook-source risk.
 #
 # Applies identically to every arm (A0-A5) via the same settings.json shape,
 # so it cannot bias the comparison.
@@ -70,16 +77,19 @@ norm() {
 }
 
 ALLOWED_NORM=$(norm "${RUN_DIR_ROOT}")
-CLAUDE_CONFIG_NORM="${ALLOWED_NORM}/claude-config"
+FORBIDDEN_CREDS="${ALLOWED_NORM}/claude-config/.credentials.json"
+FORBIDDEN_SETTINGS="${ALLOWED_NORM}/claude-config/settings.json"
 EXP_ROOT_NORM=$(norm "${FORBIDDEN_EXP_ROOT}")
 RUNS_ROOT_NORM=$(norm "${FORBIDDEN_RUNS_ROOT}")
 
 path_is_forbidden() {
   # $1 = normalized absolute path to check
   local cand="$1"
-  # Off-limits even though it's inside our own RUN_DIR -- see header comment.
+  # Off-limits even though inside our own RUN_DIR -- see header comment.
+  # Everything ELSE under claude-config (tool-results, transcripts,
+  # backups, synced plugins/skills) stays allowed.
   case "${cand}" in
-    "${CLAUDE_CONFIG_NORM}"|"${CLAUDE_CONFIG_NORM}"/*) return 0 ;;
+    "${FORBIDDEN_CREDS}"|"${FORBIDDEN_SETTINGS}") return 0 ;;
   esac
   case "${cand}" in
     "${ALLOWED_NORM}"|"${ALLOWED_NORM}"/*) return 1 ;;   # rest of our own run dir: fine
@@ -116,11 +126,14 @@ case "${tool_name}" in
     if printf '%s' "${cmd_norm}" | grep -qF -- "${EXP_ROOT_NORM}"; then
       deny "Blocked: command references the harness directory (EXP_ROOT), which is off-limits to every arm. Work only inside your own run directory."
     fi
-    # claude-config checked BEFORE the RUN_DIR scrub below -- it's nested
-    # inside our own allowed root, so the scrub would otherwise erase every
-    # reference to it and let it slip through the RUNS_ROOT check untouched.
-    if printf '%s' "${cmd_norm}" | grep -qF -- "${CLAUDE_CONFIG_NORM}"; then
-      deny "Blocked: command references claude-config (this run's own credentials/hooks), which is off-limits. Work only inside your own package directory."
+    # The two forbidden files, checked BEFORE the RUN_DIR scrub below --
+    # they're nested inside our own allowed root, so the scrub would
+    # otherwise erase any reference to them and let them slip through the
+    # RUNS_ROOT check untouched. Substring match, not exact, since a Bash
+    # command embeds these paths inside a larger command string.
+    if printf '%s' "${cmd_norm}" | grep -qF -- "${FORBIDDEN_CREDS}" || \
+       printf '%s' "${cmd_norm}" | grep -qF -- "${FORBIDDEN_SETTINGS}"; then
+      deny "Blocked: command references this run's own credentials or settings.json, which is off-limits. Work only inside your own package directory."
     fi
     # Scrub references to our OWN run directory before checking for
     # RUNS_ROOT -- an absolute path anywhere in our own RUN_DIR is fine; a

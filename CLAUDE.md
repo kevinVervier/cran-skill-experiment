@@ -118,9 +118,10 @@ Nothing runs until `verify_env.sh` passes on the accepted version. If the baseli
 `R CMD check --as-cran` with manual and vignettes building, the environment is under-provisioned and
 every arm would burn turns on the same toolchain failure.
 
-**Status (2026-09-18): `verify_env.sh` passes natively** — see `ENVIRONMENT.md`. Still open before
-block 2 can start: block network egress to `cran.r-project.org` (not yet done on this native host;
-was previously a container network policy — see pre-registration §6).
+**Status (2026-09-18): `verify_env.sh` passes natively** — see `ENVIRONMENT.md`. Network egress to
+`cran.r-project.org` is blocked (confirmed 2026-09-25 via a `0.0.0.0 cran.r-project.org` hosts-file
+entry; a live connection attempt times out) — this was previously a container network policy, now
+done at the OS level instead (see pre-registration §6). Nothing outstanding before block 2.
 
 Then: freeze checklist (pre-registration §12) → pilot (n=1 per arm, results discarded if anything
 changes afterwards) → blocks 2–5.
