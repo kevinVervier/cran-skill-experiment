@@ -15,7 +15,7 @@
 set -uo pipefail
 
 EXP_ROOT="${EXP_ROOT:-$(pwd)}"
-RUNS_ROOT="${RUNS_ROOT:?set RUNS_ROOT to the cran-exp-runs directory}"
+RUNS_ROOT="${RUNS_ROOT:?set RUNS_ROOT to the arm-runs directory (see CLAUDE.md for the resolved path)}"
 export EXP_ROOT RUNS_ROOT
 
 ARMS=(A0 A1 A2 A3 A4 A5)       # A5 = raw-handbook arm; drop last if budget forces it
@@ -29,6 +29,28 @@ grep -q "DRAFT — NOT YET FROZEN" "${EXP_ROOT}/FROZEN_PROMPT.txt" && \
   { echo "FATAL: prompt still marked DRAFT. Freeze it first."; exit 1; }
 [ -f "${EXP_ROOT}/baseline/env-check/baseline_findings.txt" ] || \
   { echo "FATAL: environment gate not passed. Run verify_env.sh"; exit 1; }
+
+# --- Keep-awake guard --------------------------------------------------------
+# This host is a Shadow (Blade) cloud PC (see ENVIRONMENT.md). A0/A5 in the
+# block-1 pilot each needed three restarts before landing a real DECLARED_DONE
+# result.json, consistent with the remote session being interrupted mid-run
+# by Shadow's own idle timeout (independent of Windows' sleep setting, which
+# is already disabled). Hold a keep-awake process for the duration of the
+# block loop so a multi-hour unattended run doesn't get cut off underneath
+# run_arm.sh.
+KEEPAWAKE_PID=""
+KEEPAWAKE_LOG="${RUNS_ROOT}/keepawake.log"
+start_keepawake() {
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File "${EXP_ROOT}/keepawake.ps1" \
+    >> "${KEEPAWAKE_LOG}" 2>&1 &
+  KEEPAWAKE_PID=$!
+  echo "keep-awake started (pid ${KEEPAWAKE_PID}), logging to ${KEEPAWAKE_LOG}"
+}
+stop_keepawake() {
+  [ -n "${KEEPAWAKE_PID}" ] && kill "${KEEPAWAKE_PID}" 2>/dev/null
+}
+trap stop_keepawake EXIT INT TERM
+start_keepawake
 
 for BLOCK in "$@"; do
   echo "=== BLOCK ${BLOCK} ==="

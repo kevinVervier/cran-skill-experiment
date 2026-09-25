@@ -51,6 +51,21 @@ env_signals <- paste(
   "Could not resolve host", "unable to access index for repository",
   "Could not connect to server", "Timeout was reached",
   "need Internet access",
+  # "checking for future file timestamps ... NOTE / unable to verify current
+  # time" -- rcmdcheck's own network time-verification call, unrelated to
+  # package content. Confirmed flaky, not content-driven: the baseline check
+  # got a clean "OK" on this exact line, and the block-1 pilot (2026-09-25,
+  # post-fix rerun) got the NOTE on 4/6 arms (then 6/6 on a later rerun)
+  # depending on live network conditions at check time, uncorrelated with
+  # which arm or skill ran. strip_env_lines works per-line, so BOTH lines
+  # need a pattern here: matching only "unable to verify current time"
+  # stripped that line but left "checking for future file timestamps ...
+  # NOTE" behind as a bogus surviving "other"-category finding (confirmed by
+  # re-running the parser after the first, incomplete version of this fix).
+  # Without both, this silently inflates residual_burden with a
+  # network-flake coin flip, whichever arm happens to run when the time
+  # service is unreachable.
+  "unable to verify current time", "checking for future file timestamps",
   sep = "|"
 )
 is_env_signal <- function(msg) grepl(env_signals, msg, ignore.case = TRUE, perl = TRUE)

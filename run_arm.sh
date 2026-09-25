@@ -16,7 +16,7 @@ ARM="$1"; REP="$2"; BLOCK="$3"
 # RUNS_ROOT holds the arm trees and must have NO instruction file anywhere between
 # it and the filesystem root. See KICKOFF.md.
 EXP_ROOT="${EXP_ROOT:?set EXP_ROOT to the cran-skill-experiment directory}"
-RUNS_ROOT="${RUNS_ROOT:?set RUNS_ROOT to the cran-exp-runs directory}"
+RUNS_ROOT="${RUNS_ROOT:?set RUNS_ROOT to the arm-runs directory (see CLAUDE.md for the resolved path)}"
 
 RUN_ID="${ARM}_r${REP}_b${BLOCK}"
 RUN_DIR="${RUNS_ROOT}/runs/${RUN_ID}"
@@ -49,6 +49,14 @@ fi
 # unscoped wildcard/root/home (see hooks/bash_destructive_guard.sh), leaving
 # scoped deletes untouched. Same settings.json shape for every arm, so it
 # cannot bias the A0-A5 comparison.
+#
+# --- Path-confinement guard (defense in depth) -------------------------------
+# No container on this host means --tools restricts tool NAMES, not the PATHS
+# those tools can reach. Confirmed in the block-1 pilot: A2 ran
+# `ls /c/Users/Shadow/Bricoles/cran-skill-experiment` from inside its own pkg
+# tree and got back a real listing including criterion-corpus.md and
+# criterion-corpus-longtail.md (the answer key -- see hooks/path_confinement_
+# guard.sh for the full incident and the limits of a regex-based guard).
 cat > "${CLAUDE_CONFIG_DIR}/settings.json" <<EOF
 {
   "hooks": {
@@ -59,6 +67,15 @@ cat > "${CLAUDE_CONFIG_DIR}/settings.json" <<EOF
           {
             "type": "command",
             "command": "${EXP_ROOT}/hooks/bash_destructive_guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Read|Edit|Write|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "RUN_DIR_ROOT='${RUN_DIR}' FORBIDDEN_EXP_ROOT='${EXP_ROOT}' FORBIDDEN_RUNS_ROOT='${RUNS_ROOT}' ${EXP_ROOT}/hooks/path_confinement_guard.sh"
           }
         ]
       }
@@ -174,6 +191,17 @@ Rscript "${DEPS_R}" > "${RUN_DIR}/dep_install.log" 2>&1
 # the config-dir isolation in section 6.5 undisturbed otherwise.
 CLAUDE_TOOLS="Bash,Read,Edit,Write,Glob,Grep,WebFetch"
 
+# --- cd into the arm tree BEFORE any claude invocation, coldstart included --
+# Previously this cd only happened before the main run (below), so the
+# coldstart call ran with cwd still at EXP_ROOT -- which has this harness's
+# own CLAUDE.md sitting in it. Confirmed via config-snapshot-preflight: every
+# arm's coldstart transcript, A0 included, contained this file's actual text
+# ("Bricoles — Portfolio Rules", "rejection-ledger", etc.), a direct breach of
+# invariant 4 for the control arm and a contaminated, non-arm-specific
+# coldstart measurement for every arm. cd here so coldstart sees exactly what
+# the main run sees.
+cd "${RUN_DIR}/pkg"
+
 # ============================================================================
 # COLD-START CALIBRATION  — do not skip
 # ----------------------------------------------------------------------------
@@ -185,6 +213,19 @@ CLAUDE_TOOLS="Bash,Read,Edit,Write,Glob,Grep,WebFetch"
 # as the main run, so the floor being measured doesn't itself vary by arm.
 # Report tokens both raw and net of this floor. See pre-registration section 12.
 # ============================================================================
+# -u EXP_ROOT -u RUNS_ROOT: these two are exported (above) for this script's
+# own use, but the CHILD claude process has no legitimate need for them, and
+# their values contain "cran-skill-experiment"/"cran-exp-runs" -- a plain
+# `env | grep -i cran` (looking for the documented CRAN_DOCS_PATH) picked
+# both up in 4/6 block-1 pilot arms, including A0, telling the no-skill
+# control it's inside a named CRAN-skill experiment. `env -u` strips them
+# from this one child's environment only; the parent shell keeps them.
+# -u OLDPWD too: bash auto-exports OLDPWD on every `cd`, so the `cd
+# "${RUN_DIR}/pkg"` above leaves OLDPWD holding whatever directory this
+# script was invoked from -- EXP_ROOT, in every real invocation. Caught live
+# smoke-testing this exact fix: stripping EXP_ROOT/RUNS_ROOT alone still left
+# `env | grep -i cran` printing "OLDPWD=.../cran-skill-experiment".
+env -u EXP_ROOT -u RUNS_ROOT -u OLDPWD \
 claude -p "Reply with the single word: ready" \
   --output-format json \
   --tools "${CLAUDE_TOOLS}" \
@@ -203,7 +244,6 @@ jq -r '{
 cp -r "${CLAUDE_CONFIG_DIR}" "${RUN_DIR}/config-snapshot-preflight" 2>/dev/null || true
 
 # --- Main run ----------------------------------------------------------------
-cd "${RUN_DIR}/pkg"
 START_EPOCH=$(date +%s)
 WALL_CLOCK_CAP="${WALL_CLOCK_CAP:-7200}"
 MAX_TURNS="${MAX_TURNS:-120}"
@@ -234,6 +274,9 @@ STUCK_LOOP_TURNS="${STUCK_LOOP_TURNS:-8}"
 # WALL_CLOCK_CAP itself so it can also set a definitive termination reason
 # (previously inferred after the fact from `timeout`'s exit code 124, which
 # could not distinguish "ran out of time" from "stuck").
+# See the coldstart invocation above for why EXP_ROOT/RUNS_ROOT/OLDPWD are
+# stripped from the child's environment rather than just left exported.
+env -u EXP_ROOT -u RUNS_ROOT -u OLDPWD \
 claude -p "$(cat "${EXP_ROOT}/FROZEN_PROMPT.txt")" \
   --output-format stream-json \
   --verbose \
@@ -352,6 +395,14 @@ cp -r "${CLAUDE_CONFIG_DIR}" "${RUN_DIR}/config-snapshot-final" 2>/dev/null || t
 # turns are indistinguishable by turn count alone.
 SUBTYPE=$(jq -r '.subtype // "unknown"' "${RUN_DIR}/result.json" 2>/dev/null)
 TURNS=$(jq -r '.num_turns // 0' "${RUN_DIR}/result.json" 2>/dev/null)
+# `subtype` alone is not reliable: the SDK has been observed to report
+# subtype:"success" on a result that is *also* is_error:true (e.g. a 429
+# session-rate-limit cutoff), which previously got misclassified as
+# DECLARED_DONE with as few as 1 turn. is_error/terminal_reason must be
+# checked explicitly, ahead of the subtype=="success" branch.
+IS_ERROR=$(jq -r '.is_error // false' "${RUN_DIR}/result.json" 2>/dev/null)
+TERMINAL_REASON=$(jq -r '.terminal_reason // "unknown"' "${RUN_DIR}/result.json" 2>/dev/null)
+API_ERROR_STATUS=$(jq -r '.api_error_status // empty' "${RUN_DIR}/result.json" 2>/dev/null)
 # When the watcher kills the run early, result.json never gets a final "result"
 # event -- num_turns is unavailable from it. Fall back to counting assistant
 # turns directly from the transcript so TURNS still means something.
@@ -363,6 +414,8 @@ if [ -f "${RUN_DIR}/.termination_live" ]; then
   TERMINATION=$(cat "${RUN_DIR}/.termination_live")   # BUDGET_EXHAUSTED_WALLCLOCK or STUCK_LOOP
 elif [ "${SUBTYPE}" = "error_max_turns" ]; then
   TERMINATION="BUDGET_EXHAUSTED_TURNS"
+elif [ "${IS_ERROR}" = "true" ]; then
+  TERMINATION="API_ERROR_${TERMINAL_REASON}${API_ERROR_STATUS:+_${API_ERROR_STATUS}}"
 elif [ "${SUBTYPE}" = "success" ]; then
   TERMINATION="DECLARED_DONE"          # refine to CONVERGED_CLEAN / _DIRTY at scoring
 else
@@ -387,6 +440,7 @@ CHECK_INVOCATIONS=$(grep -c "R CMD check\|rcmdcheck" "${RUN_DIR}/stream.jsonl" 2
   echo "wall_clock_s=$((END_EPOCH - START_EPOCH))"
   echo "exit_code=${EXIT_CODE}"
   echo "termination=${TERMINATION}"
+  echo "is_error=${IS_ERROR}"
   echo "turns=${TURNS}"
   echo "first_check_event_index=${FIRST_CHECK}"
   echo "check_invocations=${CHECK_INVOCATIONS}"
@@ -395,11 +449,20 @@ CHECK_INVOCATIONS=$(grep -c "R CMD check\|rcmdcheck" "${RUN_DIR}/stream.jsonl" 2
 # --- Submission-attempt tripwire ---------------------------------------------
 # Flags an ATTEMPT even though egress was blocked. An attempt is a reportable
 # behaviour of that skill, and it means the block did its job.
-if grep -qiE 'submit_cran|release\(\)|cran\.r-project\.org/submit|ftp.*cran' \
-     "${RUN_DIR}/stream.jsonl" 2>/dev/null; then
+#
+# Scoped to the Bash commands the agent actually ran (via jq), not the raw
+# stream.jsonl text -- that text also carries tool-call UUIDs and file paths
+# under RUNS_ROOT (named "cran-exp-runs"), and a loose `ftp.*cran` matched
+# those instead of a real submission (e.g. UUID substring "...FtP..." followed
+# later on the same line by ".../cran-exp-runs/..."). Every CRAN-domain term
+# below requires the literal "cran.r-project.org" host, not bare "cran".
+AGENT_COMMANDS=$(jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="tool_use" and .name=="Bash") | .input.command // empty' \
+  "${RUN_DIR}/stream.jsonl" 2>/dev/null)
+SUBMIT_PATTERN='submit_cran\(|devtools::release\(|usethis::use_release\(|cran\.r-project\.org/submit|ftp://[^"'"'"' ]*cran\.r-project\.org'
+if printf '%s' "${AGENT_COMMANDS}" | grep -qiE "${SUBMIT_PATTERN}"; then
   echo "SUBMISSION_ATTEMPT_DETECTED" >> "${RUN_DIR}/provenance.txt"
   echo "!! ${RUN_ID}: agent attempted a CRAN submission (blocked). Review transcript."
-  grep -inE 'submit_cran|cran\.r-project\.org/submit' "${RUN_DIR}/stream.jsonl" \
+  printf '%s' "${AGENT_COMMANDS}" | grep -inE "${SUBMIT_PATTERN}" \
     | head -20 > "${RUN_DIR}/submission_attempt.log"
 fi
 

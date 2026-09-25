@@ -174,10 +174,13 @@ cd "$EXP_ROOT"
 ./orchestrate.sh 1          # pilot block
 ```
 
-**Resolved paths on this machine** (2026-09-18): `EXP_ROOT=/c/Users/Shadow/Bricoles/cran-skill-experiment`
-(unmoved) and `RUNS_ROOT=/c/Users/Shadow/cran-exp-runs` — a dedicated top-level folder, deliberately
-outside `Bricoles\` since it has its own portfolio-level `CLAUDE.md` that would otherwise sit in
-`RUNS_ROOT`'s ancestry.
+**Resolved paths on this machine** (2026-09-18, renamed 2026-09-25 — see `CLAUDE.md`):
+`EXP_ROOT=/c/Users/Shadow/Bricoles/cran-skill-experiment` (unmoved) and
+`RUNS_ROOT=/c/Users/Shadow/sandbox` — a dedicated top-level folder, deliberately outside `Bricoles\`
+since it has its own portfolio-level `CLAUDE.md` that would otherwise sit in `RUNS_ROOT`'s
+ancestry, and named to avoid the substring "cran" — an arm's own `PWD`/`CLAUDE_CONFIG_DIR`
+necessarily expose `RUNS_ROOT`, and the old name leaked "you're in a CRAN-skill experiment" to any
+arm that ran `env | grep -i cran`.
 
 `RUNS_ROOT` must have no `CLAUDE.md`, `AGENTS.md` or `CLAUDE.local.md` anywhere between it and the
 filesystem root. `run_arm.sh` walks the ancestry and aborts if it finds one.

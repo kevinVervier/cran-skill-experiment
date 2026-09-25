@@ -14,10 +14,10 @@ that file is the spec, not this one.
 ## Layout
 
 This repo (`cran-skill-experiment`) holds the harness, scoring pipeline, prompts, and docs. Arm
-trees and run artifacts live in a **separate**, deliberately un-nested root (`cran-exp-runs`) — see
-[`KICKOFF.md`](KICKOFF.md) for why the two are kept apart (`CLAUDE.md` walks up the directory tree,
-so any instruction file above an arm's tree would leak into every arm, including the no-skill
-control).
+trees and run artifacts live in a **separate**, deliberately un-nested root — see
+[`KICKOFF.md`](KICKOFF.md) for the resolved path and for why the two are kept apart (`CLAUDE.md`
+walks up the directory tree, so any instruction file above an arm's tree would leak into every
+arm, including the no-skill control).
 
 ## Status
 

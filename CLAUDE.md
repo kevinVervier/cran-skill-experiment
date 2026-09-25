@@ -93,14 +93,24 @@ export RUNS_ROOT=~/work/cran-exp-runs
 **Resolved paths on this machine** (2026-09-18): `EXP_ROOT` did not move — it's
 `C:\Users\Shadow\Bricoles\cran-skill-experiment` (`/c/Users/Shadow/Bricoles/cran-skill-experiment`
 in Git Bash), and its own `CLAUDE.md` at the root is intentional. `RUNS_ROOT` is
-`C:\Users\Shadow\cran-exp-runs` (`/c/Users/Shadow/cran-exp-runs`) — a dedicated top-level folder,
-not under `Bricoles\` (which has its own portfolio-level `CLAUDE.md` that would otherwise sit
-directly above it, tripping invariant 5b). In practice:
+`C:\Users\Shadow\sandbox` (`/c/Users/Shadow/sandbox`) — a dedicated top-level folder, not under
+`Bricoles\` (which has its own portfolio-level `CLAUDE.md` that would otherwise sit directly above
+it, tripping invariant 5b). In practice:
 
 ```bash
 export EXP_ROOT=/c/Users/Shadow/Bricoles/cran-skill-experiment
-export RUNS_ROOT=/c/Users/Shadow/cran-exp-runs
+export RUNS_ROOT=/c/Users/Shadow/sandbox
 ```
+
+**Renamed 2026-09-25** from `cran-exp-runs`: a live arm's own working directory (`PWD`) and its
+isolated `CLAUDE_CONFIG_DIR` both sit under `RUNS_ROOT`, and both are visible to that arm by
+necessity. With the old name, that meant every arm's environment carried the substring
+"cran-exp-runs" — a plain `env | grep -i cran` (an arm looking for the documented
+`CRAN_DOCS_PATH`) surfaced it in 4/6 block-1 pilot arms, including the A0 control, effectively
+telling it "you are inside a CRAN-skill experiment." Renaming to a name with no domain-suggestive
+substring closes that specific vector; see `hooks/path_confinement_guard.sh` and the `env -u`
+fix in `run_arm.sh` for the two related leaks (arbitrary filesystem read, and the EXP_ROOT/
+RUNS_ROOT/OLDPWD env-var leak) found and fixed the same day.
 
 ## Sequencing
 
