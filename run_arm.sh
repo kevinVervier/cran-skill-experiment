@@ -475,4 +475,12 @@ cp -r "${RUN_DIR}/pkg" "${RUNS_ROOT}/blinded/${BLIND_ID}"
 # Keep the mapping OUT of the scoring directory (section 9).
 echo "${BLIND_ID},${RUN_ID}" >> "${EXP_ROOT}/.blind_map.csv"
 
+
+# Completion marker, written last and only here. orchestrate.sh uses its
+# absence to tell "interrupted mid-run" (e.g. Shadow's idle timeout killing
+# the session) apart from "run directory exists" -- the directory itself
+# appears within the first few lines of this script, long before any real
+# work is done.
+touch "${RUN_DIR}/.complete"
+
 echo "done: ${RUN_ID} -> ${BLIND_ID} (${TERMINATION}, ${TURNS} turns)"
