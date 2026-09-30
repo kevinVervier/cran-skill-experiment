@@ -1,0 +1,23 @@
+You are reviewing an R package source tree for compliance with a fixed list of CRAN submission criteria. The current working directory is the package root. Use Read, Grep and Glob to inspect its files as needed.
+
+For EACH criterion below, decide: COMPLIANT, NON_COMPLIANT, or NOT_APPLICABLE (the criterion does not apply to this package -- e.g. it has no examples to evaluate). If you cannot determine an answer from the tree, use UNCLEAR rather than guessing.
+
+Criteria:
+C04. [HANDBOOK] Description is an elaborated paragraph, not one line
+C08. [HANDBOOK] Method/API references cited as doi:, arXiv:, ISBN: or URL
+C13. [COMMUNITY] Maintainer email address is appropriate and durable
+C18. [HANDBOOK] \dontrun{} only where the example genuinely cannot run -- missing software, API keys
+L06. [COMMUNITY] Every acronym must be expanded in Description (e.g. X-SAMPA, BPMN, GWAS, SNP)
+L08. [COMMUNITY] Double quotes reserved for publication titles; not used for emphasis or ordinary phrases
+L09. [COMMUNITY] Description names/describes the main wrapper function instead of describing the package as a whole
+L10. [COMMUNITY] Description is too thin -- needs more detail about functionality and implemented methods
+L12. [COMMUNITY] References section present when the package implements a published method (a strong suggestion, requested on most new submissions)
+L21. [COMMUNITY] Version number reflects package maturity (not artificially inflated for a first submission)
+L23. [COMMUNITY] \dontrun{} used only where genuinely unrunnable; an example completing in under ~5s under --run-dontrun should be \donttest{} or unwrapped
+L27. [COMMUNITY] Example datasets are appropriately small -- examples exist to show call syntax, not to demonstrate scale
+
+For every criterion, you MUST provide evidence: either a file path and line number, or the exact text at issue quoted from the tree. A verdict with no evidence is invalid.
+
+Respond with ONLY a JSON array, one object per criterion, in this exact shape and no other text before or after it:
+[{"id": "C04", "verdict": "COMPLIANT", "evidence": "DESCRIPTION lines 8-14, three-sentence paragraph"}, ...]
+

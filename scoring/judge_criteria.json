@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "purpose": "Frozen criterion list for the §5.1 judgement oracle. ORACLE=JUDGE rows only -- everything ORACLE=STATIC or TOOLING is handled by deterministic rules/rcmdcheck instead, per the ledger's own priority order (tooling -> static -> judge).",
+    "source_files": ["criterion-corpus.md", "criterion-corpus-longtail.md"],
+    "extracted": "2026-09-30",
+    "frozen_before_arm_scoring": true,
+    "prov_note": "criterion-corpus.md tags PROV explicitly per row. criterion-corpus-longtail.md has no PROV column -- it is described in its own header as findings 'scraped from cran-comments.md files, GitHub issue threads, and r-package-devel archives', i.e. by construction not derivable from the frozen handbook snapshot every arm received. All longtail rows are therefore inferred as COMMUNITY here; this inference is recorded, not silently assumed.",
+    "letter_note": "No JUDGE-oracle row is tagged LETTER in either corpus file -- both real orthoMTL findings (R01, R02) are ORACLE=STATIC, so the judge carries zero of the two known ground-truth findings.",
+    "l23_c18_overlap_note": "C18 (HANDBOOK) and L23 (COMMUNITY, inferred) both concern \\dontrun{} legitimacy and substantially overlap in content -- L23 gives the concrete 5-second/--run-dontrun threshold, C18 is the general handbook statement. Kept as two separate frozen rows per the source tables rather than merged post-hoc; scored independently."
+  },
+  "criteria": [
+    {"id": "C04", "prov": "HANDBOOK", "prov_inferred": false, "source": "criterion-corpus.md", "text": "Description is an elaborated paragraph, not one line"},
+    {"id": "C08", "prov": "HANDBOOK", "prov_inferred": false, "source": "criterion-corpus.md", "text": "Method/API references cited as doi:, arXiv:, ISBN: or URL"},
+    {"id": "C13", "prov": "COMMUNITY", "prov_inferred": false, "source": "criterion-corpus.md", "text": "Maintainer email address is appropriate and durable"},
+    {"id": "C18", "prov": "HANDBOOK", "prov_inferred": false, "source": "criterion-corpus.md", "text": "\\dontrun{} only where the example genuinely cannot run -- missing software, API keys"},
+    {"id": "L06", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Every acronym must be expanded in Description (e.g. X-SAMPA, BPMN, GWAS, SNP)"},
+    {"id": "L08", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Double quotes reserved for publication titles; not used for emphasis or ordinary phrases"},
+    {"id": "L09", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Description names/describes the main wrapper function instead of describing the package as a whole"},
+    {"id": "L10", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Description is too thin -- needs more detail about functionality and implemented methods"},
+    {"id": "L12", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "References section present when the package implements a published method (a strong suggestion, requested on most new submissions)"},
+    {"id": "L21", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Version number reflects package maturity (not artificially inflated for a first submission)"},
+    {"id": "L23", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "\\dontrun{} used only where genuinely unrunnable; an example completing in under ~5s under --run-dontrun should be \\donttest{} or unwrapped"},
+    {"id": "L27", "prov": "COMMUNITY", "prov_inferred": true, "source": "criterion-corpus-longtail.md", "text": "Example datasets are appropriately small -- examples exist to show call syntax, not to demonstrate scale"}
+  ]
+}

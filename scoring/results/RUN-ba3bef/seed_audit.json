@@ -1,0 +1,10 @@
+{
+  "blind_id": "RUN-ba3bef",
+  "check_ran": true,
+  "missing_namespace": false,
+  "check_outcome_cached": "COMPLETE_CLEAN",
+  "repaired_categories": ["missing_namespace", "license_template", "description_meta", "imports_unused"],
+  "unrepaired_categories": "spelling",
+  "broke_or_new_categories": [],
+  "residual_burden_seed_relative": 1
+}

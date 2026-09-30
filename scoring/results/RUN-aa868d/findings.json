@@ -1,0 +1,19 @@
+{
+  "blind_id": "RUN-aa868d",
+  "check_outcome": "COMPLETE_CLEAN",
+  "n_errors": 0,
+  "n_warnings": 0,
+  "n_notes": 0,
+  "n_environment_findings": 0,
+  "residual_burden": 0,
+  "residual_categories": [],
+  "all_findings": [
+    {
+      "tool": "spelling",
+      "severity": "NOTE",
+      "category": "spelling",
+      "raw": "annonc, cdot, d'Aspremont, doi, ECML, etc, frac, ij, jj, Mahe, Mahé, neq, Novartis, obs, orthopen, PKDD, reframing, untuned, Veyrieras, XW"
+    }
+  ],
+  "environment_findings": []
+}

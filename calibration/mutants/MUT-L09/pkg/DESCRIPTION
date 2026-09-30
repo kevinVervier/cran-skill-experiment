@@ -1,0 +1,29 @@
+Package: orthoMTL
+Type: Package
+Title: Multi-Task Learning with Orthogonal Constraints
+Version: 0.1.0
+Authors@R: c(
+    person("Kevin", "Vervier",
+        email = "kevin.vervier@novartis.com",
+        role = c("aut", "cre")),
+    person("Novartis Pharma AG", role = c("cph", "fnd")))
+Description: The main function orthoMTL() fits a multi-task model. Call orthoMTL() with a predictor matrix and a response matrix to get coefficients.
+License: GPL-3
+Encoding: UTF-8
+Imports:
+    parallel,
+    doParallel,
+    foreach,
+    ggplot2,
+    rlang,
+    stats
+VignetteBuilder: knitr
+Suggests:
+    knitr,
+    glmnet,
+    testthat (>= 3.0.0),
+    survival,
+    rmarkdown
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 4.0.0)

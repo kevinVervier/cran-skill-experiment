@@ -1,0 +1,33 @@
+{
+  "seed_dir": "C:/Users/Shadow/sandbox/arms/A0/pkg",
+  "missing_namespace": true,
+  "r01_hits": [],
+  "r02_hit": [
+    {
+      "license": "GPL-3 + file LICENSE",
+      "lines": ["YEAR: 2014-2026", "COPYRIGHT HOLDER: Kevin Vervier, Novartis Pharma AG"]
+    }
+  ],
+  "seed_documented_check_ran": true,
+  "seed_documented_findings": [
+    {
+      "tool": "R_CMD_check",
+      "severity": "NOTE",
+      "category": "description_meta",
+      "raw": "Warning in url(sprintf(\"%s/src/contrib/PACKAGES.gz\", u), \"rb\") :\nMaintainer: 'Kevin Vervier <kevin.vervier@novartis.com>'\n\nLicense components with restrictions and base license permitting such:\n  GPL-3 + file LICENSE\nFile 'LICENSE':\n  YEAR: 2014-2026\n  COPYRIGHT HOLDER: Kevin Vervier, Novartis Pharma AG\n\nNo Authors@R field in DESCRIPTION.\nPlease add one, modifying\n  Authors@R: person(given = \"Kevin\",\n                    family = \"Vervier\",\n                    role = c(\"aut\", \"cre\"),\n            "
+    },
+    {
+      "tool": "R_CMD_check",
+      "severity": "NOTE",
+      "category": "imports_unused",
+      "raw": "checking dependencies in R code ... NOTE\nNamespaces in Imports field not imported from:\n  'base' 'dplyr' 'ggpubr'\n  All declared Imports should be used."
+    },
+    {
+      "tool": "spelling",
+      "severity": "NOTE",
+      "category": "spelling",
+      "raw": "al, Alexandre, annonc, cdot, colour, coloured, d'Aspremont, d’Aspremont, ECML, enet, et, frac, grey, hal, https, ij, interpretability, isotonic, jj, labelled, learningDisjointSupports, Mahe, Mahé, maximisation, modelling, Modelling, multiclass, neq, normalised, numTasks, optimisation, optimises, OrthoMTL, OrthoPen, parallelised, penalised, PKDD, prevalences, reframing, regularisation, Regularisation, regularised, Summarise, untuned, Veyrieras, visualisation, Visualisation, Visualise, XW"
+    }
+  ],
+  "violated_categories": ["missing_namespace", "license_template", "description_meta", "imports_unused", "spelling"]
+}
