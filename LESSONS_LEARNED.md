@@ -34,9 +34,12 @@ Descriptive only; no significance testing (pre-reg §8).*
 
 ## 3. Design lessons (for the next experiment)
 
-1. **The oracle floored, as the pre-reg warned.** The pre-registered fallback (judge as primary)
-   was right, but the judge had only ~9 applicable criteria per tree and only two ever fired. Next
-   time, build the mutation/seed set so criteria are *live* at the start and can discriminate.
+1. **The oracle floored, as the pre-reg warned, but the seed was live on the machine side.** The
+   seed carried four machine-detectable defects (missing NAMESPACE, license template, DESCRIPTION
+   metadata, unused imports). Every completed run in every arm, A0 included, repaired all four with
+   no regressions (57/57). So the floor is a measured success: the agent runs `R CMD check` against
+   itself. What was *not* live was the judge side: ~9 applicable criteria per tree, only two ever
+   fired. Next time, seed judge-only defects too, so they can discriminate.
 2. **Seed design: one unrepairable constant dominates.** C13 (employer email) is a fact the agent
    cannot know to change, so it fires in every tree. It consumes the judge's dynamic range. Exclude
    constants from the judged set, or report them separately.
@@ -86,7 +89,7 @@ Descriptive only; no significance testing (pre-reg §8).*
 2. Why a measurement instrument, not a demo: blinding, frozen prompt, fresh trees, interleaving.
 3. The first finding is about measurement: machine checks floor, so the judge carries the result.
 4. The result: no separation, including the hindsight oracle A4.
-5. What would change the answer: a live-criteria seed, a handicapped positive-control arm,
+5. What would change the answer: a seed with live judge-only defects, a handicapped positive-control arm,
    multi-rep judging, and other packages.
 6. Declared limitations, stated plainly and early, including the post-hoc n extension.
 

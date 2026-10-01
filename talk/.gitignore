@@ -1,0 +1,12 @@
+# Public artefact is the PDF only. Corporate template code/assets are added
+# on the internal PC and must never be committed from here.
+_extensions/
+_brand.yml
+assets/
+*.scss
+*.css
+*.html
+*_files/
+.quarto/
+*.log
+!talk.pdf

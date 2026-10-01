@@ -1,0 +1,214 @@
+---
+title: "From Research Code to CRAN"
+subtitle: "LLM-assisted refactoring of orthoMTL — and what a skill file did (not) add"
+author: "Kevin Vervier"
+institute: "Novartis"
+date: "2026-10-20"
+format:
+  revealjs:
+    slide-number: true
+    width: 1280
+    height: 720
+    # TEMPLATE SWAP POINT: on the internal PC replace this block with the
+    # Novartis revealjs format (novartis-quarto-revealjs). Content below is plain
+    # Markdown + R chunks and should carry over unchanged.
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
+---
+
+<!--
+TIMING BUDGET — 10 min slot, ~9:00 spoken, 60 s slack.
+  1 Inheritance             0:00–1:15
+  2 Pinning wrong behaviour 1:15–2:00
+  3 Three oracles           2:00–3:45   <- load-bearing
+  4 REG-01                  3:45–4:30
+  5 Experiment design       4:30–5:30
+  6 Result                  5:30–7:15
+  7 What it can't say       7:15–8:15
+  8 What transfers          8:15–9:00
+Backup slides after the Q&A hold are NOT part of the 10 minutes.
+OPENING LINE: "This is not paste-into-a-chatbot. This is an agent working in the
+repo, running the checks itself."
+-->
+
+```{r}
+#| include: false
+source("figures.R")
+n_runs <- nrow(runs)
+n_arm  <- as.integer(table(runs$arm)[["A0"]])
+n_seed <- sum(seed_repaired)
+```
+
+## The inheritance
+
+::: columns
+::: {.column width="48%"}
+**2014 — orthopen**
+
+- Multi-task learning with an orthogonality penalty
+- Regression + classification
+- Research code; never on CRAN
+- Vervier et al. (2014)
+:::
+::: {.column width="48%"}
+**2026 — orthoMTL**
+
+- Survival extension (Juric 2026)
+- Internal → Novartis open source, June 2026
+- ~20 R files and ~11 test files at the first external push
+:::
+:::
+
+::: notes
+The open-sourcing is the reason any of this is showable. One sentence, do not dwell.
+Honesty note: the 2014 monolith is the *historical* state; the agent met an already-packaged
+repo. Say this out loud; the repo is public and clonable. Counts checked against commit 681675f
+(20 R files, 11 test files); the old draft said 21/10.
+:::
+
+## You cannot pin behaviour when the behaviour is wrong
+
+- Standard refactoring playbook: characterise old behaviour, then change freely
+- Here the old behaviour was **incorrect**, so the fixes deliberately move the numbers
+  away from the 2014 published results
+- So there is no golden output. **What do you verify against?**
+
+## Three oracles
+
+| Type | Script | Result |
+|:--|:--|:--|
+| Differential | `parity_orthopen.R` | vs validated orthopen v1.1.0: $\max\lvert B_{ref}-B_{new}\rvert = 0$ on 5 deterministic cases; the seeded disjoint case agrees to $<10^{-6}$ |
+| Metamorphic | `old_vs_fixed_logistic.R` | label-flip antisymmetry restored: ~0.62 → 0.000 |
+| Pseudo-oracle | `simulation_recovery.R` | survival path vs ground truth: support-recovery AUC ~0.66 vs ~0.50 null, 10/10 seeds |
+
+. . .
+
+The survival path is exactly where differential testing **cannot** reach.
+
+::: notes
+Longest beat; the taxonomy is the transferable content. Slow down.
+Verified against validation/README.md and parity_orthopen.R: five exact cases plus one
+RNG-seeded disjoint case checked to <1e-6, so do NOT say "bit-for-bit on six cases".
+:::
+
+## REG-01: plausible, idiomatic, wrong
+
+Labels in $\{-1,+1\}$, but the gradient used the $\{0,1\}$ cross-entropy form:
+
+$$\color{#B2182B}{-\,(Y - \sigma(Xw))}$$
+
+$$\color{#1B7837}{-\,X^{\top}\!\left(\frac{y}{1+\exp(y\,Xw)}\right)\Big/ m}$$
+
+- Inherited from the 2014 research code
+- The buggy version violates label-flip symmetry; the fix restores it **and lowers held-out logistic loss**
+- Written by a human. The failure mode is not new; cheap verification is.
+
+::: notes
+The old draft quoted a 7.1% held-out loss reduction. I could not find that figure in the
+orthoMTL repo, so it is deliberately NOT on the slide. Re-run validation/old_vs_fixed_logistic.R
+(needs the legacy source via ORTHOPEN_LEGACY) and add the number here only if it reproduces.
+:::
+
+## Would a skill file have saved the round-trips?
+
+**The tell.** Two CRAN rejections, both human review: an invalid `+ file LICENSE` field, then a
+hard-coded `set.seed()`. And `.claude/settings.local.json` almost shipped in the tarball.
+
+. . .
+
+**The test.** Seed the package with CRAN defects; give an agent the CRAN task under one of
+**six conditions** (no skill, three public skills, a hindsight skill, raw handbook text):
+
+- Frozen prompt, fresh tree per run, blocks interleaved, outputs **blinded**
+- Machine checks + a judge **calibrated on mutants first** (92 % detection, 8 % false positives)
+- `r n_runs` completed runs, `r n_arm` per arm
+
+::: notes
+Everything is pre-registered; the SHA-256 of the blind map was committed before scoring.
+n went 5 to 10 per arm after an interim look: say so on the limitations slide, not here.
+:::
+
+## Result: machine checks saturate, the judge barely moves
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.3
+dotplot("judge_nc", "Judge-flagged non-compliant criteria per tree", integer = TRUE)
+```
+
+- **`r n_seed`/`r n_runs`** completed runs fixed all four seeded machine-detectable defects, **the no-skill control included**, with no regressions
+- Judge flags come from **two** criteria; no arm separates from the control, not even the hindsight arm A4
+
+::: notes
+Lead with the uncomfortable part: the hindsight arm (written from this package's own failures)
+does not beat the no-skill control. The control did well because it runs R CMD check
+against itself. That is the slide-8 point, measured.
+:::
+
+## What this cannot tell you
+
+- **Every arm, A0 included, could read an offline copy of the CRAN docs.** The honest claim is
+  "no benefit beyond documentation already at hand", not "skills are useless"
+- n = 1 package, 1 agent, 1 model version
+- **n was extended 5 → 10 per arm after an interim unblinded look** (post-hoc, not pre-registered)
+- 3 runs lost to API rate limits, excluded (`r n_runs` of 60 analysed)
+- No positive control showed the instrument *could* detect a gain; descriptive only, no significance testing
+
+## What transfers
+
+- **Behavioural oracles** → semantic correctness. Domain knowledge decides which
+  metamorphic relation is the right one; the agent cannot supply that.
+- **Conformance oracles** → compliance correctness. `R CMD check` is a machine oracle the
+  agent runs against itself. **That is why it scales, and why a skill file added nothing on top.**
+- Slop is what happens when generation gets cheap and verification does not.
+
+<br>
+
+::: {style="font-size:0.6em"}
+`github.com/Novartis/orthoMTL` · Vervier et al. 2014, Juric 2026
+:::
+
+<!-- HOLD FOR Q&A, not a main slide:
+     ab_s02 — sqrt(i) schedule correct but 12–17x slower than log/const to the same
+     optimum. Flagged, NOT changed: would move published numerics. -->
+
+# Backup {.unnumbered}
+
+## Backup: cost per run
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.3
+dotplot("cost", "Cost per run (USD)")
+```
+
+## Backup: did skills change when the agent first ran R CMD check?
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.3
+dotplot("first_check_evt", "Event index of first R CMD check")
+```
+
+- No arm checks early; ranges overlap heavily
+
+## Backup: arms
+
+| Arm | Skill file |
+|---|---|
+| A0 | none (control) |
+| A1 | CRAN checklist |
+| A2 | CRAN process + adversarial review |
+| A3 | general R-package development (not CRAN) |
+| A4 | hindsight skill written from this package's failures: *upper bound* |
+| A5 | raw handbook text |
+
+## Backup: what I would change next time
+
+- Seed **judge-only** defects so the judge has live criteria
+- Add a deliberately handicapped arm as a positive control
+- Multi-rep judging; judge set without unrepairable constants (maintainer email)
+- More packages, more models
