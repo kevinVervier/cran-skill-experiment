@@ -111,12 +111,26 @@ Recorded during the presentation pass, before bundling the deck for transfer.
    and it directly answers "did the skills fix the LICENSE?": yes, and so did
    the control.
 
-3. **R01 (`set.seed()`) was never seeded — this was previously misstated.** A
-   speaker note claimed "no arm caught those either" of both real rejections.
-   That is wrong: R02 was seeded and universally fixed, R01 was never injected
-   at all. Corrected on the caveats slide, the seeded-defects backup table, and
-   the "what I would change" list. This is the single most important factual fix
-   of the session — the deck was claiming a result it had no data for.
+3. **R01 (`set.seed()`) was present in the seed; the scoring rule missed it.**
+   An earlier version of this entry said R01 "was never seeded". Wrong. The seed
+   carries `seed = 42` as a default and an unconditional `set.seed(seed)` in
+   `orthoMTL`, `cv_orthoMTL` and `simulate_mtl` (and the default in `bootstrap_orthoMTL`) -
+   the pattern in the baseline's `cran-comments.md`. `R01_seed_in_function.R`
+   only flagged a literal inside a body, so `seed_audit.json` never saw it and
+   the §4.8 "zero hits, true negative" validation of the seed was wrong.
+   Fixed 2026-10-06: the rule now also flags numeric-default formals reaching
+   `set.seed()`, plus a companion `seed_numeric_defaults()` for trees that keep
+   the default but route it through a helper. Validated on 8 synthetic cases,
+   the seed (3 hits), baseline and control (0), `MUT-R01` (1). Original results
+   untouched; re-score in `scoring/results_r01v2/r01_rescored.csv`
+   (`scoring/rescore_r01.R`). Completed runs, direct hit / default kept via
+   helper / canonical `NULL` fix: A0 6/4/0, A1 1/8/0, A2 1/1/7, A3 3/7/0,
+   A4 4/6/0, A5 1/0/8. Descriptive only (n=9-10). The "default kept" class
+   (e.g. `local_seed()` restoring `.Random.seed`) is a judgement call whether
+   CRAN would accept it. Not yet hand-verified tree by tree beyond spot checks.
+   Consequence: the "all arms identical" framing holds for the four seeded
+   defects and C13, not for R01. A4 (written from the rejection history) did not
+   produce the canonical fix in any run.
 
 4. **The maintainer-email ("Novartis address") observation is NOT new.** It is
    criterion **C13**, already in the corpus, and per §1 it is flagged by the

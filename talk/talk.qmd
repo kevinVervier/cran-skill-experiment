@@ -252,7 +252,7 @@ The arm I wrote from our own rejections had no edge over writing nothing at all.
 
 ::: {.fragment style="text-align:center; font-size:.92em; margin-top:.5em; color:#939393;"}
 That includes the LICENSE defect that actually got us rejected: **fixed in every
-run, in every arm**. The `set.seed()` rejection was never seeded — see the caveats.
+run, in every arm**. The `set.seed()` rejection was in the seed too — and there the arms did differ (backup).
 :::
 
 ::: notes
@@ -316,8 +316,10 @@ If asked "then why do people write CRAN skill files?" - three honest reasons.
 (1) Most were written against weaker models, where the gap was real.
 (2) They encode the part R CMD check cannot see. Our LICENSE rejection was
 exactly that - and every arm fixed it, control included, so on that one the
-skill file bought nothing. The set.seed rejection was never seeded, so that
-half of the promise is genuinely untested here. Say so if pushed.
+skill file bought nothing. The set.seed rejection was also present in the
+starting package, and there it was different: only the process skill (A2) and
+the raw handbook (A5) mostly produced the canonical fix; the control did not.
+See the backup slide; n is 9-10 per arm, so descriptive only.
 (3) Writing one is cheap and feels responsible; nobody had measured whether it
 works, which is why I ran this.
 :::
@@ -325,7 +327,7 @@ works, which is why I ran this.
 ## What I am *not* claiming {.smaller}
 
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
-- **Only one of our two real rejections was seeded.** The LICENSE template was, and every arm fixed it. The `set.seed()` finding was never injected — so this measures one of the two things that actually cost us weeks
+- **The two rejections behave differently.** The LICENSE template was repaired by every arm. The hard-coded `set.seed()` was also in the starting package, and there the arms differ (backup) — descriptive counts on 9–10 runs per arm, no test
 - **N = 1** on every axis that matters: one package, one agent, one model version
 - We had budget left and wanted more points, so we added 4–5 runs per arm. The N=5 results did not trigger that — we had simply costed the runs conservatively
 - **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity"
@@ -542,7 +544,7 @@ dotplot("first_check_evt", "Event index of first R CMD check")
 
 ## Backup: what I would change
 
-- Seed **R01, the `set.seed()` finding** — the one real rejection we left out, and the one no machine check reports
+- Score **R01, the `set.seed()` finding**, with a rule that also sees seeds passed as default arguments, and add judge-side defects so the judge can discriminate
 - Seed more defects only a **CRAN volunteer** could catch
 - Add a **positive control**: an arm with the CRAN docs removed, so the skill file is the only guidance. If that arm does worse, the measurement has teeth
 - Judge each package several times, not once
@@ -558,11 +560,29 @@ dotplot("first_check_evt", "Event index of first R CMD check")
 | Unused declared `Imports` | yes | 57/57 |
 
 Three of four are machine-visible. Our other real rejection — **R01, the
-hard-coded `set.seed()`** — was **not seeded**, so the one defect class where a
-skill file had the clearest shot was never put to the test.
+hard-coded `set.seed()`** — is a fifth defect that `R CMD check` does not report;
+it is on the next slide.
 
 Three of four machine-visible is the result's main caveat: this measures the
 easy half of CRAN preparation.
+
+## Backup: the hard-coded seed (R01) {.smaller}
+
+The starting package defaulted `seed = 42` and called `set.seed()` unconditionally in
+four exported functions — the exact pattern CRAN rejected. `R CMD check` does not report it.
+
+| Arm | n | Still hard-coded | Default kept, RNG state restored | Canonical fix (`seed = NULL`) |
+|:--|--:|--:|--:|--:|
+| A0 control | 10 | 6 | 4 | 0 |
+| A1 checklist | 9 | 1 | 8 | 0 |
+| A2 process | 9 | 1 | 1 | 7 |
+| A3 general R | 10 | 3 | 7 | 0 |
+| A4 oracle* | 10 | 4 | 6 | 0 |
+| A5 raw handbook | 9 | 1 | 0 | 8 |
+
+Completed runs only; descriptive counts, no test. "Default kept" means `seed = 42` stays but the
+value goes through a helper that restores the user's RNG state — arguably acceptable, not what the
+reviewer asked for. \*A4 is an upper bound, not a competitor.
 
 ::: notes
 Be upfront - I seeded what I could verify automatically, which is exactly the

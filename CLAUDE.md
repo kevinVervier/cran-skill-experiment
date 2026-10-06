@@ -153,9 +153,11 @@ artefact about a null result, so every claim must survive a hostile check.
   LaTeX path under `--to pdf`; it deletes the existing `talk.pdf` and then fails
   (no TeX here). Build HTML, then print `talk.html?print-pdf` with decktape or a
   headless browser.
-- **Two real rejections, only one was tested.** R02 (LICENSE template) was
-  seeded and repaired in 57/57 runs. R01 (`set.seed()`) was **never seeded**.
-  Do not let the deck imply the experiment says anything about R01.
+- **Two real rejections, scored differently.** R02 (LICENSE template) was
+  repaired in 57/57 runs. R01 (`set.seed()`) was present in the seed (`seed = 42`
+  default plus unconditional `set.seed()` in four exported functions) and the
+  original R01 rule missed it; use `scoring/results_r01v2/`, not `seed_audit.json`,
+  for R01. Arms differ on it; counts are descriptive (n=9-10 per arm).
 - **The maintainer-email finding is C13, from the experiment itself** — flagged
   in every tree except A5 — not a later discovery by a newer model. And it is
   **not a policy violation**: a named person at a company address is compliant;
