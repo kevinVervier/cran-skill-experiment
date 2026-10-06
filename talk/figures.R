@@ -41,3 +41,51 @@ seed_repaired <- vapply(runs$blind, function(b) {
   d <- jsonlite::read_json(file.path("..", "scoring", "results", b, "seed_audit.json"))
   all(seed_cats %in% unlist(d$repaired_categories)) && length(d$broke_or_new_categories) == 0
 }, logical(1))
+
+# Experiment schematic for the design slide: six arms -> blinded scoring.
+design_fig <- function() {
+  d <- tibble::tibble(
+    arm = factor(names(arm_labels), levels = rev(names(arm_labels))),
+    lab = unname(arm_labels),
+    n   = as.integer(table(runs$arm)[names(arm_labels)]),
+    ctrl = names(arm_labels) == "A0"
+  )
+  ggplot(d, aes(x = 1, y = arm)) +
+    geom_tile(aes(fill = ctrl), width = .9, height = .78, colour = "white", linewidth = 1.5) +
+    geom_text(aes(label = paste0(lab, "   n = ", n)), colour = "white",
+              fontface = "bold", size = 6, hjust = .5) +
+    scale_fill_manual(values = c(`TRUE` = ACCENT, `FALSE` = "#5A5A5A"), guide = "none") +
+    labs(x = NULL, y = NULL) +
+    theme_void(base_size = 18)
+}
+
+# Anonymised schematic for the opening slide. No compound, gene, trial or
+# variable names may appear in this talk, and the original study figures carry
+# those labels in the image itself - so the effect is redrawn from scratch as an
+# illustrative shape. Values are indicative, not estimates.
+sign_flip_fig <- function() {
+  d <- tibble::tibble(
+    month = c(2, 4, 6, 10, 15, 18, 22),
+    est   = c(-0.125, -0.105, -0.125, -0.105, -0.012, 0.012, 0.062),
+    se    = c(0.012, 0.010, 0.011, 0.013, 0.014, 0.013, 0.015)
+  )
+  ggplot(d, aes(month, est)) +
+    geom_hline(yintercept = 0, linetype = "dashed", colour = INK, linewidth = .6) +
+    geom_ribbon(aes(ymin = est - 1.96 * se, ymax = est + 1.96 * se),
+                fill = ACCENT, alpha = .18) +
+    geom_line(colour = ACCENT, linewidth = 1.6) +
+    geom_point(colour = ACCENT, size = 3.4) +
+    annotate("text", x = 3.6, y = -0.052, label = "harmful", colour = INK,
+             fontface = "bold", size = 6.4, hjust = .5) +
+    annotate("text", x = 20, y = 0.028, label = "protective", colour = INK,
+             fontface = "bold", size = 6.4, hjust = .5) +
+    scale_x_continuous(breaks = d$month) +
+    labs(x = "Months of follow-up", y = "Estimated effect",
+         caption = "Schematic of one biomarker's effect. Shape is illustrative.") +
+    theme_minimal(base_size = 19) +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_line(colour = "#E6E6E6"),
+          plot.caption = element_text(colour = MUTED, size = 12),
+          text = element_text(colour = INK))
+}

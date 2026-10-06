@@ -5,8 +5,15 @@ _brand.yml
 assets/
 *.scss
 *.css
+*.pptx
+*.svg
+gradient_bar.png
 *.html
 *_files/
 .quarto/
 *.log
 !talk.pdf
+*.jpg
+*.jpeg
+*.png
+!talk_files/
