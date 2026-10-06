@@ -140,6 +140,27 @@ changes afterwards) → blocks 2–5.
   rounds, both human review. The mutation set is built from the criterion corpus, not from the
   ledger.
 
+## Talk / deck (presentation pass)
+
+The deck is `talk/talk.qmd`. Facts in it are load-bearing — it is a public
+artefact about a null result, so every claim must survive a hostile check.
+
+- **`talk.pdf` is the only public artefact.** Everything else in `talk/` is
+  gitignored: the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
+  `gradient_bar.png`, …) are added on the internal PC and **must never be
+  committed or shipped off this machine**.
+- **Never run `quarto render talk.qmd --to pdf`.** Revealjs decks take the
+  LaTeX path under `--to pdf`; it deletes the existing `talk.pdf` and then fails
+  (no TeX here). Build HTML, then print `talk.html?print-pdf` with decktape or a
+  headless browser.
+- **Two real rejections, only one was tested.** R02 (LICENSE template) was
+  seeded and repaired in 57/57 runs. R01 (`set.seed()`) was **never seeded**.
+  Do not let the deck imply the experiment says anything about R01.
+- **The maintainer-email finding is C13, from the experiment itself** — flagged
+  in every tree except A5 — not a later discovery by a newer model. And it is
+  **not a policy violation**: a named person at a company address is compliant;
+  the risk is filtering and job changes.
+
 ## Reporting posture
 
 Kevin's standing preference: flag the uncomfortable implication first, then the path forward.

@@ -93,7 +93,55 @@ Descriptive only; no significance testing (pre-reg §8).*
    multi-rep judging, and other packages.
 6. Declared limitations, stated plainly and early, including the post-hoc n extension.
 
-## 6. Open decisions before the writeup
+## 7. Talk-construction decisions (2026-10-06)
+
+Recorded during the presentation pass, before bundling the deck for transfer.
+
+1. **Narrative reframed to follow the real chronology.** The deck now runs:
+   agentic refactoring of PhD code → CRAN prep → two human-review rejections →
+   acceptance → *then* the counterfactual question ("would a skill file have got
+   us there in one shot?"). Previously the question slide led with the
+   literature hedges; those moved to a footnote. The motivation is our own
+   submission history, not a gap in the literature.
+
+2. **Per-defect repair rates are now reported, not just the all-four count.**
+   All four seeded defects were repaired in **57/57** runs, including
+   `license_template` — the defect corresponding to real rejection **R02**.
+   This is a sharper statement of the null than "n_seed/n_runs fixed everything"
+   and it directly answers "did the skills fix the LICENSE?": yes, and so did
+   the control.
+
+3. **R01 (`set.seed()`) was never seeded — this was previously misstated.** A
+   speaker note claimed "no arm caught those either" of both real rejections.
+   That is wrong: R02 was seeded and universally fixed, R01 was never injected
+   at all. Corrected on the caveats slide, the seeded-defects backup table, and
+   the "what I would change" list. This is the single most important factual fix
+   of the session — the deck was claiming a result it had no data for.
+
+4. **The maintainer-email ("Novartis address") observation is NOT new.** It is
+   criterion **C13**, already in the corpus, and per §1 it is flagged by the
+   judge in **every tree except A5** — i.e. it was found *during* the experiment,
+   not later by a newer model. Any postscript slide must say so. Framing it as a
+   fresh discovery would misrepresent our own results.
+
+5. **C13 is not a policy violation.** CRAN policy requires "a single designated
+   maintainer (a person, not a mailing list)" whose address is current and
+   usable "without any form of filtering". `kevin.vervier@novartis.com` is a
+   person, so it is compliant today; the exposure is corporate mail filtering
+   and employer change. The talk must say "not a violation today" out loud.
+   Verified against `snapshot/cran-repository-policy.txt` (lines 52-58) and the
+   Cookbook's `description_issues.qmd`. Slated for change in **0.2.0**.
+
+6. **PDF build route is unresolved and cost us the artefact.** `quarto render
+   --to pdf` on a revealjs deck goes down the LaTeX path, which wiped the
+   tracked `talk/talk.pdf` and then failed (no TeX on this host). The correct
+   route is HTML + a headless-browser print (decktape or Chrome/Edge
+   `--print-to-pdf` over `talk.html?print-pdf`); neither node/npm nor Chrome is
+   installed here, only Edge. `talk.pdf` is currently staged as deleted and must
+   be restored or rebuilt on the target machine. **Do not run `--to pdf` on this
+   deck again.**
+
+## 8. Open decisions before the writeup
 
 - Rerun or exclude the three 429 block-3 runs, and how to label them.
 - Whether to report C13 separately (constant, not skill-responsive) and recompute judge counts

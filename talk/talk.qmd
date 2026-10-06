@@ -1,11 +1,12 @@
 ---
-title: "We Let Six AI Agents Prep a CRAN Package"
-subtitle: "orthoMTL — and the skill files that changed nothing"
+title: "From Research Code to CRAN: LLM-Assisted Refactoring of orthoMTL for Survival Endpoints"
+subtitle: "We Let Six AI Agents Prep a CRAN Package"
 author:
   - name: "Kevin Vervier"
-    affiliation: "Novartis · R/Pharma 2026"
+  - name: "Nadia Solovieff"
+  - name: "Gunther Jansen"
 date: "2026-10-20"
-date-format: long
+date-format: "[Novartis · R/Pharma 2026 · ]D MMMM YYYY"
 # Novartis template assets (novartis-quarto-revealjs) are copied in locally and
 # gitignored; only talk.pdf is a public artefact.
 format:
@@ -51,9 +52,10 @@ TIMING BUDGET — 10 min slot, ~9:00 spoken, 60 s slack.
   5 The question            3:30–4:10
   6 The experiment          4:10–5:10
   7 THE RESULT (0)          5:10–6:30   <- the punch
-  8 Why the control won     6:30–7:30
-  9 Honesty slide           7:30–8:20
- 10 Take-home               8:20–9:00
+  8 Why the control won     6:30–7:20
+  9 Honesty slide           7:20–8:00
+ 10 Postscript (the joke)   8:00–8:25   <- laugh, then land
+ 11 Take-home               8:25–9:00
 OPENING LINE: "Our package found an effect that flips sign halfway through a
 cancer trial. Then I spent six weeks fighting a LICENSE field."
 DISCLOSURE CONSTRAINT: no compound, gene, trial or variable names in this deck.
@@ -70,14 +72,15 @@ tot_usd <- round(sum(runs$cost))
 ## A biomarker that changes its mind
 
 ::: columns
-::: {.column width="34%"}
-In a late-stage oncology trial, one baseline biomarker looked like **nothing**.
+::: {.column width="40%"}
+In a late-stage oncology trial, one baseline biomarker looked **unassociated
+with survival**.
 
 A standard survival model scored its effect at ≈ 0.
 :::
-::: {.column width="66%"}
+::: {.column width="60%"}
 ```{r}
-#| fig-width: 7.6
+#| fig-width: 7.0
 #| fig-height: 4.3
 #| out-width: "100%"
 sign_flip_fig()
@@ -85,7 +88,7 @@ sign_flip_fig()
 :::
 :::
 
-::: {.fragment style="text-align:center; font-size:1.15em; margin-top:-.3em;"}
+::: {.fragment style="text-align:center; font-size:1.0em; margin-top:-.3em;"}
 **Harmful early. Protective late.** The two halves cancelled out.
 :::
 
@@ -105,15 +108,18 @@ but the published analysis is in the reference on the last slide."
 
 ::: columns
 ::: {.column width="46%"}
-Cut follow-up into **landmarks**. Fit all of them **at once**, letting each
-landmark keep its own effect.
+Learn **several related tasks together**, sharing strength where they agree and
+staying apart where they don't.
 
-- Survival → a series of yes/no tasks
-- One model, not seven
-- Oncology application: C-index **0.66 vs 0.63**
+Built first for **regression and classification**. Survival came later: cut
+follow-up into **landmarks**, fit them **at once**, each keeping its own effect.
 :::
 ::: {.column width="54%"}
-![](surv_mtl.png){.fig-fit style="--fig-h:380px;" fig-alt="Diagram converting survival times into a sequence of binary classification tasks, one per landmark."}
+![](surv_mtl.png){.fig-fit style="--fig-h:360px;" fig-alt="Diagram converting survival times into a sequence of binary classification tasks, one per landmark."}
+
+::: {style="font-size:.5em; color:#939393; text-align:center; margin-top:-.2em;"}
+Survival-as-multi-task framing after MTLSA (Li et al., KDD 2016).
+:::
 :::
 :::
 
@@ -134,12 +140,12 @@ Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
 Twelve-year-old research code. An agent did the packaging work.
 
 ::: {.fragment}
-It also found a **real bug** in my own 2014 gradient — labels were $\pm1$,
-the code used the $0/1$ formula.
+Writing unit tests for the **logistic loss**, the agent found a **real bug** in
+my own 2014 gradient — labels were $\pm1$, the code used the $0/1$ formula.
 :::
 
 ::: {.fragment style="margin-top:.4em;"}
-Caught because flipping every label **must** flip the answer. It didn't.
+The test it wrote: flipping every label **must** flip the answer. It didn't.
 :::
 :::
 ::: {.column width="45%"}
@@ -164,35 +170,68 @@ Say: "the agent cannot invent that check — I had to know the maths. But it ran
 :::
 
 ::: {.fragment style="font-size:1.15em; margin-top:.7em; color:#FF4E00;"}
-Neither was caught by any automated check. Both were caught by **a human**.
+Neither was caught by any automated check. Both were caught by **a CRAN volunteer**.
 :::
 
 ::: notes
 Deliberately dark slide, big type, slow delivery. This is the pivot from act one to act two.
 Both rejections cost round-trips measured in weeks of calendar time.
+CRAN is maintained by volunteers - the Repository Policy says so in its own
+preamble: "CRAN is maintained by the efforts of volunteers (the CRAN team)".
+Their time is described there as CRAN's most precious resource. That matters for
+the argument: the scarce reviewing capacity is human and unpaid.
 :::
 
-## So: would a "skill file" have saved me?
+## Would a skill file have got us there in one shot?
 
 ::: {style="font-size:1.1em;"}
-Skill files are everywhere. **Does anyone measure them?**
+An agent did the refactoring. An agent did the packaging. Then **two rounds of
+human review**, on two things `R CMD check` never printed. The package is now on
+CRAN — so the question is the **counterfactual**.
 :::
 
-::: {.fragment style="margin-top:.6em;"}
-Re-break the package with four classic CRAN defects. Hand it to an agent under
-**six conditions**. Frozen prompt, fresh copy each time, results **blinded** before scoring.
+::: {.fragment style="margin-top:.5em;"}
+Re-break the package with four defects — **no NAMESPACE**, a **LICENSE
+template**, **DESCRIPTION metadata**, **unused Imports**. Hand it to an agent
+under **six conditions**. Frozen prompt, fresh copy each time, results
+**blinded** before scoring.
 :::
 
 ```{r}
-#| fig-width: 8
-#| fig-height: 2.6
-#| out-width: "78%"
+#| fig-width: 9
+#| fig-height: 3.4
+#| out-width: "100%"
 design_fig()
 ```
+
+::: {style="font-size:.7em; margin-top:.3em; color:#939393;"}
+The literature was already hedging: skills "often provide no benefit, and can
+even hurt" — SkillDelta (Xu et al. 2026), SkillAxe (Gautam et al. 2026).
+Skills from [posit-dev/skills](https://github.com/posit-dev/skills) and
+[CoryMcCartan/agent-skills](https://github.com/CoryMcCartan/agent-skills); every
+arm also had the [CRAN Cookbook](https://contributor.r-project.org/cran-cookbook/)
+on disk. Full references in backup.
+:::
 
 ::: notes
 A4 is the cheat arm: I wrote it FROM this package's own rejection history. It should win.
 Flag that now so the result lands harder.
+
+IMPORTANT framing. Do NOT say "nobody measures skill files" - that is false and
+someone in this room will know it. Skills ARE measured; the useful point is that
+the measurements are already conditional, and I am adding one more condition.
+
+SAY THIS OUT LOUD, after the hedges land - it inoculates the whole talk:
+"The biggest study, SkillsBench, does find a solid average gain - but on 87
+tasks hand-picked to be easier with a skill, and not one of them is R."
+Then move on. One sentence, no defensiveness. If they want more, backup slide.
+
+Be ready for the counterweight: SkillsBench (Li et al. 2026) reports +16.6 pp
+across 87 tasks and is the headline positive result. If it comes up in Q&A, do
+not fight it - note that its tasks are admitted only when "significantly easier
+with Skills", its skills are top-quartile quality, and its software-engineering
+domain gains the second-least of eight (+11.6 pp). That gradient points at my
+result rather than against it. Backup slide has the detail.
 :::
 
 ## The result {background-color="#161616" style="color:#FCFCFC"}
@@ -208,7 +247,12 @@ difference between the best skill file and **no skill file at all**
 
 ::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.8em;"}
 All **`r n_seed`/`r n_runs`** runs fixed all four defects — including the control.
-Even the arm I wrote from our own failures.
+The arm I wrote from our own rejections had no edge over writing nothing at all.
+:::
+
+::: {.fragment style="text-align:center; font-size:.92em; margin-top:.5em; color:#939393;"}
+That includes the LICENSE defect that actually got us rejected: **fixed in every
+run, in every arm**. The `set.seed()` rejection was never seeded — see the caveats.
 :::
 
 ::: notes
@@ -222,16 +266,18 @@ Then: "including the cheat arm" — that is the uncomfortable part, say it yours
 #| fig-width: 9
 #| fig-height: 4.0
 #| out-width: "100%"
-dotplot("judge_nc", "Reviewer-flagged issues per package", integer = TRUE)
+stack_fig()
 ```
 
 ::: {style="font-size:.95em;"}
-Orange = **no skill file**. It is not behind anyone.
+Every run, in every arm, ended with **0–2** reviewer-flagged issues.
+The control's spread is the same as everyone else's.
 :::
 
 ::: notes
-Point at the orange dots. Ranges overlap completely. Total compute for the whole
-experiment: about $`r tot_usd` and 12 hours.
+The outcome only ever took three values, so show all three rather than jittered
+dots. Walk the top row (A0, the control) and then say "now look at every other
+row." Total compute for the whole experiment: about $`r tot_usd` and 12 hours.
 :::
 
 ## Why the control did so well
@@ -241,42 +287,106 @@ experiment: about $`r tot_usd` and 12 hours.
 The agent runs **`R CMD check`** and reads its own failures.
 :::
 ::: {.fragment style="margin-top:.5em;"}
-A machine oracle beats any checklist — it **can't be out of date**.
+A machine oracle beats a checklist: it reflects **this** package, **today**.
 :::
 ::: {.fragment style="margin-top:.5em; color:#FF4E00; font-weight:700;"}
-Skill files add nothing where a tool already tells the truth.
+Skill files add little where a tool already tells the truth.
 :::
 :::
 
+::: {.fragment style="margin-top:.5em; font-size:.92em;"}
+Not unique to us: SkillFlow found agents used retrieved skills **70%** of the
+time and still gained **nothing**. Reading a skill is not the same as needing one.
+:::
+
+::: {style="font-size:.78em; margin-top:.5em; color:#939393;"}
+Not an argument against skill files — an argument about **where** they pay.
+The CRAN rules a skill encodes are the ones `R CMD check` already enforces.
+:::
+
 ::: notes
-This is the mechanistic explanation and the most useful thing on the slide deck.
-Where R CMD check is silent — the LICENSE field, the seed — nothing saved us either.
+This is the mechanistic explanation and the most useful thing in the deck.
+
+If asked "but models keep improving, so isn't the checklist point moot?" - that
+cuts in my favour, not against. A better model needs the checklist less, not
+more. My claim is about the tool being authoritative for this package today,
+not about the checklist being stale in the abstract.
+
+If asked "then why do people write CRAN skill files?" - three honest reasons.
+(1) Most were written against weaker models, where the gap was real.
+(2) They encode the part R CMD check cannot see. Our LICENSE rejection was
+exactly that - and every arm fixed it, control included, so on that one the
+skill file bought nothing. The set.seed rejection was never seeded, so that
+half of the promise is genuinely untested here. Say so if pushed.
+(3) Writing one is cheap and feels responsible; nobody had measured whether it
+works, which is why I ran this.
 :::
 
 ## What I am *not* claiming {.smaller}
 
-- Every arm could read the CRAN docs anyway → "**no benefit beyond docs at hand**", not "skills are useless"
-- **One** package, **one** agent, **one** model version
-- I extended the sample size **after** peeking — post-hoc, not pre-registered
-- No positive control, so I can't prove the measurement *could* detect a win
-- 3 runs lost to rate limits (`r n_runs` of 60 analysed)
+- **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
+- **Only one of our two real rejections was seeded.** The LICENSE template was, and every arm fixed it. The `set.seed()` finding was never injected — so this measures one of the two things that actually cost us weeks
+- **N = 1** on every axis that matters: one package, one agent, one model version
+- We had budget left and wanted more points, so we added 4–5 runs per arm. The N=5 results did not trigger that — we had simply costed the runs conservatively
+- **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity"
 
 ::: notes
 Say these out loud and quickly. Credibility is the currency of a null result.
-Do not skip the peeking admission.
+Lead with the non-claim, then the reason.
+
+The lost runs go here, orally, pointing at the arms table: 3 runs died on API
+rate limits, infrastructure not agent behaviour, so `r n_runs` of 60 are analysed.
+Not on the slide - it's a footnote, not a limitation of the claim.
+:::
+
+## Postscript: the one thing every arm agreed on {background-color="#F5F5F5"}
+
+::: {style="font-size:1.12em; margin-top:.3em;"}
+The judge flagged **one** criterion in almost every tree — our own maintainer
+address:
+
+::: {style="text-align:center; font-size:1.1em; margin-top:.4em;"}
+`kevin.vervier@novartis.com`
+:::
+:::
+
+::: {.fragment style="margin-top:.5em;"}
+CRAN requires **a person, not a mailing list**, kept current and reachable
+"**without any form of filtering**". A corporate account is one re-org away
+from failing all three.
+:::
+
+::: {.fragment style="margin-top:.5em; color:#FF4E00; font-weight:700; text-align:center;"}
+Not a violation today. Changing in **0.2.0** anyway.
+:::
+
+::: notes
+The laugh line, and it must be told precisely or someone will correct me.
+
+It is NOT currently against the rules - a named person at a company address is
+compliant. The exposure is filtering and job changes, both anticipated by the
+policy language. Say "not a violation today" out loud; do not oversell it.
+
+Do NOT say "a newer model spotted this". It is criterion C13, it was in the
+corpus from the start, and the judge flagged it in every arm except A5 - the
+experiment found it, which is the better story anyway: the thing all six
+conditions agreed on was the one defect I had shipped to CRAN myself.
 :::
 
 ## Take home {background-color="#F5F5F5"}
 
 ::: {style="font-size:1.2em; line-height:1.7;"}
 ::: {.fragment}
-**1.** If effects can change over time, don't average them away → `orthoMTL`
+**1.** Learning related tasks **jointly or separately** is the general tool;
+survival is its most recent use case → `orthoMTL`
 :::
 ::: {.fragment}
-**2.** Agents are good at checks a **machine** can run. Buy those, not checklists.
+**2.** Agents are good at checks a **machine** can run. Invest in **executable
+oracles** — tests, `R CMD check`, symmetry checks — before prose guidance.
 :::
 ::: {.fragment}
-**3.** The hard bugs needed **me** to know which symmetry had to hold.
+**3.** The agent ran the label-flip test. It took **me** to know that flipping
+every label *must* flip the answer.
 :::
 :::
 
@@ -285,21 +395,119 @@ Generation got cheap. Verification did not.
 :::
 
 ::: {style="font-size:.6em; margin-top:.5em; text-align:center;"}
-`github.com/Novartis/orthoMTL` · Vervier et al. 2014 · Juric et al. 2026
+[`github.com/Novartis/orthoMTL`](https://github.com/Novartis/orthoMTL) · Vervier et al. 2014 · Juric et al. 2026 · full references in backup
 :::
 
 # Backup {.unnumbered}
 
-## Backup: what the six arms were
+## Backup: what the six arms were {.smaller}
 
-| Arm | Skill file |
-|---|---|
-| A0 | none (control) |
-| A1 | CRAN checklist |
-| A2 | CRAN process + adversarial review |
-| A3 | general R-package development |
-| A4 | written from *this* package's failures |
-| A5 | raw handbook text |
+| Arm | Skill file | Source | Runs |
+|---|---|---|---|
+| A0 | none (control) | — | 10 |
+| A1 | `cran-extrachecks` | [posit-dev/skills](https://github.com/posit-dev/skills) | 9 |
+| A2 | `cran-submit` | [CoryMcCartan/agent-skills](https://github.com/CoryMcCartan/agent-skills) | 9 |
+| A3 | `r-package-development` | [posit-dev/skills](https://github.com/posit-dev/skills) | 10 |
+| A4 | written from *this* package's failures | unpublished (hindsight oracle) | 10 |
+| A5 | raw handbook text | CRAN docs, next slide | 9 |
+
+Every arm — **A0 included** — also had the same offline CRAN docs on disk.
+57 of 60 planned runs completed; 3 ended on API rate limits.
+
+## Backup: the handbook every arm could read {.smaller}
+
+Snapshot captured **2026-09-18**, identical across all 60 runs.
+
+| Source | URL |
+|:--|:--|
+| CRAN Cookbook | [contributor.r-project.org/cran-cookbook](https://contributor.r-project.org/cran-cookbook/) |
+| CRAN Repository Policy | [cran.r-project.org/web/packages/policies.html](https://cran.r-project.org/web/packages/policies.html) |
+| CRAN Submission Checklist | [cran.r-project.org/web/packages/submission_checklist.html](https://cran.r-project.org/web/packages/submission_checklist.html) |
+
+The Cookbook is built from real CRAN re-submissions and co-authored by a member
+of the CRAN team — the closest public thing to the reviewers' own knowledge.
+A5 loaded this text directly into context; the other arms were told where it was.
+
+::: notes
+This is the HANDBOOK/COMMUNITY provenance boundary: a criterion derivable from
+these three documents is HANDBOOK, anything else is COMMUNITY.
+If asked why A0 is not "no information at all" — because that is not the
+realistic alternative. The real alternative is a competent person with the docs.
+:::
+
+## Backup: the hedges, in their own words {.smaller}
+
+| Finding | Source |
+|:--|:--|
+| Skills "often provide no benefit, and can even hurt performance while incurring additional token costs" | SkillDelta, Xu et al. 2026 |
+| Human-authored skills +16.2 pp; **LLM-authored skills give no measurable gain** | SkillAxe, Gautam et al. 2026 |
+| Agents used retrieved skills 70% of the time yet showed **no performance gain** where the corpus lacked good skills for the domain | SkillFlow, Li et al. 2026 |
+| Self-generated skills landed **below** the no-skills baseline (−8 to −11.5 pp) | SkillsBench, Li et al. 2026 |
+
+My null is the same shape, in a domain none of them covered.
+
+## Backup: the counterweight {.smaller}
+
+The headline positive result is **SkillsBench**: curated skills lift pass rate
+33.9% → 50.5% (**+16.6 pp**) across 87 tasks and 18 model–harness configurations.
+I am not disputing it. Three things make it a different question from mine:
+
+- **8 domains** — natural science, media, cybersecurity, industrial, finance, office, software engineering, maths/OR. **No R, no packaging, no CRAN**
+- Tasks are admitted only if **"significantly easier with Skills"**; no-separation tasks are rejected as low-signal
+- Skills are drawn from the **top quality quartile** (10.1/12 vs ecosystem mean 6.2/12); the authors call this "an optimistic scenario"
+
+Their own domain gradient points my way: **software engineering +11.6 pp**,
+second-lowest of eight, against natural science **+28.8 pp** — "domains with
+stronger pretraining and tooling coverage benefit less."
+
+::: notes
+Use this slide only if challenged. The honest summary: SkillsBench asks "how much
+can a good skill help where a skill should help?" I ask "did a skill help on the
+job I actually had?" My four defects were not chosen for skill-dependence, and
+three of four are machine-detectable. The two results bracket the same effect
+from opposite ends rather than conflicting.
+:::
+
+## Backup: full references {.smaller}
+
+**Package and method**
+
+- orthoMTL — <https://github.com/Novartis/orthoMTL>
+- Predecessor `orthopen` — <https://github.com/kevinVervier/orthopen>
+- Vervier K., Mahé P., Vert J.-P. (2014). *Benchmark of structured machine
+  learning methods for microbial identification from mass-spectrometry data.*
+  Springer. — method origin
+- Li Y. et al. (2016). *A Multi-Task Learning Formulation for Survival Analysis.*
+  KDD. — survival-as-multi-task framing (MTLSA), source of the slide-4 diagram
+- Juric D. et al. (2026). *Annals of Oncology.* — clinical application
+
+**Skill files under test**
+
+- Posit `skills` — <https://github.com/posit-dev/skills>
+- McCartan C., `agent-skills` — <https://github.com/CoryMcCartan/agent-skills>
+
+**Prior measurement of agent skills**
+
+- Xu A. et al. (2026). *When Does a Skill Add Value? Task-Conditional Gain
+  Prediction for Selective Skill Use.* arXiv:2609.32274
+- Gautam S., Radhakrishna A., Gulwani S. (2026). *SkillAxe: Sharpening
+  LLM-Authored Agent Skills Through Evaluation-Guided Self-Refinement.*
+  arXiv:2606.10546
+- Li F., Tagkopoulos P., Tagkopoulos I. (2026). *SkillFlow: Scalable and
+  Efficient Agent Skill Retrieval System.* COLM 2026, arXiv:2504.06188
+- Li X. et al. (2026). *SkillsBench: Benchmarking How Well Agent Skills Work
+  Across Diverse Tasks.* arXiv:2602.12670
+
+**CRAN documentation**
+
+- R Core / CRAN team, *CRAN Cookbook* — <https://contributor.r-project.org/cran-cookbook/>
+- *CRAN Repository Policy* — <https://cran.r-project.org/web/packages/policies.html>
+- *CRAN Submission Checklist* — <https://cran.r-project.org/web/packages/submission_checklist.html>
+
+::: notes
+Skill repositories are moving targets. Pin the commit SHA of each skill here
+before the talk - the deck currently cites repositories, not versions.
+:::
 
 ## Backup: the three ways we checked correctness {.smaller}
 
@@ -334,7 +542,30 @@ dotplot("first_check_evt", "Event index of first R CMD check")
 
 ## Backup: what I would change
 
-- Seed defects only a **human reviewer** could catch
-- Add a deliberately handicapped arm as a positive control
+- Seed **R01, the `set.seed()` finding** — the one real rejection we left out, and the one no machine check reports
+- Seed more defects only a **CRAN volunteer** could catch
+- Add a **positive control**: an arm with the CRAN docs removed, so the skill file is the only guidance. If that arm does worse, the measurement has teeth
 - Judge each package several times, not once
 - More packages, more models
+
+## Backup: the four seeded defects {.smaller}
+
+| Defect | Caught by `R CMD check`? | Repaired |
+|:--|:--|:--|
+| `NAMESPACE` deleted | yes — check cannot even run | 57/57 |
+| `usethis` LICENSE template vs GPL-3 DESCRIPTION | **no** — this is rejection **R02** | **57/57** |
+| DESCRIPTION metadata (`Authors@R`, title case) | yes | 57/57 |
+| Unused declared `Imports` | yes | 57/57 |
+
+Three of four are machine-visible. Our other real rejection — **R01, the
+hard-coded `set.seed()`** — was **not seeded**, so the one defect class where a
+skill file had the clearest shot was never put to the test.
+
+Three of four machine-visible is the result's main caveat: this measures the
+easy half of CRAN preparation.
+
+::: notes
+Be upfront - I seeded what I could verify automatically, which is exactly the
+half where the control was always going to do well. The honest version of this
+experiment seeds the other half, and that is the first thing I would change.
+:::
