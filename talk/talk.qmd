@@ -391,8 +391,18 @@ Say these out loud and quickly. Credibility is the currency of a null result.
 Lead with the non-claim, then the reason.
 
 The lost runs go here, orally, pointing at the arms table: 3 runs died on API
-rate limits, infrastructure not agent behaviour, so `r n_runs` of 60 are analysed.
-Not on the slide - it's a footnote, not a limitation of the claim.
+rate limits - infrastructure, not agent behaviour - so `r n_runs` of 60 are
+analysed. Excluded, not rerun: a replayed run weeks later under different rate
+limits is not the same experimental unit, and rerunning after unblinding would
+have been the only part of this experiment scored with the labels known. Two of
+the three died at 1 turn having spent $0.00, so there is no agent behaviour in
+them to recover.
+
+Say the n and the reason in the same breath as the result - do NOT bury it. The
+rule is content-independent (infrastructure failures are excluded and reported,
+whichever arm they hit), which is what makes a post-hoc exclusion defensible.
+If I am running long this compresses to one sentence: "three runs died on rate
+limits, 57 analysed, excluded not rerun." See LESSONS_LEARNED.md §11.
 :::
 
 ## Postscript: the one thing every arm agreed on {background-color="#F5F5F5"}

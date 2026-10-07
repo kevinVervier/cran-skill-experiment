@@ -97,6 +97,12 @@ could not have seen one."*
 2. **Infrastructure failures need a pre-registered category.** §7 defines non-completion only as
    `BUDGET_EXHAUSTED` / `STUCK_LOOP`. A 429 is neither, and the decision to exclude or rerun had to be
    made after seeing data. Pre-register "infrastructure failure: excluded, rerun, n reported".
+   *Resolved for this experiment 2026-10-07 (§11): excluded, not rerun, reported separately; n=57.*
+   Two design requirements for next time: (a) the category must be defined **before** the first run,
+   with the exclude-or-rerun rule fixed in advance, so the decision cannot be contaminated by seeing
+   which arms failed; (b) a rerun policy only works if replacements keep their position in the
+   block-randomised schedule — a run replayed weeks later under different rate limits is not the
+   same experimental unit, which is why rerunning was rejected here.
 3. **Sample size was extended after an interim unblinded look** (n=5 → 10/arm, 2026-09-28). This is
    post-hoc and must be disclosed as such. Do not present n=10 as pre-registered.
 4. **Isolation leaks were found by piloting, not by design.** The block-1 pilot exposed (a) the
@@ -309,7 +315,37 @@ from a second direction.
 
 ## 11. Open decisions before the writeup
 
-- Rerun or exclude the three 429 block-3 runs, and how to label them.
+- ~~Rerun or exclude the three 429 block-3 runs, and how to label them.~~ **Resolved 2026-10-07:
+  exclude, do not rerun, report as a named infrastructure category.** The three are
+  `A1_r3_b3` (10 turns, $0.59, `COMPLETE_FINDINGS`), `A2_r3_b3` and `A5_r3_b3` (1 turn, $0.00,
+  `FAIL_PACKAGE`) — all block 3, all `API_ERROR_api_error_429`. Analysed n stays **57 of 60**.
+
+  *Why exclude rather than rerun.* A rerun now would execute under a different rate-limit regime and
+  a later wall-clock position than every other run, breaking the block-randomised interleaving that
+  invariant 6 exists to protect. Three replacement runs scored after unblinding would also be the
+  only runs in the experiment whose results were produced with the arm labels known. Excluding
+  costs almost nothing: A2 and A5 died at 1 turn having spent $0.00, so there is no agent behaviour
+  in them to recover, and A1 at 10 turns is well short of its arm median of 40.
+
+  *Why this is not a silent drop.* §4.2 already records that the pre-registration has no category
+  for this: §7 defines non-completion as `BUDGET_EXHAUSTED` / `STUCK_LOOP` only, and a 429 is
+  neither — it is the API refusing service, not the agent failing. So these must **not** be folded
+  into the co-primary 5 non-completion endpoint, which would misattribute an infrastructure fault to
+  arm behaviour. Report them as a separate line: *"3/60 runs lost to API rate limiting;
+  infrastructure, not agent behaviour; excluded; n=57 analysed."* The talk already does this orally
+  (`talk.qmd`, notes on "What I am *not* claiming").
+
+  *One finding worth keeping from them.* All three carry `judge_nc = 3` and `judge_applicable = 8`
+  despite A2 and A5 containing an essentially untouched seed tree. The judge panel scored failure
+  stubs as though they were results. That is the §4.5 validate-by-content lesson showing up in the
+  arm panel rather than the harness, and it is further evidence for §10: a judge that returns a
+  plausible three-criterion verdict on a package that was never worked on is not measuring the
+  package.
+
+  *Disclosure.* State the exclusion rule and the n in the same breath as the result, not in a
+  footnote. It was decided after seeing which runs failed, which is exactly the post-hoc pattern
+  §4.3 warns about — the mitigation is that the rule ("infrastructure failures are excluded and
+  reported") is content-independent and applies to all three regardless of arm.
 - ~~Whether to report C13 separately~~ **Resolved 2026-10-07: report C13 separately and recompute
   judge counts without it.** Two independent reasons. (a) It is a constant the agent cannot know to
   change, so it is not skill-responsive. (b) Its arm variation is judge adjudication, not arm
@@ -331,4 +367,5 @@ from a second direction.
 - Whether the post-unblinding R01 re-score can carry weight in the talk given it was not scored
   blind, and whether the `default_kept` class needs hand-verification (blocked: the blinded trees
   are not on the current host).
-- Commit `unblinded_results.csv`, `scoring/unblind_join.py` and this file (not yet committed).
+- ~~Commit `unblinded_results.csv`, `scoring/unblind_join.py` and this file (not yet committed).~~
+  **Done** — all three are tracked (`bb2d81e`); this file has been amended since in `a141f78`.
