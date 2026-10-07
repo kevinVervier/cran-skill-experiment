@@ -43,30 +43,33 @@ execute:
   cache: false
 ---
 
-<!--
-TIMING BUDGET — 10 min slot, ~9:00 spoken, 60 s slack.
-  1 What orthoMTL is        0:00–1:10   <- the promotion, use the sign-flip curve
-  2 Why it found the signal 1:10–2:00
-  3 Getting it to CRAN      2:00–2:45
-  4 The two rejections      2:45–3:30
-  5 The question            3:30–4:10
-  6 The experiment          4:10–5:10
-  7 THE RESULT (0)          5:10–6:30   <- the punch
-  8 Why the control won     6:30–7:20
-  9 Honesty slide           7:20–8:00
- 10 Postscript (the joke)   8:00–8:25   <- laugh, then land
- 11 Take-home               8:25–9:00
-OPENING LINE: "Our package found an effect that flips sign halfway through a
-cancer trial. Then I spent six weeks fighting a LICENSE field."
-DISCLOSURE CONSTRAINT: no compound, gene, trial or variable names in this deck.
--->
-
 ```{r}
 #| include: false
 source("figures.R")
 n_runs <- nrow(runs)
 n_seed <- sum(seed_repaired)
 tot_usd <- round(sum(runs$cost))
+
+# TIMING BUDGET -- 10 min slot, ~9:00 spoken, 60 s slack.
+#   1 What orthoMTL is        0:00-1:10   <- the promotion, use the sign-flip curve
+#   2 Why it found the signal 1:10-2:00
+#   3 Getting it to CRAN      2:00-2:45
+#   4 The two rejections      2:45-3:30
+#   5 The question            3:30-4:10
+#   6 The experiment          4:10-5:10
+#   7 THE RESULT (0)          5:10-6:30   <- the punch
+#   8 Why the control won     6:30-7:20
+#   9 Honesty slide           7:20-8:00
+#  10 Postscript (the joke)   8:00-8:25   <- laugh, then land
+#  11 Take-home               8:25-9:00
+#
+# NOTE: this block was an HTML comment in the body until 2026-10-07. Quarto
+# wrapped it in its own untitled <section>, which printed as a blank page 2.
+# Keep notes in an R comment or the YAML, never as a bare HTML comment.
+#
+# OPENING LINE: "Our package found an effect that flips sign halfway through a
+# cancer trial. Then I spent six weeks fighting a LICENSE field."
+# DISCLOSURE CONSTRAINT: no compound, gene, trial or variable names in this deck.
 ```
 
 ## A biomarker that changes its mind
@@ -435,22 +438,22 @@ asked about the A5 column in the results table, say that.
 
 ## Take home {background-color="#F5F5F5"}
 
-::: {style="font-size:1.2em; line-height:1.7;"}
+::: {style="font-size:1.05em; line-height:1.45;"}
 ::: {.fragment}
 **1.** Learning related tasks **jointly or separately** is the general tool;
 survival is its most recent use case → `orthoMTL`
 :::
-::: {.fragment}
+::: {.fragment style="margin-top:.35em;"}
 **2.** Agents are good at checks a **machine** can run. Invest in **executable
 oracles** — tests, `R CMD check`, symmetry checks — before prose guidance.
 :::
-::: {.fragment}
+::: {.fragment style="margin-top:.35em;"}
 **3.** I set out to measure skill files. I couldn't — my judge measured itself.
 Finding out **why** was worth more than the answer.
 :::
 :::
 
-::: {.fragment style="margin-top:.8em; text-align:center; font-size:1.1em; color:#FF4E00;"}
+::: {.fragment style="margin-top:.5em; text-align:center; font-size:1.15em; color:#FF4E00; font-weight:700;"}
 Generation got cheap. Verification did not.
 :::
 
@@ -464,7 +467,7 @@ the experiment is the evidence for it. If I only get one sentence remembered,
 this is the one.
 :::
 
-::: {style="font-size:.6em; margin-top:.5em; text-align:center;"}
+::: {style="font-size:.55em; margin-top:.3em; text-align:center;"}
 [`github.com/Novartis/orthoMTL`](https://github.com/Novartis/orthoMTL) · Vervier et al. 2014 · Juric et al. 2026 · full references in backup
 :::
 

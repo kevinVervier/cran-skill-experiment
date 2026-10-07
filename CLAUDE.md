@@ -165,9 +165,34 @@ and say what it cost.
   committed or shipped off this machine**.
 - **Never run `quarto render talk.qmd --to pdf`.** Revealjs decks take the
   LaTeX path under `--to pdf`; it deletes the existing `talk.pdf` and then fails
-  (no TeX here). Build HTML, then print `talk.html?print-pdf` with decktape or a
-  headless browser. `*.tex` and `talk_files/` are gitignored as of 2026-10-07
+  (no TeX here). `*.tex` and `talk_files/` are gitignored as of 2026-10-07
   precisely because that mistake left them behind.
+- **The working PDF route is `chromote` (verified 2026-10-07).** Edge's
+  `--print-to-pdf` CLI flag is **broken on this host** — it crashes the network
+  and GPU processes (`exit_code=-1073741819`) even on a one-line HTML file, and
+  no decktape/node/Chrome is installed. `chromote` drives the same Edge binary
+  over the DevTools protocol instead and works:
+
+  ```r
+  Sys.setenv(CHROMOTE_CHROME = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe")
+  b <- chromote::ChromoteSession$new()
+  b$Page$navigate(paste0("file:///", normalizePath("talk/talk.html", winslash = "/"), "?print-pdf"))
+  Sys.sleep(30)  # let reveal.js lay out every slide before printing
+  res <- b$Page$printToPDF(landscape = TRUE, printBackground = TRUE,
+                           paperWidth = 13.33, paperHeight = 7.5,
+                           marginTop = 0, marginBottom = 0,
+                           marginLeft = 0, marginRight = 0,
+                           preferCSSPageSize = TRUE, transferMode = "ReturnAsBase64")
+  writeBin(jsonlite::base64_dec(res$data), "talk/_new.pdf")
+  b$close()
+  ```
+
+  Print to `_new.pdf` first, verify with `pdftools::pdf_text()`, then replace
+  `talk.pdf`. Never print straight over the tracked artefact.
+- **Keep deck notes in R comments, never bare HTML comments.** A `<!-- -->`
+  block between slides becomes its own untitled `<section>` and prints as a
+  blank page. That is what produced the blank page 2 fixed on 2026-10-07; the
+  timing budget now lives in the `include: false` setup chunk.
 - **Two real rejections, scored differently.** R02 (LICENSE template) was
   repaired in 57/57 runs. R01 (`set.seed()`) was present in the seed (`seed = 42`
   default plus unconditional `set.seed()` in four exported functions) and the
