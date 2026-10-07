@@ -1,0 +1,56 @@
+<!-- Arm A4 skill file. Source: the maintainer's own record of CRAN's review feedback on this package. -->
+
+# CRAN submission notes for this package
+
+This package was submitted to CRAN before and rejected twice by human reviewers.
+Both rejections were for things `R CMD check --as-cran` does not report. Passing
+the check is necessary but is not enough. Work through both items below, then run
+the check as usual.
+
+## 1. Do not set a seed to a specific number inside a function
+
+CRAN's feedback, verbatim:
+
+> Please do not set a seed to a specific number within a function.
+
+Why it happens: setting a seed inside a function looks like good reproducibility
+practice. In fact it silently overwrites the caller's random-number stream, so
+the user's own seed is discarded and results change underneath them.
+
+What to do:
+
+- Search every file in `R/` for `set.seed(`.
+- No exported function may call `set.seed()` with a fixed value, whether the
+  number is written in the call or comes from a hardcoded default.
+- If a function needs reproducible randomness, give it a `seed = NULL` argument
+  and call `set.seed(seed)` only when the user supplied one. Make sure documented
+  defaults, examples, vignettes and tests are updated to match.
+- Do not fix this by deleting the call and leaving the tests broken. Randomised
+  tests should set their own seed inside the test, not inside the package code.
+
+## 2. Do not use `+ file LICENSE` with a boilerplate LICENSE under GPL
+
+CRAN's feedback, verbatim:
+
+> License components with restrictions and base license permitting such:
+> `GPL-3 + file LICENSE`. Please omit `+ file LICENSE` and the file itself, which
+> looks like a template for the MIT license. For GPL-3, it is only used to
+> specify additional restrictions to the GPL such as attribution requirements.
+
+Why it happens: `usethis::use_mit_license()` writes a two-line template
+(`YEAR:` and `COPYRIGHT HOLDER:`). Combined with a GPL-3 `License:` field in
+`DESCRIPTION`, that is exactly what CRAN rejected.
+
+What to do:
+
+- Read the `License:` field in `DESCRIPTION` and the `LICENSE` file together.
+- If the license is GPL-3 and the `LICENSE` file is only a `YEAR` /
+  `COPYRIGHT HOLDER` template, change the field to plain `GPL-3`, delete the
+  `LICENSE` file, and remove any reference to it (including in `.Rbuildignore`).
+
+## How these two relate
+
+Both failures came from conventional habits that are wrong for CRAN, not from
+carelessness. Do not rely on convention. After fixing the two items above,
+re-read the CRAN policy documents for anything else a human reviewer would
+object to, then run `R CMD check --as-cran` until it is clean.
