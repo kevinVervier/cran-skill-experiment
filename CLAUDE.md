@@ -77,7 +77,7 @@ invariant that matters is unchanged: nothing above `$RUNS_ROOT` may carry an ins
     │   ├── A1/pkg/  + cran-extrachecks        (checklist)
     │   ├── A2/pkg/  + cran-submit             (process + adversarial)
     │   ├── A3/pkg/  + r-package-development   (general, not CRAN)
-    │   ├── A4/pkg/  + Kevin's hindsight skill (ORACLE — not a competitor)
+    │   ├── A4/pkg/  (INTENDED: Kevin's hindsight skill. AS RUN: no instruction file — a second control)
     │   └── A5/pkg/  + raw handbook text       (distillation control)
     ├── runs/                      # per-run artifacts
     └── blinded/                   # opaque-ID trees for scoring
@@ -134,8 +134,13 @@ changes afterwards) → blocks 2–5.
   is what separates skill file quality from skill file length. Do not remove it.
 - **Baseline check output may contain NOTEs.** The pinned environment differs from CRAN's. Findings
   are scored *relative to* baseline, not absolutely.
-- **`A4` will probably win.** It was written from this package's own failure history. It is reported
-  as an upper bound, never in a ranking.
+- **`A4` was never delivered (found 2026-10-08).** The hindsight file was intended but never written
+  or installed: A4's first-call context is 7,145 tokens in all 10 runs, identical to A0, and no
+  instruction file exists in any A4 tree or in git history. For the main experiment A4 is a second
+  control (controls n=20) — never describe it as an oracle, an upper bound or a skill arm. A
+  delivered A4 is a separate post-hoc supplementary run: see `supplementary/README.md`. Run
+  `supplementary/check_arm_loaded.sh` before and after any run that is supposed to carry
+  instructions.
 - **The ledger has only two findings.** That is complete, not partial: there were two rejection
   rounds, both human review. The mutation set is built from the criterion corpus, not from the
   ledger.
@@ -201,9 +206,8 @@ and say what it cost.
 - **R01 is an open lead, never a skill-file win.** The re-score is
   post-unblinding. It is defensible because `rescore_r01.R` is a pure function of
   tree content and never reads `.blind_map.csv` — the same code at first
-  unblinding gives the same table. But A4, written from this exact rejection
-  history, produced the canonical fix **zero** times, which is the opposite of a
-  clean skill effect. See `LESSONS_LEARNED.md` §7.3.
+  unblinding gives the same table. The controls (A0, and A4, which had no file) produced the canonical fix **zero**
+  times in 20 runs; A2 and A5 mostly did. Still a post-hoc lead, not a result. See `LESSONS_LEARNED.md` §7.3.
 - **The maintainer-email finding is C13, from the experiment itself** — not a
   later discovery by a newer model. And it is **not a policy violation**: a named
   person at a company address is compliant; the risk is filtering and job changes.

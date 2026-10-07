@@ -50,18 +50,20 @@ n_runs <- nrow(runs)
 n_seed <- sum(seed_repaired)
 tot_usd <- round(sum(runs$cost))
 
-# TIMING BUDGET -- 10 min slot, ~9:00 spoken, 60 s slack.
-#   1 What orthoMTL is        0:00-1:10   <- the promotion, use the sign-flip curve
-#   2 Why it found the signal 1:10-2:00
-#   3 Getting it to CRAN      2:00-2:45
-#   4 The two rejections      2:45-3:30
-#   5 The question            3:30-4:10
-#   6 The experiment          4:10-5:10
-#   7 THE RESULT (0)          5:10-6:30   <- the punch
-#   8 Why the control won     6:30-7:20
-#   9 Honesty slide           7:20-8:00
-#  10 Postscript (the joke)   8:00-8:25   <- laugh, then land
-#  11 Take-home               8:25-9:00
+# TIMING BUDGET -- 10 min slot, ~9:15 spoken, 45 s slack (re-cut 2026-10-07 for
+# the 12 content slides the deck actually has).
+#   1 Biomarker changes its mind   0:00-0:50   <- open on the curve
+#   2 orthoMTL                     0:50-1:35   <- the promotion, no more
+#   3 PhD code to CRAN             1:35-2:10
+#   4 CRAN rejected us twice       2:10-2:45
+#   5 The question + design        2:45-3:45
+#   6 THE RESULT (0)               3:45-4:45   <- the punch
+#   7 Every arm lands together     4:45-5:15
+#   8 Why the control did so well  5:15-6:10   <- incl. the set.seed lead
+#   9 The part I did not expect    6:10-7:30   <- the real result
+#  10 What I am not claiming       7:30-8:10   <- three bullets, no more
+#  11 Postscript                   8:10-8:30   <- drop first if running long
+#  12 Take home                    8:30-9:15
 #
 # NOTE: this block was an HTML comment in the body until 2026-10-07. Quarto
 # wrapped it in its own untitled <section>, which printed as a blank page 2.
@@ -145,6 +147,7 @@ Twelve-year-old research code. An agent did the packaging work.
 ::: {.fragment}
 Writing unit tests for the **logistic loss**, the agent found a **real bug** in
 my own 2014 gradient — labels were $\pm1$, the code used the $0/1$ formula.
+I checked it by hand: it was real, and the code was fixed.
 :::
 
 ::: {.fragment style="margin-top:.4em;"}
@@ -158,7 +161,10 @@ The test it wrote: flipping every label **must** flip the answer. It didn't.
 
 ::: notes
 Keep this tight. The transferable idea is the symmetry check, not the bug.
-Say: "the agent cannot invent that check — I had to know the maths. But it ran it."
+Facts to state exactly: the agent found the bug while writing unit tests for the
+logistic loss; I verified by hand that it was a real error; the code was then
+modified. Do not claim I designed the test, and do not claim the agent
+"understood" the maths - say it found it and I confirmed it.
 :::
 
 ## Then CRAN rejected us. Twice. {background-color="#161616" style="color:#FCFCFC"}
@@ -195,8 +201,8 @@ CRAN — so the question is the **counterfactual**.
 
 ::: {.fragment style="margin-top:.5em;"}
 Re-break the package with four defects — **no NAMESPACE**, a **LICENSE
-template**, **DESCRIPTION metadata**, **unused Imports**. Hand it to an agent
-under **six conditions**. Frozen prompt, fresh copy each time, results
+template**, **DESCRIPTION metadata**, **unused Imports** (three of the four are
+visible to `R CMD check`). Hand it to an agent under **six conditions**. Frozen prompt, fresh copy each time, results
 **blinded** before scoring.
 :::
 
@@ -217,8 +223,11 @@ on disk. Full references in backup.
 :::
 
 ::: notes
-A4 is the cheat arm: I wrote it FROM this package's own rejection history. It should win.
-Flag that now so the result lands harder.
+A4 was meant to be the oracle arm, written from this package's rejection history, but it
+never received its file (found 2026-10-08, see LESSONS_LEARNED.md section 0). It is a second
+control. Do NOT call it the cheat arm or an upper bound. Say: "five instruction sets, one of
+them none - and I ran the none twice by accident." Only say this if asked about A4 or
+positive controls; the backup arms slide carries it.
 
 IMPORTANT framing. Do NOT say "nobody measures skill files" - that is false and
 someone in this room will know it. Skills ARE measured; the useful point is that
@@ -244,18 +253,19 @@ result rather than against it. Backup slide has the detail.
 0
 :::
 ::: {style="font-size:1.4em; margin-top:.2em;"}
-difference between the best skill file and **no skill file at all**
+difference between the best skill file and **no skill file at all** —
+on the four seeded defects
 :::
 :::
 
 ::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.8em;"}
 All **`r n_seed`/`r n_runs`** runs fixed all four defects — including the control.
-The arm I wrote from our own rejections had no edge over writing nothing at all.
+None of the four skill files beat writing nothing at all.
 :::
 
 ::: {.fragment style="text-align:center; font-size:.92em; margin-top:.5em; color:#939393;"}
 That includes the LICENSE defect that actually got us rejected: **fixed in every
-run, in every arm**. The `set.seed()` rejection was in the seed too — and there the arms did differ (backup).
+run, in every arm**. Likely a ceiling: three of the four defects are ones `R CMD check` reports.
 :::
 
 ::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.6em; color:#FF4E00; font-weight:700;"}
@@ -264,7 +274,7 @@ Then I went looking for why — and the interesting answer was in my own instrum
 
 ::: notes
 THE PUNCH. Stop talking for two seconds after the zero appears.
-Then: "including the cheat arm" — that is the uncomfortable part, say it yourself.
+Then: "including the control, run twice" - 20 runs of nothing, same result.
 
 The last fragment is the hinge into the rest of the talk. Do not skip it. The
 zero is not the end of the story; the next two slides are why the zero happened
@@ -313,6 +323,13 @@ time and still gained **nothing**. Reading a skill is not the same as needing on
 ::: {style="font-size:.78em; margin-top:.5em; color:#939393;"}
 Not an argument against skill files — an argument about **where** they pay.
 The CRAN rules a skill encodes are the ones `R CMD check` already enforces.
+:::
+
+::: {.fragment style="font-size:.85em; margin-top:.5em;"}
+Where the tool is silent — the hard-coded `set.seed()` — the arms **did** differ:
+the process skill and the raw handbook mostly fixed it, the control never did.
+Rules sitting on disk were not enough; why text in context helps, I can't say.
+A lead from a post-hoc re-score, not a result (backup).
 :::
 
 ::: notes
@@ -380,15 +397,18 @@ rubric, one rep per tree. The transferable lesson is in the next slide.
 ## What I am *not* claiming {.smaller}
 
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
-- **The two rejections behave differently.** The LICENSE template was repaired by every arm. The hard-coded `set.seed()` was also in the starting package, and there the arms differ (backup) — descriptive counts on 9–10 runs per arm, no test
-- **N = 1** on every axis that matters: one package, one agent, one model version
-- **Sample size** was not powered: we ran as many runs as time and budget allowed
-- **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity" — and the judge panel (previous slide) says the second is live
-- **One open thread I can't close**: on the `set.seed()` rejection the arms *do* differ (backup). That re-score is post-unblinding, so I report it as a lead for someone else, not as support for anything above
+- **N = 1** on every axis that matters: one package, one model (Claude Opus 5.5 in Claude Code), five instruction sets — and runs were not powered, just as many as time and budget allowed
+- **No positive control**: I planned a hindsight arm, but its file was never delivered — I only found out afterwards. Without one, I can't separate "no effect" from "no sensitivity" — and the judge panel (previous slide) says the second is live
 
 ::: notes
 Say these out loud and quickly. Credibility is the currency of a null result.
 Lead with the non-claim, then the reason.
+
+Moved off the slide (say if asked): the two rejections behave differently
+(LICENSE repaired 57/57; set.seed differs by arm, descriptive counts on 9-10
+runs per arm, no test) and the set.seed re-score is post-unblinding, so it is a
+lead for someone else, not support for anything above. Ceiling: 3 of 4 seeded
+defects are visible to R CMD check, and every arm had the Cookbook on disk.
 
 The lost runs go here, orally, pointing at the arms table: 3 runs died on API
 rate limits - infrastructure, not agent behaviour - so `r n_runs` of 60 are
@@ -412,8 +432,8 @@ limits, 57 analysed, excluded not rerun." See LESSONS_LEARNED.md §11.
 ## Postscript: our own maintainer address {background-color="#F5F5F5"}
 
 ::: {style="font-size:1.12em; margin-top:.3em;"}
-The judge flagged **one** criterion in almost every tree — our own maintainer
-address:
+Even a noisy judge can be right once. It flagged our own maintainer address in
+47 of 57 trees:
 
 ::: {style="text-align:center; font-size:1.1em; margin-top:.4em;"}
 `kevin.vervier@novartis.com`
@@ -438,9 +458,11 @@ compliant. The exposure is filtering and job changes, both anticipated by the
 policy language. Say "not a violation today" out loud; do not oversell it.
 
 Do NOT say "a newer model spotted this". It is criterion C13, it was in the
-corpus from the start, and the judge flagged it in 47 of the 57 analysed trees -
-the experiment found it, which is the better story anyway: the thing nearly all
-six conditions agreed on was the one defect I had shipped to CRAN myself.
+corpus from the start, and the judge flagged it in 47 of the 57 analysed trees.
+Frame it as the previous slide's lesson, not a contradiction of it: the same judge
+that argued both sides of a quoted sentence also flagged, repeatedly, a real
+exposure I had shipped to CRAN myself. A broken instrument can still be right
+once; that is not evidence it works. Drop this slide first if running long.
 
 Precision point (corrected 2026-10-07): do NOT say "every arm except A5". No arm
 ever changed the address - it is still kevin.vervier@novartis.com in all 57 runs.
@@ -495,11 +517,16 @@ this is the one.
 | A1 | `cran-extrachecks` | [posit-dev/skills](https://github.com/posit-dev/skills) | 9 |
 | A2 | `cran-submit` | [CoryMcCartan/agent-skills](https://github.com/CoryMcCartan/agent-skills) | 9 |
 | A3 | `r-package-development` | [posit-dev/skills](https://github.com/posit-dev/skills) | 10 |
-| A4 | written from *this* package's failures | unpublished (hindsight oracle) | 10 |
+| A4 | **none - intended hindsight file never delivered; a second control** | — | 10 |
 | A5 | raw handbook text | CRAN docs, next slide | 9 |
 
 Every arm — **A0 included** — also had the same offline CRAN docs on disk.
 57 of 60 planned runs completed; 3 ended on API rate limits.
+
+Agent: Claude Opus 5.5 (`claude-opus-5-5`) in Claude Code 2.1.282–284 (auto-updated mid-experiment).
+Judge: Claude Sonnet 5 — same vendor family as the agent. Skill files were delivered as an
+always-loaded `CLAUDE.md`, not through the on-demand Skill tool, which the agent did not have.
+A4 and A0 are therefore both controls (20 runs).
 
 ## Backup: the handbook every arm could read {.smaller}
 
@@ -667,7 +694,7 @@ four exported functions — the exact pattern CRAN rejected. `R CMD check` does 
 
 Completed runs only; descriptive counts, no test. "Default kept" means `seed = 42` stays but the
 value goes through a helper that restores the user's RNG state — arguably acceptable, not what the
-reviewer asked for. \*A4 is an upper bound, not a competitor.
+reviewer asked for. \*A4 had no instruction file: a second control.
 
 **These counts are a re-score, run after unblinding.** My original rule only matched
 `set.seed(<literal>)` inside a function body, so it scored **zero hits on the seed itself** — a
@@ -688,10 +715,10 @@ a tree path and returns hits; it has no access to arm labels. Validated on 8
 synthetic cases, the seed (3 hits), baseline and control (0), and a mutant (1).
 
 I am NOT claiming this as a skill-file win. Two things block that. It is one
-criterion at n=9-10 with no test, and A4 - the arm written from this exact
-rejection history - produced the canonical fix zero times, which is the opposite
-of what a clean skill effect looks like. Report it as the most interesting loose
-end in the dataset and move on.
+criterion at n=9-10 with no test, and it is a post-hoc re-score. The controls
+(A0 and the file-less A4) produced the canonical fix zero times in 20 runs, which
+makes the A2/A5 contrast more interesting, not proven. Report it as the most
+interesting loose end in the dataset and move on.
 
 If asked why A2 and A5 and nobody else: the cookbook contains the canonical
 seed = NULL pattern verbatim, in a section every arm could read. A5 had that text

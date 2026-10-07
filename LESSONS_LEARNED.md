@@ -4,13 +4,46 @@
 (`unblinded_results.csv`), `PRE_UNBLINDING_LOCK.md`, project memory notes, and `LATER.md`.
 Descriptive only; no significance testing (pre-reg §8).*
 
+## 0. Correction (2026-10-08): arm A4 was never delivered — it is a second control
+
+**Read this before anything below.** Sections 1–13 were written when A4 was believed to be a
+hindsight skill arm. It was not. Evidence, all from the run logs and git history:
+
+| Arm | First-API-call context, tokens (all 10 runs) | Instruction file |
+|---|---|---|
+| A0 control | 7,145 | none |
+| **A4** | **7,145** | **none, in any run tree, `arms/A4/pkg`, or git history** |
+| A3 / A2 / A1 / A5 | 8,233 / 9,693 / 12,810 / 32,088 | `CLAUDE.md` (2.7 / 6.4 / 14 / 76 KB) |
+
+Cause: the Phase 0 build left A4 "intentionally untouched" for Kevin to write; the freeze
+checklist (pre-registration §13) had no box confirming it existed; `run_arm.sh` guards only that
+the control has no file, never that instructed arms have one. Nothing caught it for 60 runs.
+
+Consequences:
+- **A4 is a second control.** Controls are n=20 (A0 + A4). "A4 ties A0" meant A0 tied A0.
+- **The oracle / upper-bound / "cheat arm" framing is void**, here and in the talk. There was
+  never a positive control. This is the strongest form of the §3.3 limitation.
+- **The null is intact and cleaner:** none of the four skill files (A1, A2, A3, A5) beat a
+  20-run control on the seeded defects. A0 vs A4 also gives a free noise estimate (R01: A0 6/4/0,
+  A4 4/6/0 — same distribution, different runs).
+- **R01 lead is slightly sturdier:** 0 canonical fixes in 20 control runs vs A2 7/9 and A5 8/9
+  (post-hoc, descriptive, no test).
+- Skills were delivered as always-loaded `CLAUDE.md` files, not through the on-demand `Skill`
+  tool (which was not available to the agent). "Skill file" in this study means that.
+- Also to disclose: Claude Code auto-updated during the experiment (recorded 2.1.276; runs used
+  2.1.282 ×18, 2.1.283 ×31, 2.1.284 ×11). Models: agent `claude-opus-5-5`, judge `claude-sonnet-5`.
+
+Remedy: `supplementary/` — a post-hoc paired run of a delivered A4 against fresh A0 controls,
+with `check_arm_loaded.sh` as a manipulation check. Reported separately, never pooled.
+
 ## 1. Headline result (lead with the uncomfortable part)
 
 - **No detected effect of any skill file on conformance.** Across the 57 completed runs, residual
   review burden is 0 above baseline in every run. The floor rule (§7) applies: report it and move on.
-- **The hindsight oracle (A4) does not separate from the A0 control.** A4 was written from this
-  package's own failure history, so this is the most uncomfortable result. It says the instrument
-  was too weak to detect an effect as much as it says skills do nothing.
+- **~~The hindsight oracle (A4) does not separate from the A0 control.~~ [Superseded, see §0:
+  A4 had no instruction file; it is a second control.]** The original text called this the most
+  uncomfortable result. The truer uncomfortable fact is that the experiment never had a positive
+  control.
 - **The judge signal is two criteria.** All NON_COMPLIANT verdicts come from C13 (employer-domain
   maintainer email, 47) and L08 (quote style, 23). C13 fires in 47/57 trees; the 10 COMPLIANT
   verdicts are 7 A5 plus one each A2/A3/A4. L08 looks like judge noise.
@@ -48,7 +81,8 @@ could not have seen one."*
   from a blind instrument is indistinguishable from a true null. We cannot separate them.
 - **R01 is a genuine open thread, not a win.** It is the one place arms differ (§3.5). Report it as
   a lead with its caveats attached — post-unblinding re-score, one criterion, n=9–10, no test, and
-  A4 produced the canonical fix zero times, which is not what a clean skill effect looks like.
+  the controls (A0, plus A4 which had no file, §0) produced the canonical fix zero times in 20
+  runs, so this is a lead worth testing, not a result.
 - **What it cannot claim**: anything about other packages, other models, other rubrics, or human
   review outcomes (n = 1 package, 1 agent, 1 model version, 1 judge rep).
 
@@ -63,8 +97,9 @@ could not have seen one."*
 2. **Seed design: one unrepairable constant dominates.** C13 (employer email) is a fact the agent
    cannot know to change, so it fires in every tree. It consumes the judge's dynamic range. Exclude
    constants from the judged set, or report them separately.
-3. **A4 "upper bound" assumes the instrument can see the gap.** Since A4 didn't separate, the
-   experiment has no positive control that proved sensitivity. Add a deliberately handicapped arm
+3. **There was no A4 upper bound (§0).** A4 was never delivered, so the experiment has no positive
+   control that proved sensitivity. Add a manipulation check that each instructed arm's context
+   exceeds the control's (`supplementary/check_arm_loaded.sh`). Add a deliberately handicapped arm
    (e.g. a misleading skill) so a null can be distinguished from a blind instrument.
 4. **One judge rep per tree.** Calibration used 3 reps; the arm panel used 1. L08 variance between
    arms suggests judge noise, and one rep can't separate that from arm effect.
@@ -135,7 +170,7 @@ failure as the evidence. Not a spin on a null — a reweighting toward what was 
 3. Why a measurement instrument, not a demo: blinding, frozen prompt, fresh trees, interleaving,
    a pre-registered design and a hindsight-oracle upper bound. **The methodology is a contribution
    independent of the result** — most claims in this space are untested.
-4. The result: zero separation, including the hindsight oracle A4.
+4. The result: zero separation of any skill file from the control (A4 was a second control, §0).
 5. **The turn, and the real finding:** the judge panel that was meant to see past `R CMD check`
    had ten of twelve criteria never fire, and the two that did were the judge arguing both sides
    of text no arm had touched (§10). Found *after* unblinding by reading evidence strings nobody
@@ -189,8 +224,8 @@ Recorded during the presentation pass, before bundling the deck for transfer.
    (e.g. `local_seed()` restoring `.Random.seed`) is a judgement call whether
    CRAN would accept it. Not yet hand-verified tree by tree beyond spot checks.
    Consequence: the "all arms identical" framing holds for the four seeded
-   defects and C13, not for R01. A4 (written from the rejection history) did not
-   produce the canonical fix in any run.
+   defects and C13, not for R01. A4 had no instruction file (§0) and, like A0,
+   did not produce the canonical fix in any run.
 
    **On defending the post-unblinding timing (added 2026-10-07).** The objection to answer is
    "you re-scored after seeing the labels." The answer has three parts, in this order: (1) the
@@ -203,8 +238,8 @@ Recorded during the presentation pass, before bundling the deck for transfer.
    and control (0), and `MUT-R01` (1).
 
    This does not make R01 a skill-file win, and the talk must not present it as one: one criterion,
-   n=9–10, no test, and A4 — written from this exact rejection history — produced the canonical fix
-   zero times, which is the opposite of a clean skill effect. Report it as the most interesting
+   n=9–10, no test; the controls (A0 and the file-less A4, §0) produced the canonical fix zero times
+   in 20 runs. Still a post-hoc lead, not a skill-file win. Report it as the most interesting
    loose end in the dataset (§2).
 
 4. **The maintainer-email ("Novartis address") observation is NOT new.** It is

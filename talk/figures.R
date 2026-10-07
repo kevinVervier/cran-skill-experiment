@@ -13,7 +13,7 @@ runs_all <- read_csv("../unblinded_results.csv", show_col_types = FALSE) |>
 runs <- filter(runs_all, term == "DECLARED_DONE")
 
 arm_labels <- c(A0 = "A0 control", A1 = "A1 checklist", A2 = "A2 process",
-                A3 = "A3 general R", A4 = "A4 oracle*", A5 = "A5 raw handbook")
+                A3 = "A3 general R", A4 = "A4 control 2*", A5 = "A5 raw handbook")
 
 # Outcome slide. judge_nc takes only 0/1/2 across all runs, so a jittered dot
 # strip over-plots badly and implies a continuum that isn't there. A stacked
@@ -36,7 +36,7 @@ stack_fig <- function(var = "judge_nc", d = runs) {
     scale_colour_manual(values = c(`0` = "white", `1` = "white", `2` = "white"), guide = "none") +
     scale_x_continuous(expand = expansion(mult = c(0, .02))) +
     labs(x = "Runs", y = NULL,
-         caption = "Every run landed on 0-2 issues, in every arm.\n*A4 is an upper bound, not a competitor.") +
+         caption = "Every run landed on 0-2 issues, in every arm.\n*A4 had no skill file: a second control.") +
     theme_minimal(base_size = 18) +
     theme(panel.grid = element_blank(), axis.text.x = element_blank(),
           legend.position = "top",
@@ -57,7 +57,7 @@ dotplot <- function(var, xlab, d = runs, integer = FALSE) {
                  colour = INK, linewidth = .9, inherit.aes = FALSE) +
     scale_x_continuous(breaks = if (integer) \(l) seq(ceiling(l[1]), floor(l[2])) else waiver()) +
     scale_colour_manual(values = c(`TRUE` = ACCENT, `FALSE` = MUTED), guide = "none") +
-    labs(x = xlab, y = NULL, caption = "Dots = runs; bar = median.\n*A4 is an upper bound, not a competitor.") +
+    labs(x = xlab, y = NULL, caption = "Dots = runs; bar = median.\n*A4 had no skill file: a second control.") +
     theme_minimal(base_size = 18) +
     theme(panel.grid.major.y = element_blank(), panel.grid.minor = element_blank(),
           panel.grid.major.x = element_line(colour = "#E6E6E6"),
