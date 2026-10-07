@@ -1,7 +1,10 @@
 # Transferring this repo to another machine
 
-Written 2026-10-07. The repo has no reachable remote (`cran.r-project.org` egress is blocked and
-there is no push target), so transfer is by **git bundle** — a single file carrying the complete
+Written 2026-10-07. The repo's remote is `origin` = <https://github.com/kevinVervier/cran-skill-experiment>
+(public). **Whether it is reachable depends on the machine** — it was not from the
+machine this note was written on, and it was from the Shadow PC. Test it first
+(`git ls-remote origin`); if it answers, just `git pull`/`git push` and ignore the
+rest of this file. Where it is not reachable, transfer is by **git bundle** — a single file carrying the complete
 history that clones like a normal remote on the far side.
 
 ## What you were given
@@ -20,11 +23,12 @@ git log --oneline -1    # expect e7f606c
 git ls-files | wc -l    # expect 2353
 ```
 
-The clone sets the bundle as `origin`. That remote is a dead file path — remove it or repoint it
-before committing anything you intend to keep:
+The clone sets the bundle as `origin`. That remote is a dead file path — repoint it at GitHub
+(or remove it) before committing anything you intend to keep:
 
 ```bash
-git remote remove origin
+git remote set-url origin https://github.com/kevinVervier/cran-skill-experiment.git
+git ls-remote origin   # confirms this machine can reach it
 ```
 
 ## What is NOT in the bundle, and why
