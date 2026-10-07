@@ -11,9 +11,17 @@ Descriptive only; no significance testing (pre-reg §8).*
 - **The hindsight oracle (A4) does not separate from the A0 control.** A4 was written from this
   package's own failure history, so this is the most uncomfortable result. It says the instrument
   was too weak to detect an effect as much as it says skills do nothing.
-- **The judge signal is two criteria.** All 57 NON_COMPLIANT verdicts come from C13 (employer-domain
-  maintainer email) and L08 (quote style). C13 is flagged in every tree except A5. L08 looks like
-  judge noise.
+- **The judge signal is two criteria.** All NON_COMPLIANT verdicts come from C13 (employer-domain
+  maintainer email, 47) and L08 (quote style, 23). C13 fires in 47/57 trees; the 10 COMPLIANT
+  verdicts are 7 A5 plus one each A2/A3/A4. L08 looks like judge noise.
+- **Correction (2026-10-07): the C13 variation is judge adjudication, not arm behaviour.** An
+  earlier version of this section said A5 "changed the maintainer email in 7 of 9 runs". That is
+  wrong. In all 57 completed runs — every arm, including all 9 A5 runs — the maintainer address is
+  still `kevin.vervier@novartis.com`; no arm ever edited it. What varies is the judge's reasoning:
+  in the 10 COMPLIANT trees it excuses the corporate domain by pointing at the copyright holder
+  ("matching the listed copyright holder Novartis Pharma AG", "company-sponsored package"), and 7
+  of those 10 happen to be A5. C13 is under-specified — it does not say whether a `cph` match
+  justifies an employer domain — so it measures judge variance, not conformance. See §3.5 and §9.
 - **No arm checks early.** Median turn of first `R CMD check`: A0 184, A1 140, A2 272, A3 157,
   A4 115, A5 190, with heavily overlapping ranges. The "skill arms check early" mechanism is not in
   the data.
@@ -23,14 +31,26 @@ Descriptive only; no significance testing (pre-reg §8).*
 
 ## 2. What the talk can honestly claim
 
-- Machine checks alone do not discriminate here. Every arm, including the no-skill control, passes
-  (the floor effect the pre-reg predicted).
-- A judgement-style oracle calibrated to 91.7% detection and 8.3% false positives still found almost
-  no arm differences. Two criteria carry everything.
-- Public skill files showed no measurable benefit on this package, this model and this oracle. That
-  is a null, not proof of no effect.
-- What it cannot claim: anything about other packages, other models, or human review outcomes
-  (n = 1 package, 1 agent, 1 model version).
+*Revised 2026-10-07 after §9 and §10. The headline is no longer "no effect"; it is "the instrument
+could not have seen one."*
+
+- **The machine-check result stands and is unaffected by the judge problems.** It came from
+  `R CMD check`, not the oracle. Every arm, control included, repaired all four seeded defects
+  (57/57). Machine checks alone do not discriminate here — the floor effect the pre-reg predicted.
+- **The judge panel added no sensitivity on top of it.** Ten of its twelve criteria never fired;
+  the two that did measure judge adjudication of unchanged text (§10). Calibration at 91.7%
+  detection / 8.3% false positives did not survive contact with the arm panel at one rep per tree.
+- **So the honest claim is about measurement, not about skill files.** "Public skill files showed
+  no measurable benefit on this package, this model and this oracle" is true but understates it:
+  this oracle could not have detected a benefit if one existed. That is a null *instrument*, which
+  is a stronger and more useful statement than a null result.
+- **The uncomfortable corollary, stated first per §12.** Without a positive control (§3.3), a null
+  from a blind instrument is indistinguishable from a true null. We cannot separate them.
+- **R01 is a genuine open thread, not a win.** It is the one place arms differ (§3.5). Report it as
+  a lead with its caveats attached — post-unblinding re-score, one criterion, n=9–10, no test, and
+  A4 produced the canonical fix zero times, which is not what a clean skill effect looks like.
+- **What it cannot claim**: anything about other packages, other models, other rubrics, or human
+  review outcomes (n = 1 package, 1 agent, 1 model version, 1 judge rep).
 
 ## 3. Design lessons (for the next experiment)
 
@@ -48,10 +68,24 @@ Descriptive only; no significance testing (pre-reg §8).*
    (e.g. a misleading skill) so a null can be distinguished from a blind instrument.
 4. **One judge rep per tree.** Calibration used 3 reps; the arm panel used 1. L08 variance between
    arms suggests judge noise, and one rep can't separate that from arm effect.
-5. **Single-criterion A5 effect is uninterpretable on its own.** A5 changed the maintainer email in
-   7 of 9 runs, and no other arm did. §8's "context volume vs content" reading does not apply
-   cleanly to a single criterion. Check what the raw handbook text says about maintainer email
-   before drawing any conclusion.
+5. **Single-criterion A5 effect is uninterpretable on its own — and on C13 it is not an arm effect
+   at all.** *Revised 2026-10-07.* The original entry said A5 changed the maintainer email in 7 of 9
+   runs. It did not: no arm ever changed it (§1). The follow-up suggested here — "check what the raw
+   handbook says about maintainer email" — was done and came back empty: the handbook's only
+   relevant line is `description_issues.qmd:178` ("make sure the provided email address is actively
+   monitored"), which says nothing about employer domains and cannot explain A5. The C13 split is
+   judge adjudication of a `cph`-matched corporate address.
+
+   The genuine single-criterion arm effect is **R01**, where A2 (7/9) and A5 (8/9) reach the
+   canonical `seed = NULL` fix and A0/A1/A3/A4 essentially never do. Here the handbook *does*
+   contain the answer verbatim: `code_issues.qmd:53-83` ("Setting a Specific Seed") carries the
+   exact `function(..., seed = NULL){ if(!is.null(seed)) set.seed(seed) }` pattern and the
+   instruction "Ideally, the argument is already set to `NULL` per default", under a CRAN reviewer
+   quote matching the real R01 rejection. But that text sits in `snapshot/`, readable by **every**
+   arm including A0, so handbook availability alone does not explain the split. A5 is the arm with
+   the handbook front-loaded into context rather than merely pointed at, which is the pre-reg §3
+   "front-loading, not distillation" reading; A2's route is unconfirmed (its skill file is not on
+   this host). Descriptive, one criterion, n=9. Do not present as established.
 
 ## 4. Process / protocol lessons
 
@@ -85,13 +119,33 @@ Descriptive only; no significance testing (pre-reg §8).*
 
 ## 5. Suggested narrative framing (for the presentation pass)
 
-1. The claim and why it is worth testing (skills are everywhere, evidence is thin).
-2. Why a measurement instrument, not a demo: blinding, frozen prompt, fresh trees, interleaving.
-3. The first finding is about measurement: machine checks floor, so the judge carries the result.
-4. The result: no separation, including the hindsight oracle A4.
-5. What would change the answer: a seed with live judge-only defects, a handicapped positive-control arm,
-   multi-rep judging, and other packages.
-6. Declared limitations, stated plainly and early, including the post-hoc n extension.
+*Revised 2026-10-07. The arc now ends on verification as the bottleneck, with the instrument's own
+failure as the evidence. Not a spin on a null — a reweighting toward what was actually learned.*
+
+1. The science and the shipped artefact: joint vs separate task learning → `orthoMTL`, on CRAN.
+   This is the credibility deposit the rest of the talk spends.
+2. The counterfactual question, from our own submission history: would a skill file have got us
+   there in one shot?
+3. Why a measurement instrument, not a demo: blinding, frozen prompt, fresh trees, interleaving,
+   a pre-registered design and a hindsight-oracle upper bound. **The methodology is a contribution
+   independent of the result** — most claims in this space are untested.
+4. The result: zero separation, including the hindsight oracle A4.
+5. **The turn, and the real finding:** the judge panel that was meant to see past `R CMD check`
+   had ten of twelve criteria never fire, and the two that did were the judge arguing both sides
+   of text no arm had touched (§10). Found *after* unblinding by reading evidence strings nobody
+   had to read. The counts looked like a clean two-criterion signal; only the free-text
+   justifications exposed it.
+6. The transferable lesson: executable oracles beat prose guidance. `R CMD check` floored because
+   it works. Judgement criteria that are not operationally defined measure the judge. Anyone
+   building an agentic pipeline has this problem.
+7. Limitations plainly and early, including the post-hoc n extension and the missing positive
+   control. R01 offered as an open lead, explicitly not as support for the headline.
+8. Close on verification as the bottleneck — the thesis, not a sign-off.
+
+**Tone discipline.** This audience has sat through nulls dressed up as insights. The engagement
+comes from refusing to do that: lead with the shipped package, state the zero without hedging,
+then show the instrument failing and say what it cost. Do not let the positive frame quietly
+reinstate R01 as a win (§2).
 
 ## 7. Talk-construction decisions (2026-10-06)
 
@@ -132,6 +186,21 @@ Recorded during the presentation pass, before bundling the deck for transfer.
    defects and C13, not for R01. A4 (written from the rejection history) did not
    produce the canonical fix in any run.
 
+   **On defending the post-unblinding timing (added 2026-10-07).** The objection to answer is
+   "you re-scored after seeing the labels." The answer has three parts, in this order: (1) the
+   original rule was wrong in a demonstrable way — it returned **zero hits on the seed itself**,
+   a detector that cannot see the defect it was built for; (2) the correction was to the detector,
+   not to the direction of the result; (3) `rescore_r01.R` takes a tree path and returns hits, is
+   a pure function of package file content, and never reads `.blind_map.csv` — **the same code run
+   at first unblinding would have produced the identical table.** Arm labels cannot have influenced
+   it because the code never sees them. Validated on 8 synthetic cases, the seed (3 hits), baseline
+   and control (0), and `MUT-R01` (1).
+
+   This does not make R01 a skill-file win, and the talk must not present it as one: one criterion,
+   n=9–10, no test, and A4 — written from this exact rejection history — produced the canonical fix
+   zero times, which is the opposite of a clean skill effect. Report it as the most interesting
+   loose end in the dataset (§2).
+
 4. **The maintainer-email ("Novartis address") observation is NOT new.** It is
    criterion **C13**, already in the corpus, and per §1 it is flagged by the
    judge in **every tree except A5** — i.e. it was found *during* the experiment,
@@ -155,10 +224,111 @@ Recorded during the presentation pass, before bundling the deck for transfer.
    be restored or rebuilt on the target machine. **Do not run `--to pdf` on this
    deck again.**
 
-## 8. Open decisions before the writeup
+## 9. The C13 mechanism (2026-10-07)
+
+Why the judge split on C13, established from the 57 completed runs' judge evidence strings
+(`scoring/results/*/judge_rep1.json`; the blinded trees themselves are not on the current host).
+
+1. **The address is identical everywhere.** All 57 evidence strings quote
+   `kevin.vervier@novartis.com`. No arm in any run edited it.
+2. **The copyright holder is the hinge, and the judge uses it both ways.** Novartis Pharma AG is
+   listed as `cph` in every tree. The judge invokes it in 20 of 57 verdicts — as *mitigating* in 8
+   of the 10 COMPLIANT ones ("plausible institutional address matching the cph", "company-sponsored
+   package") and as *aggravating* in 12 NON_COMPLIANT ones ("corporate domain tied to Novartis
+   Pharma AG, also listed as copyright holder; such addresses are not durable"). Same fact,
+   opposite valence. The clincher is within A5: its own 2 NON_COMPLIANT runs both cite the cph, as
+   aggravating.
+3. **So there is no tree-content trigger to find.** The split is not caused by a DESCRIPTION or
+   `inst/COPYRIGHTS` difference between arms — the inputs agree. It is one under-specified criterion
+   resolved inconsistently at one judge rep per tree. A5's 7/9 is a cluster in judge noise, not an
+   arm effect.
+4. **Consequence for the design.** This is §3.4 ("one judge rep per tree") biting on a second
+   criterion, after L08. A criterion that admits a mitigating reading the rubric does not adjudicate
+   will produce arm-shaped noise. Next time: state in the criterion whether an employer domain
+   matching the `cph` is acceptable, and use ≥3 reps so within-tree variance is measurable.
+
+## 10. The judge panel had no working discriminator (2026-10-07)
+
+Established from `scoring/judge_criteria.json` and the 57 completed runs' judge evidence. This
+supersedes §1's "the judge signal is two criteria" by explaining what those two criteria actually
+measured. It is the strongest available statement of why the experiment detected nothing.
+
+### 11.1 Only 2 of 12 criteria ever fired
+
+| | criteria | ever NON_COMPLIANT |
+|---|---|---|
+| HANDBOOK | 3 | 0 |
+| COMMUNITY, explicit provenance | 1 | 1 (C13) |
+| COMMUNITY, inferred provenance | 8 | 1 (L08) |
+
+Six criteria (C04, C08, L09, L10, L12, L27) returned COMPLIANT in all 57 trees — constant, zero
+discriminating power. Four more were NOT_APPLICABLE in nearly every tree (C18 55/57, L23 54/57,
+L06 49/57, L21 2/57). The panel's effective width is 2 of 12; after excluding C13 per §11 it is
+**one** criterion, and that one is inferred-provenance.
+
+This is the §3.1 floor effect repeating on the judge side. The pre-registration anticipated the
+machine checks flooring and expected the judge to carry the result; the judge floored too.
+
+### 11.2 Provenance is thinner than §1 implied
+
+Of the 9 COMMUNITY criteria, **8 carry `prov_inferred: true`** — every row sourced from
+`criterion-corpus-longtail.md`, which has no PROV column at all. `_meta.prov_note` states the
+inference openly: that file's contents are scraped from `cran-comments.md`, GitHub threads and
+r-package-devel archives, so by construction they are not derivable from the handbook snapshot the
+arms received. The inference is recorded rather than silently assumed, which is the right call.
+
+`_meta.letter_note` is the sharper problem: **no JUDGE row is tagged LETTER**, because both real
+orthoMTL findings (R01, R02) are ORACLE=STATIC. The judge carries zero of the two known
+ground-truth findings. Everything it scored was handbook-general or folklore, never a documented
+cause of our actual rejections.
+
+### 11.3 L08 fails the same way C13 does, more blatantly
+
+L08 hinges almost entirely on one seed string, present unchanged in every tree:
+`A patient is considered "uncensored" only if all task labels are non-NA` (`R/metrics.R:24`,
+`man/cindex_mtl.Rd:34`).
+
+- 22 of the 23 NON_COMPLIANT verdicts cite that exact line as emphasis quoting.
+- **2 COMPLIANT verdicts cite the same line and excuse it** — "double quotes only around the
+  technical term to define a concept, not for emphasis" / "used only for code/class-name literals".
+  Same file, same line, opposite verdict. This is the C13 both-ways pattern (§9.2) repeated.
+- The other 29 COMPLIANT verdicts **never looked at `metrics.R`**: they checked DESCRIPTION, found
+  no double quotes, and declared compliance.
+
+So L08 is a compound of three things, none of them a property of the arm: whether the judge searched
+beyond DESCRIPTION, and if it found the line, which of two defensible readings it picked. A1's 0/9
+NON_COMPLIANT is not A1 fixing anything — the judge simply never opened the file in any A1 run.
+
+### 11.4 What this means for the result
+
+Both signal-carrying criteria are now explained as judge variance rather than conformance. The null
+is therefore stronger and differently framed: not "no effect was detected" but **"the judge panel
+had no criterion capable of detecting one."** An instrument with one noisy binary left cannot
+distinguish a true null from blindness — which is §3.3's missing-positive-control problem arriving
+from a second direction.
+
+## 11. Open decisions before the writeup
 
 - Rerun or exclude the three 429 block-3 runs, and how to label them.
-- Whether to report C13 separately (constant, not skill-responsive) and recompute judge counts
-  without it.
-- Whether to investigate the A5 and C13 difference or list it as an unexplained observation.
+- ~~Whether to report C13 separately~~ **Resolved 2026-10-07: report C13 separately and recompute
+  judge counts without it.** Two independent reasons. (a) It is a constant the agent cannot know to
+  change, so it is not skill-responsive. (b) Its arm variation is judge adjudication, not arm
+  behaviour (§9). Excluding it leaves `judge_nc` at a mean of 0.0–0.78 per run with **L08 alone**
+  carrying the residual (A0 3/10, A1 0/9, A2 6/9, A3 4/10, A4 3/10, A5 7/9). **Superseded in part
+  by §10:** L08 is not merely noisy, it is the same both-ways judge variance on a single unchanged
+  seed string, with 29 of its COMPLIANT verdicts never having opened the relevant file. So the
+  recomputation does not rescue the panel — it empties it. Report the C13-excluded counts, but say
+  what §10.4 says rather than presenting L08 as a surviving signal.
+- ~~Whether to investigate the A5 and C13 difference~~ **Resolved 2026-10-07** — see §3.5 and §9.
+  Not an arm effect; no further investigation warranted.
+- **New (2026-10-07): decide whether the judge panel is reportable as a measurement at all.** Per
+  §10, 10 of 12 criteria never fired and the 2 that did measure judge behaviour, not conformance.
+  Options: (a) report the panel as a negative result about the instrument, which is the honest
+  reading and fits the talk's measurement-first narrative; (b) report judge results only as a
+  descriptive appendix with the §10 caveats attached; (c) drop the judge panel from the headline
+  entirely and rest the null on the machine-check floor plus R01. Kevin's call — (a) is the most
+  defensible and the most uncomfortable.
+- Whether the post-unblinding R01 re-score can carry weight in the talk given it was not scored
+  blind, and whether the `default_kept` class needs hand-verification (blocked: the blinded trees
+  are not on the current host).
 - Commit `unblinded_results.csv`, `scoring/unblind_join.py` and this file (not yet committed).

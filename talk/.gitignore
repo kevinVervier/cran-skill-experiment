@@ -16,4 +16,9 @@ gradient_bar.png
 *.jpg
 *.jpeg
 *.png
-!talk_files/
+
+# LaTeX-path leftovers. Never run `quarto render talk.qmd --to pdf` on this
+# revealjs deck: it takes the LaTeX route, deletes talk.pdf and then fails.
+# Build HTML, then print talk.html?print-pdf with decktape or headless Chrome.
+*.tex
+talk_files/

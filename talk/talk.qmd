@@ -255,9 +255,17 @@ That includes the LICENSE defect that actually got us rejected: **fixed in every
 run, in every arm**. The `set.seed()` rejection was in the seed too — and there the arms did differ (backup).
 :::
 
+::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.6em; color:#FF4E00; font-weight:700;"}
+Then I went looking for why — and the interesting answer was in my own instrument.
+:::
+
 ::: notes
 THE PUNCH. Stop talking for two seconds after the zero appears.
 Then: "including the cheat arm" — that is the uncomfortable part, say it yourself.
+
+The last fragment is the hinge into the rest of the talk. Do not skip it. The
+zero is not the end of the story; the next two slides are why the zero happened
+and what it cost me to find out.
 :::
 
 ## Every arm lands in the same place
@@ -324,13 +332,56 @@ See the backup slide; n is 9-10 per arm, so descriptive only.
 works, which is why I ran this.
 :::
 
+## The part I did not expect {background-color="#161616" style="color:#FCFCFC"}
+
+::: {style="font-size:1.1em; margin-top:.3em;"}
+`R CMD check` floored because it **works**. So the judgement oracle was supposed
+to see what the tool cannot.
+:::
+
+::: {.fragment style="margin-top:.6em;"}
+It had **12 criteria**. Ten never fired once.
+:::
+
+::: {.fragment style="margin-top:.5em;"}
+The two that did fire were the judge **disagreeing with itself** about text that
+**no arm had touched**:
+:::
+
+::: {.fragment style="font-size:.92em; margin-top:.4em;"}
+- the maintainer email — unchanged in all **57** runs; read as fine in 10 trees, as a problem in 47
+- one sentence in the seed — flagged by 22 verdicts, *excused* by 2, and 29 never opened the file
+:::
+
+::: {.fragment style="margin-top:.6em; color:#FF4E00; font-weight:700; text-align:center; font-size:1.05em;"}
+Both "findings" were my oracle. Not my arms.
+:::
+
+::: notes
+This is the real result and I should say so plainly.
+
+I did not find this during scoring. I found it afterwards, reading the judge's
+own evidence strings - which I did not have to look at. That is the point worth
+making to this audience: the failure was invisible at the summary level. The
+counts looked like a clean two-criterion signal. Only the free-text justification
+showed the judge arguing both sides of the same fact.
+
+If asked "so is the whole experiment void?" - no. The machine-check result stands
+on its own and is unaffected; it came from R CMD check, not the judge. What is
+void is the idea that the judge panel added sensitivity on top of it.
+
+Do not oversell this as a general claim about LLM judges. It is one package, one
+rubric, one rep per tree. The transferable lesson is in the next slide.
+:::
+
 ## What I am *not* claiming {.smaller}
 
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
 - **The two rejections behave differently.** The LICENSE template was repaired by every arm. The hard-coded `set.seed()` was also in the starting package, and there the arms differ (backup) — descriptive counts on 9–10 runs per arm, no test
 - **N = 1** on every axis that matters: one package, one agent, one model version
 - We had budget left and wanted more points, so we added 4–5 runs per arm. The N=5 results did not trigger that — we had simply costed the runs conservatively
-- **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity"
+- **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity" — and the judge panel (previous slide) says the second is live
+- **One open thread I can't close**: on the `set.seed()` rejection the arms *do* differ (backup). That re-score is post-unblinding, so I report it as a lead for someone else, not as support for anything above
 
 ::: notes
 Say these out loud and quickly. Credibility is the currency of a null result.
@@ -370,9 +421,16 @@ compliant. The exposure is filtering and job changes, both anticipated by the
 policy language. Say "not a violation today" out loud; do not oversell it.
 
 Do NOT say "a newer model spotted this". It is criterion C13, it was in the
-corpus from the start, and the judge flagged it in every arm except A5 - the
-experiment found it, which is the better story anyway: the thing all six
-conditions agreed on was the one defect I had shipped to CRAN myself.
+corpus from the start, and the judge flagged it in 47 of the 57 analysed trees -
+the experiment found it, which is the better story anyway: the thing nearly all
+six conditions agreed on was the one defect I had shipped to CRAN myself.
+
+Precision point (corrected 2026-10-07): do NOT say "every arm except A5". No arm
+ever changed the address - it is still kevin.vervier@novartis.com in all 57 runs.
+The 10 COMPLIANT verdicts (7 of them A5) are the judge excusing the corporate
+domain because Novartis Pharma AG is also the listed copyright holder. That is
+judge variance on an under-specified criterion, not an arm fixing anything. If
+asked about the A5 column in the results table, say that.
 :::
 
 ## Take home {background-color="#F5F5F5"}
@@ -387,13 +445,23 @@ survival is its most recent use case → `orthoMTL`
 oracles** — tests, `R CMD check`, symmetry checks — before prose guidance.
 :::
 ::: {.fragment}
-**3.** The agent ran the label-flip test. It took **me** to know that flipping
-every label *must* flip the answer.
+**3.** I set out to measure skill files. I couldn't — my judge measured itself.
+Finding out **why** was worth more than the answer.
 :::
 :::
 
 ::: {.fragment style="margin-top:.8em; text-align:center; font-size:1.1em; color:#FF4E00;"}
 Generation got cheap. Verification did not.
+:::
+
+::: notes
+Point 3 replaced the label-flip line, which now lives in the correctness backup.
+The three points are meant to escalate: the science, the practical advice, the
+thing that cost me a month to learn.
+
+Land the closing line slowly. It is the thesis of the whole talk, not a sign-off -
+the experiment is the evidence for it. If I only get one sentence remembered,
+this is the one.
 :::
 
 ::: {style="font-size:.6em; margin-top:.5em; text-align:center;"}
@@ -584,8 +652,32 @@ Completed runs only; descriptive counts, no test. "Default kept" means `seed = 4
 value goes through a helper that restores the user's RNG state — arguably acceptable, not what the
 reviewer asked for. \*A4 is an upper bound, not a competitor.
 
+**These counts are a re-score, run after unblinding.** My original rule only matched
+`set.seed(<literal>)` inside a function body, so it scored **zero hits on the seed itself** — a
+detector that cannot see the defect it was built for. I found that while preparing this talk, fixed
+the rule, and re-ran it. The re-score reads package files only and never touches the blind map: the
+same code at first unblinding would have produced this same table. The flaw was in the detector, not
+in the direction of the correction.
+
 ::: notes
 Be upfront - I seeded what I could verify automatically, which is exactly the
 half where the control was always going to do well. The honest version of this
 experiment seeds the other half, and that is the first thing I would change.
+
+On the post-unblinding point, say it before anyone asks, and say it in this order:
+(1) the rule was wrong, (2) here is how it was wrong, (3) it is a pure function of
+tree content, so the timing cannot have biased the direction. rescore_r01.R takes
+a tree path and returns hits; it has no access to arm labels. Validated on 8
+synthetic cases, the seed (3 hits), baseline and control (0), and a mutant (1).
+
+I am NOT claiming this as a skill-file win. Two things block that. It is one
+criterion at n=9-10 with no test, and A4 - the arm written from this exact
+rejection history - produced the canonical fix zero times, which is the opposite
+of what a clean skill effect looks like. Report it as the most interesting loose
+end in the dataset and move on.
+
+If asked why A2 and A5 and nobody else: the cookbook contains the canonical
+seed = NULL pattern verbatim, in a section every arm could read. A5 had that text
+front-loaded into context rather than pointed at; A2 is the adversarial-review
+arm. That is a hypothesis about front-loading vs distillation, not a finding.
 :::

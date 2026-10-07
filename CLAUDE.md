@@ -145,6 +145,20 @@ changes afterwards) → blocks 2–5.
 The deck is `talk/talk.qmd`. Facts in it are load-bearing — it is a public
 artefact about a null result, so every claim must survive a hostile check.
 
+**Narrative (reframed 2026-10-07).** The deck no longer ends on "no effect". It
+ends on **verification as the bottleneck**, with the experiment's own instrument
+failure as the evidence. Arc: shipped science (`orthoMTL` on CRAN) → the
+counterfactual question from our own rejections → why a measurement instrument →
+the zero → **the turn**: the judge panel had 12 criteria, 10 never fired, and the
+2 that did were the judge arguing both sides of text no arm had touched →
+executable oracles beat prose guidance → *"Generation got cheap. Verification did
+not."* That closing line is the thesis, not a sign-off. See `LESSONS_LEARNED.md`
+§5 for the full arc and §10 for the judge-panel finding.
+
+Tone discipline: this is not a null dressed up as an insight. Lead with the
+shipped package, state the zero without hedging, then show the instrument failing
+and say what it cost.
+
 - **`talk.pdf` is the only public artefact.** Everything else in `talk/` is
   gitignored: the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
   `gradient_bar.png`, …) are added on the internal PC and **must never be
@@ -152,16 +166,28 @@ artefact about a null result, so every claim must survive a hostile check.
 - **Never run `quarto render talk.qmd --to pdf`.** Revealjs decks take the
   LaTeX path under `--to pdf`; it deletes the existing `talk.pdf` and then fails
   (no TeX here). Build HTML, then print `talk.html?print-pdf` with decktape or a
-  headless browser.
+  headless browser. `*.tex` and `talk_files/` are gitignored as of 2026-10-07
+  precisely because that mistake left them behind.
 - **Two real rejections, scored differently.** R02 (LICENSE template) was
   repaired in 57/57 runs. R01 (`set.seed()`) was present in the seed (`seed = 42`
   default plus unconditional `set.seed()` in four exported functions) and the
   original R01 rule missed it; use `scoring/results_r01v2/`, not `seed_audit.json`,
   for R01. Arms differ on it; counts are descriptive (n=9-10 per arm).
-- **The maintainer-email finding is C13, from the experiment itself** — flagged
-  in every tree except A5 — not a later discovery by a newer model. And it is
-  **not a policy violation**: a named person at a company address is compliant;
-  the risk is filtering and job changes.
+- **R01 is an open lead, never a skill-file win.** The re-score is
+  post-unblinding. It is defensible because `rescore_r01.R` is a pure function of
+  tree content and never reads `.blind_map.csv` — the same code at first
+  unblinding gives the same table. But A4, written from this exact rejection
+  history, produced the canonical fix **zero** times, which is the opposite of a
+  clean skill effect. See `LESSONS_LEARNED.md` §7.3.
+- **The maintainer-email finding is C13, from the experiment itself** — not a
+  later discovery by a newer model. And it is **not a policy violation**: a named
+  person at a company address is compliant; the risk is filtering and job changes.
+- **Do NOT say "flagged in every tree except A5".** No arm ever changed the
+  address — it is `kevin.vervier@novartis.com` in all 57 runs. The 10 COMPLIANT
+  verdicts are the judge excusing the corporate domain because Novartis Pharma AG
+  is also the listed copyright holder, and its own 2 NON_COMPLIANT A5 runs cite
+  the same fact as aggravating. C13 measures judge variance, not conformance
+  (`LESSONS_LEARNED.md` §9).
 
 ## Reporting posture
 
