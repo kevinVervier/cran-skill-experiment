@@ -353,7 +353,7 @@ The two that did fire were the judge **disagreeing with itself** about text that
 
 ::: {.fragment style="font-size:.92em; margin-top:.4em;"}
 - the maintainer email — unchanged in all **57** runs; read as fine in 10 trees, as a problem in 47
-- one sentence in the seed — flagged by 22 verdicts, *excused* by 2, and 29 never opened the file
+- one sentence in the seed — flagged in 23 trees, *excused* in 2, and in 29 the judge never opened the file (3 n/a)
 :::
 
 ::: {.fragment style="margin-top:.6em; color:#FF4E00; font-weight:700; text-align:center; font-size:1.05em;"}
@@ -382,7 +382,7 @@ rubric, one rep per tree. The transferable lesson is in the next slide.
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
 - **The two rejections behave differently.** The LICENSE template was repaired by every arm. The hard-coded `set.seed()` was also in the starting package, and there the arms differ (backup) — descriptive counts on 9–10 runs per arm, no test
 - **N = 1** on every axis that matters: one package, one agent, one model version
-- We had budget left and wanted more points, so we added 4–5 runs per arm. The N=5 results did not trigger that — we had simply costed the runs conservatively
+- **Sample size** was not powered: we ran as many runs as time and budget allowed
 - **No positive control**: a deliberately handicapped arm (docs removed, so a skill file is the only guidance) would have shown the measurement *can* detect a win. Without one, I can't separate "no effect" from "no sensitivity" — and the judge panel (previous slide) says the second is live
 - **One open thread I can't close**: on the `set.seed()` rejection the arms *do* differ (backup). That re-score is post-unblinding, so I report it as a lead for someone else, not as support for anything above
 
@@ -401,11 +401,15 @@ them to recover.
 Say the n and the reason in the same breath as the result - do NOT bury it. The
 rule is content-independent (infrastructure failures are excluded and reported,
 whichever arm they hit), which is what makes a post-hoc exclusion defensible.
+Sample size, if asked: n=5 per arm was never powered. After an interim unblinded
+look at n=5 we extended to 10 per arm because time and budget allowed, not to chase
+a result; counts are descriptive. Do not claim a pre-registered n=10.
+
 If I am running long this compresses to one sentence: "three runs died on rate
 limits, 57 analysed, excluded not rerun." See LESSONS_LEARNED.md §11.
 :::
 
-## Postscript: the one thing every arm agreed on {background-color="#F5F5F5"}
+## Postscript: our own maintainer address {background-color="#F5F5F5"}
 
 ::: {style="font-size:1.12em; margin-top:.3em;"}
 The judge flagged **one** criterion in almost every tree — our own maintainer
