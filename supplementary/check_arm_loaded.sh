@@ -17,6 +17,7 @@ RUNS_ROOT="${RUNS_ROOT:?set RUNS_ROOT}"
 MIN_DELTA="${MIN_DELTA:-200}"   # tokens an instructed arm must exceed A0 by
 MODE="${1:?usage: pre <ARM>... | post <RUN_DIR>...}"; shift
 FAIL=0
+RATE=0
 
 first_call_tokens() {  # stream.jsonl -> input+cache tokens of the first assistant call
   jq -r 'select(.type=="assistant" and .message.usage != null)
@@ -43,6 +44,10 @@ case "${MODE}" in
     echo "A0 reference first-call context (median): ${REF} tokens"
     for D in "$@"; do
       ARM=$(basename "$D" | cut -c1-2); T=$(first_call_tokens "$D/stream.jsonl")
+      # Rate-limited run (429): not a delivery failure, the run is simply lost. Exit 3 tells the orchestrator to stop.
+      if [ "$(jq -r '.api_error_status // empty' "$D/result.json" 2>/dev/null)" = "429" ]; then
+        echo "RATE-LIMITED $(basename "$D"): API 429 (first-call tokens: ${T:-none}); run lost, not a delivery failure"; RATE=1; continue
+      fi
       if [ -z "${T}" ]; then echo "WARN $(basename "$D"): no first-call usage found"; FAIL=1; continue; fi
       if [ "${ARM}" = "A0" ]; then echo "ok   $(basename "$D"): ${T} (control)"; continue; fi
       if [ $(( T - REF )) -lt "${MIN_DELTA}" ]; then
@@ -53,4 +58,6 @@ case "${MODE}" in
     done ;;
   *) echo "unknown mode ${MODE}"; exit 2 ;;
 esac
-exit ${FAIL}
+[ "${FAIL}" -ne 0 ] && exit 1
+[ "${RATE}" -ne 0 ] && exit 3
+exit 0

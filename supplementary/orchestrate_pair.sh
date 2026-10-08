@@ -32,6 +32,12 @@ for BLOCK in "$@"; do
     fi
     echo "--- ${ARM} (block ${BLOCK}) ---"
     "${EXP_ROOT}/run_arm.sh" "${ARM}" "${BLOCK}" "${BLOCK}"
-    "${CHECK}" post "${RUN_DIR}" || echo "!! manipulation check FAILED for ${ARM} block ${BLOCK}: do not count this run"
+    "${CHECK}" post "${RUN_DIR}"; RC=$?
+    if [ "${RC}" -eq 3 ]; then
+      echo "!! RATE-LIMITED at ${ARM} block ${BLOCK}: stopping. Lost runs are kept and reported, never replaced in place."
+      echo "   Relaunch later with NEW block numbers for the lost pairs."; exit 3
+    elif [ "${RC}" -ne 0 ]; then
+      echo "!! manipulation check FAILED for ${ARM} block ${BLOCK}: do not count this run"
+    fi
   done
 done
