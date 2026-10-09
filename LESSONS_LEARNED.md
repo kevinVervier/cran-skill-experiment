@@ -44,7 +44,7 @@ outcomes.
 Supplementary result (blocks 11-13, 21-24, 26-28 = 10 matched pairs; blocks 14 and 25 lost their
 A0 partner to a 429, so their A4 runs are unpaired extras; Claude Code 2.1.294; labels known; no
 judge panel). R01 via `scoring/rescore_r01.R`: fresh A0 0 canonical / 6 default kept / 4 hard-coded;
-delivered A4 10/0/0 (12/12 with the extras). R02 (LICENSE) repaired in every tree, both arms. This
+delivered A4 10/0/0 (12/12 with the extras). R02 (LICENSE) repaired in every tree, both arms. `R CMD check` (`extract_findings.R`, 22 trees): 0 errors and 0 warnings everywhere; residual burden 0 in 21, 1 in one A0 tree (block 28, `description_meta`); no arm separation. Scores: `supplementary/results/`. This
 is a ceiling check — the file quotes the reviewer and names `seed = NULL` — and an after-the-fact
 positive control, NOT evidence that the blinded run would have shown the same. A0 block 23 ended
 `OTHER_success` (91 turns, no DECLARED_DONE marker): kept; it does not change the counts.

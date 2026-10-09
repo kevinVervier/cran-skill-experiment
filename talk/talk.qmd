@@ -743,7 +743,8 @@ Claude Code (2.1.294).
 Two extra hindsight runs without a surviving partner (rate limits) were also canonical: 12 of 12.
 This is a ceiling check, not a skill-file result: the file contains the answer. It shows the
 seed defect is learnable from text in context, which the blinded experiment could not show. Not
-pooled with the 57; no judge panel was run on these trees. Scripts: `supplementary/`.
+pooled with the 57; no judge panel was run on these trees. `R CMD check` was identical across
+arms: no errors or warnings in any of the 22 trees. Scripts and scores: `supplementary/`.
 
 ::: notes
 Frame as an afterward positive control. Do NOT say the blinded experiment would have given the
