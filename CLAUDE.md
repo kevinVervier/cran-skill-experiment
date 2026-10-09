@@ -138,7 +138,9 @@ changes afterwards) → blocks 2–5.
   or installed: A4's first-call context is 7,145 tokens in all 10 runs, identical to A0, and no
   instruction file exists in any A4 tree or in git history. For the main experiment A4 is a second
   control (controls n=20) — never describe it as an oracle, an upper bound or a skill arm. A
-  delivered A4 is a separate post-hoc supplementary run: see `supplementary/README.md`. Run
+  delivered A4 is a separate post-hoc supplementary run (12/12 canonical R01 fixes vs 0/10 fresh
+  controls; an afterward positive control, never pooled with the 57): see `supplementary/README.md`.
+  The talk pools the 10 undelivered-A4 runs as A0 (n=20) and says "five conditions". Run
   `supplementary/check_arm_loaded.sh` before and after any run that is supposed to carry
   instructions.
 - **The ledger has only two findings.** That is complete, not partial: there were two rejection

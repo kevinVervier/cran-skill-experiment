@@ -1,6 +1,6 @@
 ---
 title: "From Research Code to CRAN: LLM-Assisted Refactoring of orthoMTL for Survival Endpoints"
-subtitle: "We Let Six AI Agents Prep a CRAN Package"
+subtitle: "We Let Five AI Agents Prep a CRAN Package"
 author:
   - name: "Kevin Vervier"
   - name: "Nadia Solovieff"
@@ -202,7 +202,7 @@ CRAN — so the question is the **counterfactual**.
 ::: {.fragment style="margin-top:.5em;"}
 Re-break the package with four defects — **no NAMESPACE**, a **LICENSE
 template**, **DESCRIPTION metadata**, **unused Imports** (three of the four are
-visible to `R CMD check`). Hand it to an agent under **six conditions**. Frozen prompt, fresh copy each time, results
+visible to `R CMD check`). Hand it to an agent under **five conditions**. Frozen prompt, fresh copy each time, results
 **blinded** before scoring.
 :::
 
@@ -223,11 +223,12 @@ on disk. Full references in backup.
 :::
 
 ::: notes
-A4 was meant to be the oracle arm, written from this package's rejection history, but it
-never received its file (found 2026-10-08, see LESSONS_LEARNED.md section 0). It is a second
-control. Do NOT call it the cheat arm or an upper bound. Say: "five instruction sets, one of
-them none - and I ran the none twice by accident." Only say this if asked about A4 or
-positive controls; the backup arms slide carries it.
+Five conditions: four skill files and a control. The control has n=20 because a second batch of
+10 runs was meant to carry a hindsight file written from this package's rejection history and
+never received it (found 2026-10-08, see LESSONS_LEARNED.md section 0). Those runs are identical
+in configuration to A0, so they are pooled as A0. Only go into this if asked about positive
+controls; the backup arms slide carries it. Do NOT call that batch an upper bound for the main
+experiment: it never ran as one.
 
 IMPORTANT framing. Do NOT say "nobody measures skill files" - that is false and
 someone in this room will know it. Skills ARE measured; the useful point is that
@@ -398,7 +399,7 @@ rubric, one rep per tree. The transferable lesson is in the next slide.
 
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help a lot; this is *no benefit on CRAN prep, with the docs at hand*
 - **N = 1** on every axis that matters: one package, one model (Claude Opus 5.5 in Claude Code), five instruction sets — and runs were not powered, just as many as time and budget allowed
-- **No positive control**: I planned a hindsight arm, but its file was never delivered — I only found out afterwards. Without one, I can't separate "no effect" from "no sensitivity" — and the judge panel (previous slide) says the second is live
+- **No positive control in the blinded run**: I planned a hindsight arm, but its file was never delivered — I found out afterwards. A later run with the file delivered did fix the seed defect, so the instrument can see an effect there; but the judge panel (previous slide) says "no sensitivity" is still live
 
 ::: notes
 Say these out loud and quickly. Credibility is the currency of a null result.
@@ -509,15 +510,14 @@ this is the one.
 
 # Backup {.unnumbered}
 
-## Backup: what the six arms were {.smaller}
+## Backup: what the five arms were {.smaller}
 
 | Arm | Skill file | Source | Runs |
 |---|---|---|---|
-| A0 | none (control) | — | 10 |
+| A0 | none (control) | — | **20** (10 + 10, see below) |
 | A1 | `cran-extrachecks` | [posit-dev/skills](https://github.com/posit-dev/skills) | 9 |
 | A2 | `cran-submit` | [CoryMcCartan/agent-skills](https://github.com/CoryMcCartan/agent-skills) | 9 |
 | A3 | `r-package-development` | [posit-dev/skills](https://github.com/posit-dev/skills) | 10 |
-| A4 | **none - intended hindsight file never delivered; a second control** | — | 10 |
 | A5 | raw handbook text | CRAN docs, next slide | 9 |
 
 Every arm — **A0 included** — also had the same offline CRAN docs on disk.
@@ -526,7 +526,10 @@ Every arm — **A0 included** — also had the same offline CRAN docs on disk.
 Agent: Claude Opus 5.5 (`claude-opus-5-5`) in Claude Code 2.1.282–284 (auto-updated mid-experiment).
 Judge: Claude Sonnet 5 — same vendor family as the agent. Skill files were delivered as an
 always-loaded `CLAUDE.md`, not through the on-demand Skill tool, which the agent did not have.
-A4 and A0 are therefore both controls (20 runs).
+A0 has 20 runs because a second batch of 10 (labelled A4) was meant to carry a hindsight file
+written from the rejection history and never received it: first-call context was 7,145 tokens in
+all 10, identical to A0. They are pooled as A0. A later paired run with the file delivered is on
+the last backup slide.
 
 ## Backup: the handbook every arm could read {.smaller}
 
@@ -685,16 +688,15 @@ four exported functions — the exact pattern CRAN rejected. `R CMD check` does 
 
 | Arm | n | Still hard-coded | Default kept, RNG state restored | Canonical fix (`seed = NULL`) |
 |:--|--:|--:|--:|--:|
-| A0 control | 10 | 6 | 4 | 0 |
+| A0 control | 20 | 10 | 10 | 0 |
 | A1 checklist | 9 | 1 | 8 | 0 |
 | A2 process | 9 | 1 | 1 | 7 |
 | A3 general R | 10 | 3 | 7 | 0 |
-| A4 oracle* | 10 | 4 | 6 | 0 |
 | A5 raw handbook | 9 | 1 | 0 | 8 |
 
 Completed runs only; descriptive counts, no test. "Default kept" means `seed = 42` stays but the
 value goes through a helper that restores the user's RNG state — arguably acceptable, not what the
-reviewer asked for. \*A4 had no instruction file: a second control.
+reviewer asked for. A0 includes the 10 runs that were meant to carry the hindsight file and did not (see arms slide).
 
 **These counts are a re-score, run after unblinding.** My original rule only matched
 `set.seed(<literal>)` inside a function body, so it scored **zero hits on the seed itself** — a
@@ -716,7 +718,7 @@ synthetic cases, the seed (3 hits), baseline and control (0), and a mutant (1).
 
 I am NOT claiming this as a skill-file win. Two things block that. It is one
 criterion at n=9-10 with no test, and it is a post-hoc re-score. The controls
-(A0 and the file-less A4) produced the canonical fix zero times in 20 runs, which
+(A0, n=20, including the 10 runs that never got the hindsight file) produced the canonical fix zero times in 20 runs, which
 makes the A2/A5 contrast more interesting, not proven. Report it as the most
 interesting loose end in the dataset and move on.
 
@@ -724,4 +726,27 @@ If asked why A2 and A5 and nobody else: the cookbook contains the canonical
 seed = NULL pattern verbatim, in a section every arm could read. A5 had that text
 front-loaded into context rather than pointed at; A2 is the adversarial-review
 arm. That is a hypothesis about front-loading vs distillation, not a finding.
+:::
+
+## Backup: positive control, run afterwards (R01) {.smaller}
+
+The hindsight file was written from CRAN's own two rejection messages, installed, and checked to
+reach the model (first-call context +1,055 tokens over its paired control). Then A0 and the
+hindsight arm were run as 10 interleaved pairs, **after unblinding, labels known**, on a newer
+Claude Code (2.1.294).
+
+| Arm | n | Canonical fix (`seed = NULL`) | Default kept | Still hard-coded |
+|:--|--:|--:|--:|--:|
+| Fresh A0 | 10 | 0 | 6 | 4 |
+| Hindsight file delivered | 10 | 10 | 0 | 0 |
+
+Two extra hindsight runs without a surviving partner (rate limits) were also canonical: 12 of 12.
+This is a ceiling check, not a skill-file result: the file contains the answer. It shows the
+seed defect is learnable from text in context, which the blinded experiment could not show. Not
+pooled with the 57; no judge panel was run on these trees. Scripts: `supplementary/`.
+
+::: notes
+Frame as an afterward positive control. Do NOT say the blinded experiment would have given the
+same result: different CLI version, labels known, no judge. The claim is only that when the file
+is delivered, the instrument sees the fix.
 :::

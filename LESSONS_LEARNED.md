@@ -36,6 +36,19 @@ Consequences:
 Remedy: `supplementary/` — a post-hoc paired run of a delivered A4 against fresh A0 controls,
 with `check_arm_loaded.sh` as a manipulation check. Reported separately, never pooled.
 
+Decision (2026-10-09, Kevin): in the talk the 10 undelivered-A4 runs are **pooled as A0 (n=20)**,
+not dropped, and the deck says "five conditions". The 57-run analysis is unchanged otherwise. The
+relabelling was made after unblinding, on instrument-failure grounds (first-call tokens), not on
+outcomes.
+
+Supplementary result (blocks 11-13, 21-24, 26-28 = 10 matched pairs; blocks 14 and 25 lost their
+A0 partner to a 429, so their A4 runs are unpaired extras; Claude Code 2.1.294; labels known; no
+judge panel). R01 via `scoring/rescore_r01.R`: fresh A0 0 canonical / 6 default kept / 4 hard-coded;
+delivered A4 10/0/0 (12/12 with the extras). R02 (LICENSE) repaired in every tree, both arms. This
+is a ceiling check — the file quotes the reviewer and names `seed = NULL` — and an after-the-fact
+positive control, NOT evidence that the blinded run would have shown the same. A0 block 23 ended
+`OTHER_success` (91 turns, no DECLARED_DONE marker): kept; it does not change the counts.
+
 ## 1. Headline result (lead with the uncomfortable part)
 
 - **No detected effect of any skill file on conformance.** Across the 57 completed runs, residual
