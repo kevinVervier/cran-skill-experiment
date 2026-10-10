@@ -15,8 +15,9 @@ runs <- filter(runs_all, term == "DECLARED_DONE") |>
   # identical in configuration to A0: pooled as A0 (n=20). The labels are re-mapped here only.
   mutate(arm = ifelse(arm == "A4", "A0", arm))
 
-arm_labels <- c(A0 = "A0 control", A1 = "A1 checklist", A2 = "A2 process",
-                A3 = "A3 general R", A5 = "A5 raw handbook")
+# Arms are named by content on slides; the A-codes stay as names for joins with the data.
+arm_labels <- c(A0 = "Control", A1 = "Checklist", A2 = "Process",
+                A3 = "General R", A5 = "Handbook")
 
 # Outcome slide. judge_nc takes only 0/1/2 across all runs, so a jittered dot
 # strip over-plots badly and implies a continuum that isn't there. A stacked
@@ -85,7 +86,7 @@ design_fig <- function() {
   ggplot(d, aes(x = 1, y = arm)) +
     geom_tile(aes(fill = ctrl), width = .9, height = .82, colour = "white", linewidth = 1.5) +
     geom_text(aes(label = paste0(lab, "   n = ", n)), colour = "white",
-              fontface = "bold", size = 8, hjust = .5) +
+              fontface = "bold", size = 6.5, hjust = .5) +
     scale_fill_manual(values = c(`TRUE` = ACCENT, `FALSE` = "#5A5A5A"), guide = "none") +
     labs(x = NULL, y = NULL) +
     theme_void(base_size = 18)
@@ -112,12 +113,45 @@ sign_flip_fig <- function() {
     annotate("text", x = 20, y = 0.028, label = "protective", colour = INK,
              fontface = "bold", size = 6.4, hjust = .5) +
     scale_x_continuous(breaks = d$month) +
-    labs(x = "Months of follow-up", y = "Estimated effect",
+    # State the sign: survival statisticians read a negative Cox coefficient as protective.
+    labs(x = "Months of follow-up", y = "Effect on survival\n(below 0 = worse)",
          caption = "Schematic of one biomarker's effect. Shape is illustrative.") +
     theme_minimal(base_size = 19) +
     theme(panel.grid.minor = element_blank(),
           panel.grid.major.x = element_blank(),
           panel.grid.major.y = element_line(colour = "#E6E6E6"),
           plot.caption = element_text(colour = MUTED, size = 13),
+          text = element_text(colour = INK))
+}
+
+# Landmark schematic for the orthoMTL slide, replacing the MTLSA table image (unreadable
+# when projected). Each landmark is one yes/no task: still event-free at that time?
+# Patients are invented; 1 = event-free, 0 = event before the landmark, ? = censored.
+landmark_fig <- function() {
+  # y = 5 - id puts patient 1 at the top without a reversed scale.
+  pts <- tibble::tibble(id = 1:4, time = c(20, 9, 15, 24), event = c(TRUE, TRUE, FALSE, FALSE))
+  lms <- c(6, 12, 18)
+  cells <- merge(pts, data.frame(lm = lms), by = NULL) |>
+    mutate(lab = ifelse(lm < time, "1", ifelse(event, "0", "?")), y = 5 - id)
+  pts <- mutate(pts, y = 5 - id)
+  ggplot() +
+    geom_vline(xintercept = lms, linetype = "dashed", colour = MUTED, linewidth = .6) +
+    geom_segment(data = pts, aes(x = 0, xend = time, y = y, yend = y),
+                 colour = INK, linewidth = 1.3) +
+    geom_point(data = pts, aes(time, y, shape = event), size = 4.2, stroke = 1.4, colour = INK) +
+    geom_label(data = cells, aes(lm, y, label = lab, colour = lab == "?"),
+               fontface = "bold", size = 5.6, label.size = 0, fill = "white") +
+    annotate("text", x = lms, y = 4.6, label = paste("Task", seq_along(lms)),
+             fontface = "bold", size = 5.6, colour = INK) +
+    scale_shape_manual(values = c(`TRUE` = 4, `FALSE` = 1), guide = "none") +
+    scale_colour_manual(values = c(`TRUE` = ACCENT, `FALSE` = INK), guide = "none") +
+    scale_x_continuous(breaks = lms, labels = paste(lms, "mo"), limits = c(0, 25)) +
+    scale_y_continuous(breaks = 4:1, labels = paste("Patient", 1:4),
+                       expand = expansion(add = c(.4, .4))) +
+    labs(x = NULL, y = NULL,
+         caption = "x event   o censored   1 event-free   0 event   ? left out of that task") +
+    theme_minimal(base_size = 18) +
+    theme(panel.grid = element_blank(),
+          plot.caption = element_text(colour = MUTED, size = 12, hjust = .5),
           text = element_text(colour = INK))
 }
