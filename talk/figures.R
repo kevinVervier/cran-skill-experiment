@@ -75,21 +75,84 @@ seed_repaired <- vapply(runs$blind, function(b) {
   all(seed_cats %in% unlist(d$repaired_categories)) && length(d$broke_or_new_categories) == 0
 }, logical(1))
 
-# Experiment schematic for the design slide: five arms -> blinded scoring.
+# Trial-style flow diagram for the design slide: starting package -> block-randomised
+# arms -> blinded scoring, with the rules shared by every run along the top. Drawn on a
+# fixed 16 x 9 canvas so the layout does not depend on the data; only n comes from runs.
 design_fig <- function() {
-  d <- tibble::tibble(
-    arm = factor(names(arm_labels), levels = rev(names(arm_labels))),
-    lab = unname(arm_labels),
-    n   = as.integer(table(runs$arm)[names(arm_labels)]),
-    ctrl = names(arm_labels) == "A0"
+  PANEL <- "#F2F2F2"; ARM <- "#4A4A4A"
+  box <- function(x0, x1, y0, y1, fill, colour = NA)
+    annotate("rect", xmin = x0, xmax = x1, ymin = y0, ymax = y1, fill = fill, colour = colour)
+  arr <- function(x0, y0, x1, y1)
+    annotate("segment", x = x0, y = y0, xend = x1, yend = y1, colour = MUTED, linewidth = .8,
+             arrow = arrow(length = unit(.11, "in"), type = "closed"))
+  ln <- function(x0, y0, x1, y1)
+    annotate("segment", x = x0, y = y0, xend = x1, yend = y1, colour = MUTED, linewidth = .8)
+
+  n <- as.integer(table(runs$arm)[names(arm_labels)])
+  arms <- tibble::tibble(
+    lab  = unname(arm_labels),
+    desc = c("no skill file", "cran-extrachecks", "cran-submit",
+             "r-package-development", "raw CRAN docs in context"),
+    n    = paste0("n = ", n, ifelse(names(arm_labels) == "A0", "*", "")),
+    y    = c(7.0, 5.7, 4.4, 3.1, 1.8),
+    fill = ifelse(names(arm_labels) == "A0", ACCENT, ARM)
   )
-  ggplot(d, aes(x = 1, y = arm)) +
-    geom_tile(aes(fill = ctrl), width = .9, height = .82, colour = "white", linewidth = 1.5) +
-    geom_text(aes(label = paste0(lab, "   n = ", n)), colour = "white",
-              fontface = "bold", size = 6.5, hjust = .5) +
-    scale_fill_manual(values = c(`TRUE` = ACCENT, `FALSE` = "#5A5A5A"), guide = "none") +
-    labs(x = NULL, y = NULL) +
+  rules <- c("Pre-registered", "One agent", "Frozen prompt", "Fresh copy each run",
+             "CRAN docs in every arm")
+  rx <- 3.3 + 2.76 * (seq_along(rules) - 1)
+
+  p <- ggplot() + coord_cartesian(xlim = c(0, 16), ylim = c(0, 9), expand = FALSE) +
     theme_void(base_size = 18)
+
+  # Rules shared by every run.
+  p <- p + annotate("text", x = .2, y = 8.55, label = "Every run:", hjust = 0,
+                    fontface = "bold", size = 4.6, colour = INK)
+  for (i in seq_along(rules)) p <- p + box(rx[i] - 1.3, rx[i] + 1.3, 8.25, 8.85, "white", MUTED)
+  p <- p + annotate("text", x = rx, y = 8.55, label = rules, size = 3.9, colour = INK)
+
+  # Starting package -> block randomisation fan-out.
+  p <- p + box(.2, 3.1, 3.3, 5.5, PANEL) +
+    annotate("text", x = 1.65, y = 5.0, label = "Starting package", fontface = "bold",
+             size = 5, colour = INK) +
+    annotate("text", x = 1.65, y = 4.05, size = 4.1, colour = INK, lineheight = .95,
+             label = "orthoMTL, re-broken:\n4 planted defects\n+ original set.seed()") +
+    arr(3.1, 4.4, 4.5, 4.4) +
+    annotate("text", x = 4.55, y = 8.0, label = "block-randomised\n10 blocks", size = 3.8,
+             colour = MUTED, lineheight = .9, vjust = 1) +
+    ln(4.55, min(arms$y), 4.55, max(arms$y))
+  for (y in arms$y) p <- p + arr(4.55, y, 5.25, y)
+
+  # Arms.
+  for (i in seq_len(nrow(arms))) p <- p + box(5.3, 9.8, arms$y[i] - .5, arms$y[i] + .5, arms$fill[i])
+  p <- p +
+    annotate("text", x = 5.5, y = arms$y + .17, label = arms$lab, hjust = 0,
+             fontface = "bold", size = 5, colour = "white") +
+    annotate("text", x = 5.5, y = arms$y - .2, label = arms$desc, hjust = 0,
+             size = 3.7, colour = "white", family = "mono") +
+    annotate("text", x = 9.6, y = arms$y, label = arms$n, hjust = 1,
+             fontface = "bold", size = 4.6, colour = "white")
+
+  # Collector -> blinded scoring.
+  for (y in arms$y) p <- p + ln(9.8, y, 10.3, y)
+  p <- p + ln(10.3, min(arms$y), 10.3, max(arms$y)) +
+    arr(10.3, 5.95, 10.85, 5.95) + arr(10.3, 2.85, 10.85, 2.85) +
+    annotate("text", x = 13.35, y = 7.75, label = "Scored blind to arm", fontface = "bold",
+             size = 4.6, colour = INK) +
+    box(10.9, 15.8, 4.9, 7.0, PANEL, INK) +
+    annotate("text", x = 13.35, y = 6.45, label = "Primary: AI judge", fontface = "bold",
+             size = 5, colour = INK) +
+    annotate("text", x = 13.35, y = 5.55, size = 4.1, colour = INK, lineheight = .95,
+             label = "a second model scores\n12 CRAN-reviewer criteria") +
+    box(10.9, 15.8, 1.8, 3.9, PANEL) +
+    annotate("text", x = 13.35, y = 3.35, label = "Machine check", fontface = "bold",
+             size = 5, colour = INK) +
+    annotate("text", x = 13.35, y = 2.45, size = 4.1, colour = INK, lineheight = .95,
+             label = "R CMD check + scripts:\nplanted defects repaired?")
+
+  # Flow footnote.
+  p + annotate("text", x = .2, y = .55, hjust = 0, size = 3.6, colour = MUTED,
+               label = paste0("60 runs planned, 3 lost to API rate limits, ", nrow(runs),
+                              " analysed.   * includes 10 runs whose skill file never arrived."))
 }
 
 # Anonymised schematic for the opening slide. No compound, gene, trial or

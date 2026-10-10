@@ -265,33 +265,22 @@ The question is the counterfactual: the package is already on CRAN, after two ro
 of human review on things R CMD check never printed. Would a skill file have saved them?
 :::
 
-## We ran it like a trial {.smaller}
+## We ran it like a trial
 
-::: columns
-::: {.column width="56%"}
-- **One agent**, one frozen prompt, a fresh copy of the **starting package** every run
-- Four **planted defects** — no `NAMESPACE`, a `LICENSE` template, `DESCRIPTION`
-  metadata, unused `Imports` — plus our original hard-coded `set.seed()`
-- **Five arms**: a control with no skill file, and four published ones. Every arm
-  had the CRAN docs on disk
-- **Pre-registered**; scoring **blinded** to arm
-- **Endpoints**: `R CMD check` and scripts for the planted defects. Expecting those to
-  floor, the protocol made an **AI judge** — a second model, scoring 12 CRAN-reviewer
-  criteria — the **primary** conformance measure
-:::
-::: {.column width="44%"}
 ```{r}
-#| fig-width: 5.4
-#| fig-height: 3.6
+#| fig-width: 12
+#| fig-height: 5.6
 #| out-width: "100%"
 design_fig()
 ```
-:::
-:::
 
 ::: notes
 Lean into the trial vocabulary - this room owns it: arms, control, blinding,
-pre-registration. Say "we ran it like a five-arm trial".
+pre-registration. Say "we ran it like a five-arm trial". Walk the diagram left to right
+in one breath each: the starting package (four planted defects, plus our original
+hard-coded set.seed); block-randomised into five arms, every arm once per block in
+random order; scored blind. Then the one point that matters for later: we expected the
+machine check to floor, so the protocol made the AI judge the primary measure.
 
 The control has n=20 because a second batch of 10 runs was meant to carry a hindsight
 file and never received it - a protocol deviation, told on the "not claiming" slide.
