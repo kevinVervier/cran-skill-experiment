@@ -78,7 +78,9 @@ seed_repaired <- vapply(runs$blind, function(b) {
 # Trial-style flow diagram for the design slide: starting package -> block-randomised
 # arms -> blinded scoring, with the rules shared by every run along the top. Drawn on a
 # fixed 16 x 9 canvas so the layout does not depend on the data; only n comes from runs.
-design_fig <- function() {
+# `step` builds it up for fragments on one canvas, so the layers align when stacked:
+# 1 = rules + starting package, 2 = + randomisation and arms, 3 = + blinded scoring.
+design_fig <- function(step = 3) {
   PANEL <- "#F2F2F2"; ARM <- "#4A4A4A"
   box <- function(x0, x1, y0, y1, fill, colour = NA)
     annotate("rect", xmin = x0, xmax = x1, ymin = y0, ymax = y1, fill = fill, colour = colour)
@@ -110,13 +112,16 @@ design_fig <- function() {
   for (i in seq_along(rules)) p <- p + box(rx[i] - 1.3, rx[i] + 1.3, 8.25, 8.85, "white", MUTED)
   p <- p + annotate("text", x = rx, y = 8.55, label = rules, size = 3.9, colour = INK)
 
-  # Starting package -> block randomisation fan-out.
+  # Starting package.
   p <- p + box(.2, 3.1, 3.3, 5.5, PANEL) +
     annotate("text", x = 1.65, y = 5.0, label = "Starting package", fontface = "bold",
              size = 5, colour = INK) +
     annotate("text", x = 1.65, y = 4.05, size = 4.1, colour = INK, lineheight = .95,
-             label = "orthoMTL, re-broken:\n4 planted defects\n+ original set.seed()") +
-    arr(3.1, 4.4, 4.5, 4.4) +
+             label = "orthoMTL, re-broken:\n4 planted defects\n+ original set.seed()")
+  if (step < 2) return(p)
+
+  # Block randomisation fan-out.
+  p <- p + arr(3.1, 4.4, 4.5, 4.4) +
     annotate("text", x = 4.55, y = 8.0, label = "block-randomised\n10 blocks", size = 3.8,
              colour = MUTED, lineheight = .9, vjust = 1) +
     ln(4.55, min(arms$y), 4.55, max(arms$y))
@@ -131,6 +136,11 @@ design_fig <- function() {
              size = 3.7, colour = "white", family = "mono") +
     annotate("text", x = 9.6, y = arms$y, label = arms$n, hjust = 1,
              fontface = "bold", size = 4.6, colour = "white")
+
+  p <- p + annotate("text", x = .2, y = .55, hjust = 0, size = 3.6, colour = MUTED,
+                    label = paste0("60 runs planned, 3 lost to API rate limits, ", nrow(runs),
+                                   " analysed.   * includes 10 runs whose skill file never arrived."))
+  if (step < 3) return(p)
 
   # Collector -> blinded scoring.
   for (y in arms$y) p <- p + ln(9.8, y, 10.3, y)
@@ -148,11 +158,7 @@ design_fig <- function() {
              size = 5, colour = INK) +
     annotate("text", x = 13.35, y = 2.45, size = 4.1, colour = INK, lineheight = .95,
              label = "R CMD check + scripts:\nplanted defects repaired?")
-
-  # Flow footnote.
-  p + annotate("text", x = .2, y = .55, hjust = 0, size = 3.6, colour = MUTED,
-               label = paste0("60 runs planned, 3 lost to API rate limits, ", nrow(runs),
-                              " analysed.   * includes 10 runs whose skill file never arrived."))
+  p
 }
 
 # Anonymised schematic for the opening slide. No compound, gene, trial or
