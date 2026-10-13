@@ -152,19 +152,48 @@ changes afterwards) → blocks 2–5.
 The deck is `talk/talk.qmd`. Facts in it are load-bearing — it is a public
 artefact about a null result, so every claim must survive a hostile check.
 
-**Narrative (reframed 2026-10-07).** The deck no longer ends on "no effect". It
-ends on **verification as the bottleneck**, with the experiment's own instrument
-failure as the evidence. Arc: shipped science (`orthoMTL` on CRAN) → the
-counterfactual question from our own rejections → why a measurement instrument →
-the zero → **the turn**: the judge panel had 12 criteria, 10 never fired, and the
-2 that did were the judge arguing both sides of text no arm had touched →
-executable oracles beat prose guidance → *"Generation got cheap. Verification did
-not."* That closing line is the thesis, not a sign-off. See `LESSONS_LEARNED.md`
-§5 for the full arc and §10 for the judge-panel finding.
+**Narrative (reframed 2026-10-07, restructured 2026-10-13).** The deck no longer
+ends on "no effect". It is built around one question — *what actually catches
+mistakes when an AI agent writes your R package?* — and ends on **verification as
+the bottleneck**, with the experiment's own instrument failure as the evidence.
+Arc: shipped science (`orthoMTL` on CRAN) → evidence 1, a unit test the agent wrote
+caught a real 2014 bug → our two CRAN rejections → what a skill file is → the
+design, told as a trial → evidence 2, **57/57: every arm hit the ceiling** because
+the agent runs `R CMD check` → evidence 3, `set.seed()`, where the check is silent
+and the arms did differ (exploratory) → evidence 4, **the turn**: the AI judge (the
+pre-registered primary measure) had 12 criteria, 10 never fired, and the 2 that did
+were the judge arguing both sides of text no arm had touched → *"Machine checks are
+cheap. Judgement isn't."* That closing line is the thesis, not a sign-off; the
+earlier wording ("Generation got cheap. Verification did not.") is kept in the
+notes as an alternative. See `LESSONS_LEARNED.md` §5 for the full arc and §10 for
+the judge-panel finding.
 
 Tone discipline: this is not a null dressed up as an insight. Lead with the
-shipped package, state the zero without hedging, then show the instrument failing
-and say what it cost.
+shipped package, show 57/57 and name it a ceiling before the audience does, then
+show the instrument failing and say what it cost.
+
+**Slide style (2026-10-13).** First person, short declarative lines, punch line on
+the click.
+- **One idea per slide.** When a slide is too loaded, split it into two before
+  cutting content.
+- **Titles set up the punch, never give it away** ("The result" above 57/57, "The
+  part I did not expect" for the judge).
+- **Backgrounds are white or black, never grey.** Black (`#161616`) marks the four
+  turns only: "Then CRAN rejected us. Twice.", "The result", "The part I did not
+  expect", "Take home". Every content slide is white, including "Then I handed it
+  the answer" (exploratory; black would oversell it).
+- **Vocabulary.**
+  - Say "starting package", never "the seed" (it collides with `set.seed()`).
+  - Name arms by content (Control, Checklist, Process, General R, Handbook); the
+    A-codes appear only in the backup arms table.
+  - Say "machine check" or "executable check", not "oracle".
+- **Speaker notes follow SAY / DON'T / IF ASKED.** SAY is the one line to land,
+  DON'T is load-bearing precision, IF ASKED is Q&A only and never volunteered on
+  stage. Keep notes short: long notes invite tangents.
+- **Timing.** About 8:40 spoken in a 10-minute slot, with about 1:20 of slack on
+  purpose. The budget and two checkpoints (leave the design slide by 4:00, reach
+  the judge slide by 6:15) live in the setup chunk. If running long, "Then I
+  handed it the answer" is the first slide to move back to backup.
 
 - **`talk.pdf` is the only public artefact.** Everything else in `talk/` is
   gitignored: the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
@@ -201,7 +230,7 @@ and say what it cost.
   blank page. That is what produced the blank page 2 fixed on 2026-10-07; the
   timing budget now lives in the `include: false` setup chunk.
 - **Two real rejections, scored differently.** R02 (LICENSE template) was
-  repaired in 57/57 runs. R01 (`set.seed()`) was present in the seed (`seed = 42`
+  repaired in 57/57 runs. R01 (`set.seed()`) was present in the starting package (`seed = 42`
   default plus unconditional `set.seed()` in four exported functions) and the
   original R01 rule missed it; use `scoring/results_r01v2/`, not `seed_audit.json`,
   for R01. Arms differ on it; counts are descriptive (n=9-10 per arm).
@@ -210,6 +239,16 @@ and say what it cost.
   tree content and never reads `.blind_map.csv` — the same code at first
   unblinding gives the same table. The controls (A0, and A4, which had no file) produced the canonical fix **zero**
   times in 20 runs; A2 and A5 mostly did. Still a post-hoc lead, not a result. See `LESSONS_LEARNED.md` §7.3.
+  On slide it is labelled "Exploratory: re-scored after unblinding, no test. A lead,
+  not a result." No take-home may imply prose guidance helps on it.
+- **The undelivered A4 file is a protocol deviation.** On the "not claiming" slide,
+  say that one arm's file never reached the model and those 10 runs joined the
+  control. It was caught afterwards from the 7,145-token first call.
+- **The n = 5 → 10 extension is not an interim analysis.** On slide: "Not powered;
+  n was set by budget." In Q&A: planned 5 per arm, extended after an unblinded look
+  because budget allowed, not to chase a result. Counts are descriptive with no
+  tests, so there is no error rate to inflate. Never say "interim analysis", never
+  say the signal was trending, never claim a pre-registered n = 10.
 - **The maintainer-email finding is C13, from the experiment itself** — not a
   later discovery by a newer model. And it is **not a policy violation**: a named
   person at a company address is compliant; the risk is filtering and job changes.
