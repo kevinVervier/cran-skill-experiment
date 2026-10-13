@@ -486,7 +486,7 @@ is in backup. Only tell it if there is time in Q&A.
 - **Not** "skill files are useless" → where tasks are *selected* to need them, they help;
   this is *no benefit on the machine-checkable part of CRAN prep, with the docs at hand*
 - **N = 1** on every axis that matters: one package, one agent model (Claude Opus 5.5 in
-  Claude Code), and a judge from the **same vendor**. Runs were not powered
+  Claude Code), and a judge from the **same vendor**. Runs were not powered; n was set by budget
 - **A protocol deviation**: one planned treatment arm got placebo — its file never reached
   the model. Caught afterwards by the size of the first prompt (a drug-level check); those
   10 runs joined the control
