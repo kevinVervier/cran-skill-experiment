@@ -50,20 +50,23 @@ n_runs <- nrow(runs)
 n_seed <- sum(seed_repaired)
 tot_usd <- round(sum(runs$cost))
 
-# TIMING BUDGET -- 10 min slot, ~9:10 spoken, 50 s slack (re-cut 2026-10-10 around one
-# question: what actually catches mistakes when an agent writes your R package?).
-#   1 Biomarker changes its mind   0:00-0:45   <- open on the curve
-#   2 orthoMTL                     0:45-1:20   <- the promotion, no more
-#   3 First catch: a unit test     1:20-2:00   <- evidence 1: executable check
-#   4 CRAN rejected us twice       2:00-2:30
-#   5 What is a skill file?        2:30-3:00   <- define before measuring
-#   6 We ran it like a trial       3:00-4:00
-#   7 Everyone hit the ceiling     4:00-4:45   <- evidence 2: R CMD check
-#   8 Why the control did so well  4:45-5:20
-#   9 Where the check is silent    5:20-6:30   <- evidence 3: set.seed (exploratory)
-#  10 The AI judge measured itself 6:30-7:30   <- evidence 4: judgement is not a check
-#  11 What I am not claiming       7:30-8:15
-#  12 Take home                    8:15-9:10
+# TIMING BUDGET -- 10 min slot, ~8:10 spoken, ~1:50 slack ON PURPOSE (re-cut 2026-10-13).
+# The slack is for the pauses, the clicks and the one tangent that will happen anyway.
+#   1 Biomarker changes its mind   0:00-0:40
+#   2 orthoMTL                     0:40-1:15
+#   3 First catch: a unit test     1:15-1:55
+#   4 CRAN rejected us twice       1:55-2:20
+#   5 What is a skill file?        2:20-2:50
+#   6 We ran it like a trial       2:50-3:50   <- CHECKPOINT: leave this slide by 4:00
+#   7 Every arm hit the ceiling    3:50-4:40
+#   8 Where the check is silent    4:40-5:40
+#   9 The AI judge measured itself 5:40-6:40   <- CHECKPOINT: arrive here by 6:00
+#  10 What I am not claiming       6:40-7:20
+#  11 Take home                    7:20-8:10
+# Running late at a checkpoint: on slides 8-10 say only the SAY line, skip the extras.
+#
+# NOTES FORMAT: every slide's notes open with SAY (the one line to land), then DON'T
+# (load-bearing precision), then IF ASKED (Q&A only - never volunteer it on stage).
 #
 # NOTE: this block was an HTML comment in the body until 2026-10-07. Quarto
 # wrapped it in its own untitled <section>, which printed as a blank page 2.
@@ -79,13 +82,12 @@ tot_usd <- round(sum(runs$cost))
 ## A biomarker that changes its mind
 
 ::: columns
-::: {.column width="40%"}
-In a late-stage oncology trial, one baseline biomarker looked **unassociated
-with survival**.
+::: {.column width="36%"}
+In a late-stage oncology trial, one biomarker looked **unrelated to survival**.
 
-A standard survival model scored its effect at ≈ 0.
+Estimated effect: **≈ 0**.
 :::
-::: {.column width="60%"}
+::: {.column width="64%"}
 ```{r}
 #| fig-width: 7.0
 #| fig-height: 4.3
@@ -100,31 +102,25 @@ sign_flip_fig()
 :::
 
 ::: notes
-OPEN HERE. Do not start with methods. Start with the curve crossing zero.
-The point of the whole first act: averaging over time hid a real signal.
-Pause after "the two halves cancelled out." That is the hook.
+SAY: open on the curve, not on methods. "Below zero is worse survival." Click.
+Pause after "the two halves cancelled out" - that is the hook.
 
-The y-axis says which way is worse. Say it once: "below zero is worse survival".
-Survival statisticians read a negative Cox coefficient as protective, so do not
-let the sign go unstated.
+DON'T: name any compound, gene, trial or variable. The figure is a redrawn
+schematic, captioned as illustrative.
 
-DISCLOSURE: no compound, gene, trial or variable name anywhere in this talk.
-This figure is a redrawn schematic, captioned as illustrative - the study
-figures could not be used because the labels are burned into the images.
-If asked in Q&A: "the specific biomarker isn't something I can name here,
-but the published analysis is in the reference on the last slide."
+IF ASKED which biomarker: "I can't name it here; the published analysis is in the
+reference on the last slide."
 :::
 
 ## orthoMTL: don't average over time {background-color="#F5F5F5"}
 
 ::: columns
-::: {.column width="42%"}
-Cut follow-up into **landmarks**. Each one is a yes/no task: *still event-free?*
+::: {.column width="38%"}
+Cut follow-up into **landmarks**: one yes/no task each.
 
-Fit all the tasks **at once** — sharing strength where they agree, each keeping
-**its own effect**.
+Fit them **together**, each with **its own effect**.
 :::
-::: {.column width="58%"}
+::: {.column width="62%"}
 ```{r}
 #| fig-width: 6.6
 #| fig-height: 3.9
@@ -133,7 +129,7 @@ landmark_fig()
 ```
 
 ::: {style="font-size:.5em; color:#939393; text-align:center; margin-top:-.2em;"}
-Survival-as-multi-task framing after MTLSA (Li et al., KDD 2016).
+Framing after MTLSA (Li et al., KDD 2016).
 :::
 :::
 :::
@@ -143,38 +139,32 @@ Survival-as-multi-task framing after MTLSA (Li et al., KDD 2016).
 :::
 
 ::: notes
-This is the promotion slide. 35 seconds, no more. The sell is: if your outcome is
-time-to-event and you suspect effects change over time, this package will show you that.
-Built first for regression and classification; survival is the newest use.
-Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
+SAY: "If your outcome is time-to-event and you suspect effects change over time,
+this package shows you that." Click for the link. 35 seconds, no more.
 
-EXPECT THIS QUESTION from biostatisticians: "isn't this just non-proportional hazards?
-Why not coxph with tt(), a landmark Cox model, or RMST?" Do not fight it - those are
-the right tools for a handful of covariates with an assumed shape of change.
-[VERIFY BEFORE USE - draft answer] orthoMTL is aimed at many candidate features at
-once: the landmark tasks are fitted jointly with a penalty, so effects can differ
-between landmarks without a parametric time function, and tasks borrow strength
-where the data say they agree.
+IF ASKED "isn't this just non-proportional hazards - why not coxph with tt(), landmark
+Cox or RMST?": those are right for a handful of covariates with an assumed shape.
+[VERIFY BEFORE USE - draft] orthoMTL is for many candidate features: landmark tasks
+are fitted jointly with a penalty, effects can differ between landmarks with no
+parametric time function, and tasks borrow strength where the data agree.
+Refs: Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
 :::
 
 ## PhD code to CRAN: the first catch was a test
 
 ::: columns
-::: {.column width="55%"}
-Twelve-year-old research code, packaged by an **AI agent**: a language model
-that edits files and runs commands itself.
+::: {.column width="50%"}
+Twelve-year-old code, packaged by an **AI agent** — a language model that edits
+files and runs commands itself.
 
 ::: {.fragment fragment-index="1"}
-Writing tests for the **logistic loss**, it found a **real bug** in my 2014
-gradient: labels were ±1, the code used the 0/1 formula. I confirmed it by hand.
-:::
-
-::: {.fragment fragment-index="2" style="margin-top:.4em;"}
-The test: flip every label and the probabilities **must** mirror. They didn't.
+Its unit tests found a **real bug** in my 2014 gradient: ±1 labels, 0/1 formula.
 :::
 :::
-::: {.column width="45%"}
+::: {.column width="50%"}
 ::: {.fragment fragment-index="2"}
+Flip every label; predictions must mirror. **They didn't.**
+
 ```r
 fit_a <- fit(X,  y)
 fit_b <- fit(X, -y)  # flipped
@@ -190,13 +180,12 @@ Sketch of the idea, not the package's actual test.
 :::
 
 ::: notes
-Keep this tight. The transferable idea is the symmetry check, not the bug: a check a
-machine can run caught what twelve years of reading the code did not. That is the
-first piece of evidence for the take-home.
-Facts to state exactly: the agent found the bug while writing unit tests for the
-logistic loss; I verified by hand that it was a real error; the code was then
-modified. Do not claim I designed the test, and do not claim the agent
-"understood" the maths - say it found it and I confirmed it.
+SAY: "A check a machine can run caught what twelve years of reading the code did not."
+That is evidence #1 for the take-home.
+
+DON'T: claim I designed the test, or that the agent "understood" the maths. Exact
+facts: it found the bug while writing unit tests for the logistic loss; I verified
+by hand; the code was fixed.
 :::
 
 ## Then CRAN rejected us. Twice. {background-color="#F5F5F5"}
@@ -211,38 +200,30 @@ modified. Do not claim I designed the test, and do not claim the agent
 :::
 
 ::: {.fragment style="font-size:1.15em; margin-top:.7em; color:#FF4E00;"}
-Neither was caught by any automated check. Both were caught by **a CRAN volunteer**.
+No automated check caught either. **A CRAN volunteer** caught both.
 :::
 
 ::: notes
-Big type, slow delivery. This is the pivot from act one to act two.
-Both rejections cost round-trips measured in weeks of calendar time.
-CRAN is maintained by volunteers - the Repository Policy says so in its own
-preamble: "CRAN is maintained by the efforts of volunteers (the CRAN team)".
-Their time is described there as CRAN's most precious resource. That matters for
-the argument: the scarce reviewing capacity is human and unpaid.
+SAY: slow, big pauses. "Each one cost weeks of round-trips - and the people who caught
+them are volunteers."
+
+IF ASKED: the CRAN Repository Policy's own preamble says CRAN is maintained by
+volunteers and calls their time its most precious resource.
 :::
 
 ## What is a skill file?
 
 ::: columns
-::: {.column width="42%"}
-A **Markdown file of instructions**, loaded into the agent's context before it
-starts work.
+::: {.column width="40%"}
+A **Markdown file of instructions** the agent reads before it starts.
 
-Posit and others publish CRAN ones. People drop them into their projects.
-
-::: {.fragment style="margin-top:.6em; font-weight:700;"}
+::: {.fragment style="margin-top:.8em; font-weight:700;"}
 Would one have got us through CRAN in one shot?
 :::
 :::
-::: {.column width="58%"}
+::: {.column width="60%"}
 ```markdown
 # CRAN submission notes for this package
-
-This package was submitted to CRAN before and
-rejected twice by human reviewers. Passing the
-check is necessary but is not enough.
 
 ## 1. Do not set a seed to a specific number
 ##    inside a function
@@ -251,18 +232,17 @@ check is necessary but is not enough.
 ```
 
 ::: {style="font-size:.5em; color:#939393;"}
-Excerpt (abridged): the file I later wrote from our own two rejections — last backup slide.
+Excerpt (abridged): the file I later wrote from our own two rejections.
 :::
 :::
 :::
 
 ::: notes
-Thirty seconds. Many people in the room have never seen one; the point is that it is
-just text, there is no magic. In this study the file was always loaded (as CLAUDE.md),
-not fetched on demand.
+SAY: "It's just text - Posit and others publish CRAN ones, people drop them into
+their projects." Click: the question. 30 seconds.
 
-The question is the counterfactual: the package is already on CRAN, after two rounds
-of human review on things R CMD check never printed. Would a skill file have saved them?
+IF ASKED: in this study the file was always loaded (as CLAUDE.md), not fetched on
+demand by a Skill tool.
 :::
 
 ## We ran it like a trial
@@ -295,33 +275,22 @@ design_fig(3)
 :::
 
 ::: notes
-Lean into the trial vocabulary - this room owns it: arms, control, blinding,
-pre-registration. Say "we ran it like a five-arm trial". The diagram builds in three
-clicks, one breath each: the starting package (four planted defects, plus our original
-hard-coded set.seed); block-randomised into five arms, every arm once per block in
-random order; then scoring, blind to arm. Then the one point that matters for later: we expected the
-machine check to floor, so the protocol made the AI judge the primary measure.
+SAY, one breath per click: "Same starting package every time." Click: "Five arms,
+block-randomised." Click: "Scored blind. We expected the machine check to floor, so
+the AI judge was the primary measure." Do not read the boxes aloud.
 
-The control has n=20 because a second batch of 10 runs was meant to carry a hindsight
-file and never received it - a protocol deviation, told on the "not claiming" slide.
-Those runs are identical in configuration to the control, so they are pooled.
+CHECKPOINT: leave this slide by 4:00.
 
-Skills from posit-dev/skills (checklist = cran-extrachecks, general R =
-r-package-development) and CoryMcCartan/agent-skills (process = cran-submit); the
-handbook arm had the raw CRAN docs loaded into context. Backup has the table.
+DON'T: say "nobody measures skill files" - skills are measured; the point is the
+measurements are already conditional.
 
-IMPORTANT framing. Do NOT say "nobody measures skill files" - that is false and
-someone in this room will know it. Skills ARE measured; the useful point is that
-the measurements are already conditional, and I am adding one more condition.
-The literature was already hedging: skills "often provide no benefit, and can even
-hurt" (SkillDelta, Xu et al. 2026; SkillAxe, Gautam et al. 2026).
-
-SAY THIS OUT LOUD, one sentence, no defensiveness:
-"The biggest study, SkillsBench, does find a solid average gain - but on 87
-tasks hand-picked to be easier with a skill, and not one of them is R."
-If it comes up in Q&A: its tasks are admitted only when "significantly easier
-with Skills", its skills are top-quartile quality, and its software-engineering
-domain gains the second-least of eight (+11.6 pp). Backup slide has the detail.
+IF ASKED about the literature: SkillDelta and SkillAxe report skills "often provide
+no benefit". SkillsBench finds +16.6 pp, but on 87 tasks admitted only if
+"significantly easier with Skills", top-quartile skills, and none in R; its
+software-engineering domain gains second-least of eight. Backup has the detail.
+IF ASKED why the control has n = 20: the protocol deviation, "not claiming" slide.
+IF ASKED which skills: posit-dev/skills (cran-extrachecks, r-package-development),
+CoryMcCartan/agent-skills (cran-submit); backup arms table.
 :::
 
 ## Every arm hit the ceiling {background-color="#161616" style="color:#FCFCFC"}
@@ -335,222 +304,146 @@ runs fixed all four planted defects — **control included**
 :::
 :::
 
-::: {.fragment style="text-align:center; font-size:1.0em; margin-top:.7em;"}
-No skill file beat no skill file. A **ceiling**, not a null: three of the four
-are defects `R CMD check` reports.
+::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.7em;"}
+A **ceiling**: the agent runs `R CMD check`, and it reports three of the four.
 :::
 
-::: {.fragment style="text-align:center; font-size:1.0em; margin-top:.6em; color:#FF4E00; font-weight:700;"}
-So a skill file could only help where the check is silent.
-:::
-
-::: notes
-THE PUNCH. Stop talking for two seconds after the number appears.
-Then: "including the control, all twenty runs of it."
-
-Say "ceiling" before anyone in the room does. The machine-checked result is a
-secondary endpoint and it floored, exactly as the pre-registration predicted.
-
-The LICENSE defect that actually got us rejected - the one planted defect R CMD check
-does not report - was fixed in every run, in every arm, control included.
-
-The last fragment is the hinge into the next two slides. Do not skip it.
-:::
-
-## Why the control did so well
-
-::: {style="font-size:1.2em; margin-top:.6em;"}
-::: {.fragment}
-The agent runs **`R CMD check`** and reads its own failures.
-:::
-::: {.fragment style="margin-top:.6em;"}
-A machine check beats a checklist: it reflects **this** package, **today**.
-:::
-::: {.fragment style="margin-top:.6em; color:#FF4E00; font-weight:700;"}
+::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.6em; color:#FF4E00; font-weight:700;"}
 Skill files add little where a tool already tells the truth.
 :::
+
+::: notes
+SAY: let the number sit for two seconds. "Including the control - all twenty runs."
+Click. "That's a ceiling, and I'll say it before you do." Click. "So a skill file can
+only help where the check is silent."
+
+IF ASKED about the LICENSE defect (the one planted defect R CMD check does not report):
+fixed in every run, every arm, control included.
+IF ASKED "models keep improving - isn't this moot?": that cuts my way; a better model
+needs the checklist less.
+IF ASKED "then why write CRAN skill files?": most were written for weaker models;
+they encode what the check can't see (next slide); and nobody had measured it.
+:::
+
+## Where the check is silent: `set.seed()`
+
+::: columns
+::: {.column width="48%"}
+`set.seed(42)` inside four exported functions — our second rejection.
+`R CMD check` says nothing.
+
+::: {.fragment style="margin-top:.6em;"}
+Afterwards, a file quoting the reviewer: **10/10**, against **0/10** for a fresh control.
+:::
+
+::: {style="margin-top:.6em; color:#939393; font-size:.8em;"}
+Exploratory: re-scored after unblinding, no test. A lead, not a result.
+:::
+:::
+::: {.column width="52%"}
+| Arm | `seed = NULL` fix |
+|:--|--:|
+| Control | **0** / 20 |
+| Checklist | 0 / 9 |
+| Process | **7** / 9 |
+| General R | 0 / 10 |
+| Handbook | **8** / 9 |
+:::
 :::
 
 ::: notes
-This is the mechanistic explanation and the most useful thing in the deck.
-Not an argument against skill files - an argument about where they pay. The CRAN
-rules a skill encodes are mostly the ones R CMD check already enforces.
+SAY: "The one rejection the tool can't see - and here the arms differ. Exploratory:
+a lead, not a result." Then move on.
 
-Not unique to us (say only if asked): SkillFlow found agents used retrieved skills
-70% of the time and still gained nothing. Reading a skill is not the same as needing one.
+DON'T: call this a skill-file win. It is post-hoc, one criterion, n = 9-20, no test.
 
-If asked "but models keep improving, so isn't the checklist point moot?" - that
-cuts in my favour, not against. A better model needs the checklist less, not
-more. My claim is about the tool being authoritative for this package today,
-not about the checklist being stale in the abstract.
-
-If asked "then why do people write CRAN skill files?" - three honest reasons.
-(1) Most were written against weaker models, where the gap was real.
-(2) They encode the part R CMD check cannot see - which is the next slide.
-(3) Writing one is cheap and feels responsible; nobody had measured whether it
-works on this job, which is why I ran this.
-:::
-
-## Where the check is silent: `set.seed()` {.smaller}
-
-The starting package called `set.seed(42)` inside four exported functions — our
-second rejection. `R CMD check` says nothing.
-
-| Arm | n | Canonical fix (`seed = NULL`) | Default kept, RNG restored | Still hard-coded |
-|:--|--:|--:|--:|--:|
-| Control | 20 | **0** | 10 | 10 |
-| Checklist | 9 | 0 | 8 | 1 |
-| Process | 9 | **7** | 1 | 1 |
-| General R | 10 | 0 | 7 | 3 |
-| Handbook | 9 | **8** | 0 | 1 |
-
-::: {.fragment style="margin-top:.4em;"}
-Afterwards, a file quoting the reviewer: **10/10** canonical fixes, against **0/10**
-for a fresh control.
-:::
-
-::: {style="margin-top:.4em; color:#939393;"}
-Exploratory: re-scored after unblinding, n = 9–20, no test. A lead, not a result.
-:::
-
-::: notes
-This is where instructions seem to matter: the one real rejection the tool cannot see.
-The control produced the canonical fix zero times in twenty runs; the process skill and
-the raw handbook mostly did. Every arm had the Cookbook text on disk, so "on disk" was
-not enough; why text in context helps, I can't say.
-
-Say the caveats in the same breath, in this order: (1) my original detector only matched
-set.seed(<literal>) and scored zero hits on the starting package itself, so I fixed the
-rule after unblinding; (2) the re-score is a pure function of the package files with no
-access to arm labels, so the timing cannot have biased the direction; (3) counts are
-descriptive, n = 9-20, no test.
-
-"Default kept" means seed = 42 stays but goes through a helper that restores the user's
-RNG state - arguably acceptable, not what the reviewer asked for.
-
-The 10/10 line is an after-the-fact positive control: different CLI version, labels
-known, no judge, and the file contains the answer. It shows the defect is learnable
-from text in context - nothing more. Backup slides have both.
+IF ASKED about post-unblinding: my original detector only matched set.seed(<literal>)
+and scored zero hits on the starting package itself; I fixed the rule after
+unblinding. The re-score is a pure function of the package files with no access to
+arm labels, so the timing cannot bias the direction. Full three-way table in backup.
+IF ASKED about the 10/10: an after-the-fact positive control - newer CLI, labels known,
+no judge, and the file contains the answer. It shows the defect is learnable from
+text in context, nothing more.
 :::
 
 ## The AI judge measured itself {background-color="#161616" style="color:#FCFCFC"}
 
-::: {style="font-size:1.1em; margin-top:.3em;"}
-The judge was the primary measure — it was meant to see what the tool cannot.
+::: {style="font-size:1.15em; margin-top:.4em;"}
+The primary measure. **12 criteria.** Ten never fired.
 :::
 
-::: {.fragment style="margin-top:.6em;"}
-It had **12 criteria**. Ten never fired.
+::: {.fragment style="font-size:1.15em; margin-top:.7em;"}
+Our maintainer email, **unchanged in all 57 runs**:<br>
+fine **10** times, a problem **47** times.
 :::
 
-::: {.fragment style="margin-top:.6em;"}
-One that did: our maintainer email — **unchanged in all 57 runs**.<br>
-The judge called it fine in **10**, a problem in **47**.
-:::
-
-::: {.fragment style="margin-top:.6em;"}
-Same text, opposite verdicts. The only other criterion that fired did the same.
-:::
-
-::: {.fragment style="margin-top:.7em; color:#FF4E00; font-weight:700; text-align:center; font-size:1.1em;"}
+::: {.fragment style="margin-top:.9em; color:#FF4E00; font-weight:700; text-align:center; font-size:1.15em;"}
 Every "finding" was my instrument. Not my arms.
 :::
 
 ::: notes
-This is the real result and I should say so plainly.
+SAY: "Same text, opposite verdicts. I only saw it by reading the judge's own
+justifications - the counts looked like a clean signal."
 
-I did not find this during scoring. I found it afterwards, reading the judge's
-own evidence strings - which I did not have to look at. That is the point worth
-making to this audience: the failure was invisible at the summary level. The
-counts looked like a clean two-criterion signal. Only the free-text justification
-showed the judge arguing both sides of the same fact.
+CHECKPOINT: arrive here by 6:00. Late? Say only the SAY line on this and the next slide.
 
-The other criterion, if asked: one sentence in the starting package - flagged in 23
-trees, excused in 2, and in 29 the judge never opened the file (3 n/a).
+DON'T: generalise to all LLM judges - one package, one rubric, one rep per tree.
 
-If asked "so is the whole experiment void?" - no. The machine-check result stands
-on its own; it came from R CMD check, not the judge. What is void is the idea that
-the judge added sensitivity on top of it - and the judge was the pre-registered
-primary conformance measure, so on what a human reviewer would object to, I have
-no working endpoint.
-
-Do not oversell this as a general claim about LLM judges. It is one package, one
-rubric, one rep per tree.
-
-The email story (judge right for the wrong reason; we are changing it in 0.2.0 anyway)
-is in backup. Only tell it if there is time in Q&A.
+IF ASKED "is the experiment void?": no. The machine-check result came from R CMD check
+and stands. What's void is the idea that the judge added sensitivity - and it was the
+pre-registered primary, so on what a human reviewer would object to I have no working
+endpoint.
+IF ASKED about the other criterion that fired: one sentence in the starting package,
+flagged in 23 trees, excused in 2, file never opened in 29 (3 n/a).
 :::
 
-## What I am *not* claiming {.smaller}
+## What I am *not* claiming
 
-- **Not** "skill files are useless" → where tasks are *selected* to need them, they help;
-  this is *no benefit on the machine-checkable part of CRAN prep, with the docs at hand*
-- **N = 1** on every axis that matters: one package, one agent model (Claude Opus 5.5 in
-  Claude Code), and a judge from the **same vendor**. Runs were not powered; n was set by budget
-- **A protocol deviation**: one planned treatment arm got placebo — its file never reached
-  the model. Caught afterwards by the size of the first prompt (a drug-level check); those
-  10 runs joined the control
-- **No working measure of what humans object to**: the judge had no sensitivity, and the
-  `set.seed()` contrast is a post-hoc lead
+- **Not** "skill files are useless" — this is the machine-checkable part of CRAN prep,
+  with the docs at hand
+- **N = 1**: one package, one agent model, a judge from the **same vendor**. Not powered;
+  n was set by budget
+- **A protocol deviation**: one arm's file never reached the model. Those 10 runs
+  joined the control
 
 ::: notes
-Say these out loud and quickly. Credibility is the currency of a null result.
-Lead with the non-claim, then the reason.
+SAY the three bullets quickly. Credibility is the currency of a null result.
 
-The protocol deviation, told as a pharma audience will hear it: the arm meant to carry a
-hindsight file written from our own rejections ran ten times with no file at all. Its
-first API call was 7,145 tokens in every run - identical to the control - while every
-real skill arm was larger. The freeze checklist had no box for "the file exists". The
-pooling decision was made on that instrument evidence, not on outcomes. See
-LESSONS_LEARNED.md section 0.
-
-The lost runs go here, orally: 3 runs died on API rate limits - infrastructure, not
-agent behaviour - so `r n_runs` of 60 are analysed. Excluded, not rerun: a replayed run
-weeks later under different rate limits is not the same experimental unit, and rerunning
-after unblinding would have been the only part of this experiment scored with the labels
-known. Two of the three died at 1 turn having spent $0.00.
-
-Sample size, if asked: n=5 per arm was never powered. After an interim unblinded look at
-n=5 we extended to 10 per arm because time and budget allowed, not to chase a result;
-counts are descriptive. Do not claim a pre-registered n=10.
-
-Ceiling: 3 of 4 planted defects are visible to R CMD check, and every arm had the
-Cookbook on disk.
-
-If I am running long this compresses to one sentence: "three runs died on rate
-limits, 57 analysed, excluded not rerun." See LESSONS_LEARNED.md §11.
+IF ASKED about the deviation: the hindsight arm ran ten times with no file. Its first
+API call was 7,145 tokens in every run - identical to the control - while every real
+skill arm was larger. Caught afterwards from that token count; pooled on that
+evidence, not on outcomes (LESSONS_LEARNED.md section 0).
+IF ASKED about the model: Claude Opus 5.5 in Claude Code; judge Claude Sonnet 5.
+IF ASKED about n: planned 5 per arm; after an unblinded look we extended to 10 because
+budget allowed, not to chase a result. Counts are descriptive, no tests, so there is
+no error rate to inflate. Never call it an interim analysis or a pre-registered n=10.
+IF ASKED about lost runs: 3 died on API rate limits (two at 1 turn, $0.00), so
+`r n_runs` of 60 analysed; excluded, not rerun - a run replayed weeks later is not the
+same experimental unit.
 :::
 
 ## Take home {background-color="#F5F5F5"}
 
-::: {style="font-size:1.05em; line-height:1.45;"}
+::: {style="font-size:1.1em; line-height:1.5;"}
 ::: {.fragment}
-**1.** Effects that change over time hide in averages. Fit the landmarks
-**jointly** → `orthoMTL`
+**1.** Effects that change over time hide in averages → `orthoMTL`
 :::
-::: {.fragment style="margin-top:.35em;"}
-**2.** Agents are good at what a **machine** can check. Invest in **executable
-checks** first — tests, `R CMD check` — and spend prose on what no tool sees.
+::: {.fragment style="margin-top:.4em;"}
+**2.** Agents do well what a **machine** can check. Invest in **executable checks** first.
 :::
-::: {.fragment style="margin-top:.35em;"}
-**3.** My primary instrument, an AI judge, measured itself. Check a judge
-**against itself** before you trust it.
+::: {.fragment style="margin-top:.4em;"}
+**3.** Check your AI judge **against itself** before you trust it.
 :::
 :::
 
-::: {.fragment style="margin-top:.5em; text-align:center; font-size:1.2em; color:#FF4E00; font-weight:700;"}
+::: {.fragment style="margin-top:.6em; text-align:center; font-size:1.2em; color:#FF4E00; font-weight:700;"}
 Machine checks are cheap. Judgement isn't.
 :::
 
 ::: notes
-The three points escalate: the science, the practical advice, the thing that cost me
-a month to learn. Point 2 carries all three pieces of evidence: the label-flip test,
-R CMD check flooring every arm, and set.seed as the place where prose seemed to matter.
+SAY: three clicks, one sentence each, then the closing line - slowly. Stop talking.
 
-Land the closing line slowly. It is the thesis of the whole talk, not a sign-off -
-the experiment is the evidence for it. Earlier wording, if preferred: "Generation got
-cheap. Verification did not." The new one says what the data show: verification by
-a machine was cheap and worked; verification by judgement was the expensive part.
+Earlier closing line, if preferred: "Generation got cheap. Verification did not."
 :::
 
 ::: {style="font-size:.55em; margin-top:.3em; text-align:center;"}
@@ -784,20 +677,21 @@ easy half of CRAN preparation.
 
 ## Backup: the hard-coded seed (R01) {.smaller}
 
-The starting package defaulted `seed = 42` and called `set.seed()` unconditionally in
-four exported functions — the exact pattern CRAN rejected. `R CMD check` does not report it.
+| Arm | n | Canonical fix (`seed = NULL`) | Default kept, RNG restored | Still hard-coded |
+|:--|--:|--:|--:|--:|
+| Control | 20 | 0 | 10 | 10 |
+| Checklist | 9 | 0 | 8 | 1 |
+| Process | 9 | 7 | 1 | 1 |
+| General R | 10 | 0 | 7 | 3 |
+| Handbook | 9 | 8 | 0 | 1 |
 
-Counts per arm are on the `set.seed()` slide. Completed runs only; descriptive counts, no test. "Default
-kept" means `seed = 42` stays but the value goes through a helper that restores the user's RNG
-state — arguably acceptable, not what the reviewer asked for. The control includes the 10 runs
-that were meant to carry the hindsight file and did not (see arms slide).
+Completed runs; descriptive, no test. "Default kept": `seed = 42` stays but a helper restores the
+user's RNG state — arguably acceptable, not what the reviewer asked for. Control includes the 10
+runs whose hindsight file never arrived.
 
-**These counts are a re-score, run after unblinding.** My original rule only matched
-`set.seed(<literal>)` inside a function body, so it scored **zero hits on the starting package itself** — a
-detector that cannot see the defect it was built for. I found that while preparing this talk, fixed
-the rule, and re-ran it. The re-score reads package files only and never touches the blind map: the
-same code at first unblinding would have produced this same table. The flaw was in the detector, not
-in the direction of the correction.
+**Re-scored after unblinding.** The original rule only matched `set.seed(<literal>)`, so it scored
+**zero hits on the starting package itself**. The fixed rule reads package files only and never
+touches the blind map: the same code at first unblinding gives this same table.
 
 ::: notes
 Be upfront - I planted what I could verify automatically, which is exactly the
