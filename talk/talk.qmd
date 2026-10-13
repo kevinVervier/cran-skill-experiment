@@ -50,19 +50,23 @@ n_runs <- nrow(runs)
 n_seed <- sum(seed_repaired)
 tot_usd <- round(sum(runs$cost))
 
-# TIMING BUDGET -- 10 min slot, ~8:10 spoken, ~1:50 slack ON PURPOSE (re-cut 2026-10-13).
+# TIMING BUDGET -- 10 min slot, ~8:40 spoken, ~1:20 slack ON PURPOSE (re-cut 2026-10-13).
 # The slack is for the pauses, the clicks and the one tangent that will happen anyway.
+# Loaded slides are split, not cut: one idea per slide, punch line on the click.
 #   1 Biomarker changes its mind   0:00-0:40
 #   2 orthoMTL                     0:40-1:15
-#   3 First catch: a unit test     1:15-1:55
-#   4 CRAN rejected us twice       1:55-2:20
-#   5 What is a skill file?        2:20-2:50
-#   6 We ran it like a trial       2:50-3:50   <- CHECKPOINT: leave this slide by 4:00
-#   7 Every arm hit the ceiling    3:50-4:40
-#   8 Where the check is silent    4:40-5:40
-#   9 The AI judge measured itself 5:40-6:40   <- CHECKPOINT: arrive here by 6:00
-#  10 What I am not claiming       6:40-7:20
-#  11 Take home                    7:20-8:10
+#   3 From PhD code to CRAN        1:15-1:40
+#   4 The test it wrote            1:40-2:00
+#   5 CRAN rejected us twice       2:00-2:25
+#   6 What is a skill file?        2:25-2:55
+#   7 We ran it like a trial       2:55-3:55   <- CHECKPOINT: leave this slide by 4:00
+#   8 The result                   3:55-4:30
+#   9 Why the control did so well  4:30-5:00
+#  10 Where the check is silent    5:00-5:40
+#  11 Then I handed it the answer  5:40-6:00
+#  12 The part I did not expect    6:00-7:00   <- CHECKPOINT: arrive here by 6:15
+#  13 What I am not claiming       7:00-7:40
+#  14 Take home                    7:40-8:40
 # Running late at a checkpoint: on slides 8-10 say only the SAY line, skip the extras.
 #
 # NOTES FORMAT: every slide's notes open with SAY (the one line to land), then DON'T
@@ -150,42 +154,55 @@ parametric time function, and tasks borrow strength where the data agree.
 Refs: Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
 :::
 
-## PhD code to CRAN: the first catch was a test
+## From PhD code to CRAN
 
-::: columns
-::: {.column width="50%"}
-Twelve-year-old code, packaged by an **AI agent** — a language model that edits
-files and runs commands itself.
+Twelve-year-old research code. An **AI agent** — a language model that edits files
+and runs commands itself — did the packaging.
 
-::: {.fragment fragment-index="1"}
-Its unit tests found a **real bug** in my 2014 gradient: ±1 labels, 0/1 formula.
+::: {.fragment style="margin-top:.6em;"}
+Writing unit tests for the **logistic loss**, it found a **real bug** in my own 2014
+gradient: labels were ±1, the code used the 0/1 formula.
 :::
-:::
-::: {.column width="50%"}
-::: {.fragment fragment-index="2"}
-Flip every label; predictions must mirror. **They didn't.**
 
+::: {.fragment style="margin-top:.6em;"}
+I checked it by hand. It was real.
+:::
+
+::: notes
+SAY: the story, plainly. Land "It was real." and click on.
+
+DON'T: claim the agent "understood" the maths. Exact facts: it found the bug while
+writing unit tests for the logistic loss; I verified by hand; the code was fixed.
+:::
+
+## The test it wrote
+
+::: {style="font-size:1.2em; margin-top:.4em;"}
+Flip every label. The answer **must** flip.
+:::
+
+::: {style="font-size:1.45em;"}
 ```r
 fit_a <- fit(X,  y)
-fit_b <- fit(X, -y)  # flipped
+fit_b <- fit(X, -y)  # every label flipped
 expect_equal(predict(fit_a, X),
              1 - predict(fit_b, X))
 ```
+:::
 
-::: {style="font-size:.5em; color:#939393;"}
+::: {style="font-size:.5em; color:#939393; margin-top:-.4em;"}
 Sketch of the idea, not the package's actual test.
 :::
-:::
-:::
+
+::: {.fragment style="font-size:1.6em; margin-top:.5em; color:#FF4E00; font-weight:700; text-align:center;"}
+It didn't.
 :::
 
 ::: notes
 SAY: "A check a machine can run caught what twelve years of reading the code did not."
-That is evidence #1 for the take-home.
+Hold "It didn't." for a beat. This is evidence #1 for the take-home.
 
-DON'T: claim I designed the test, or that the agent "understood" the maths. Exact
-facts: it found the bug while writing unit tests for the logistic loss; I verified
-by hand; the code was fixed.
+DON'T: claim I designed the test - the agent wrote it.
 :::
 
 ## Then CRAN rejected us. Twice. {background-color="#F5F5F5"}
@@ -293,7 +310,7 @@ IF ASKED which skills: posit-dev/skills (cran-extrachecks, r-package-development
 CoryMcCartan/agent-skills (cran-submit); backup arms table.
 :::
 
-## Every arm hit the ceiling {background-color="#161616" style="color:#FCFCFC"}
+## The result {background-color="#161616" style="color:#FCFCFC"}
 
 ::: {style="text-align:center; margin-top:.1em;"}
 ::: {style="font-size:5em; font-weight:700; color:#FF4E00; line-height:1;"}
@@ -305,24 +322,43 @@ runs fixed all four planted defects — **control included**
 :::
 
 ::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.7em;"}
-A **ceiling**: the agent runs `R CMD check`, and it reports three of the four.
-:::
-
-::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.6em; color:#FF4E00; font-weight:700;"}
-Skill files add little where a tool already tells the truth.
+No skill file beat **no skill file**. A ceiling — and I'll say it before you do.
 :::
 
 ::: notes
 SAY: let the number sit for two seconds. "Including the control - all twenty runs."
-Click. "That's a ceiling, and I'll say it before you do." Click. "So a skill file can
-only help where the check is silent."
+Click. Say "ceiling" before anyone in the room does.
 
 IF ASKED about the LICENSE defect (the one planted defect R CMD check does not report):
 fixed in every run, every arm, control included.
 IF ASKED "models keep improving - isn't this moot?": that cuts my way; a better model
 needs the checklist less.
 IF ASKED "then why write CRAN skill files?": most were written for weaker models;
-they encode what the check can't see (next slide); and nobody had measured it.
+they encode what the check can't see (two slides on); and nobody had measured it.
+:::
+
+## Why the control did so well
+
+::: {style="font-size:1.2em; margin-top:.6em;"}
+::: {.fragment}
+The agent runs **`R CMD check`** and reads its own failures.
+:::
+::: {.fragment style="margin-top:.6em;"}
+A machine check beats a checklist: it reflects **this** package, **today**.
+:::
+::: {.fragment style="margin-top:.6em; color:#FF4E00; font-weight:700;"}
+Skill files add little where a tool already tells the truth.
+:::
+:::
+
+::: notes
+SAY: three clicks, one line each. Then the bridge: "So a skill file can only help
+where the check is silent."
+
+DON'T: frame this as against skill files - it is about where they pay.
+
+IF ASKED: SkillFlow found agents used retrieved skills 70% of the time and still
+gained nothing. Reading a skill is not the same as needing one.
 :::
 
 ## Where the check is silent: `set.seed()`
@@ -330,13 +366,12 @@ they encode what the check can't see (next slide); and nobody had measured it.
 ::: columns
 ::: {.column width="48%"}
 `set.seed(42)` inside four exported functions — our second rejection.
+
 `R CMD check` says nothing.
 
-::: {.fragment style="margin-top:.6em;"}
-Afterwards, a file quoting the reviewer: **10/10**, against **0/10** for a fresh control.
-:::
+Here, the arms **did** differ.
 
-::: {style="margin-top:.6em; color:#939393; font-size:.8em;"}
+::: {style="margin-top:.8em; color:#939393; font-size:.8em;"}
 Exploratory: re-scored after unblinding, no test. A lead, not a result.
 :::
 :::
@@ -361,15 +396,49 @@ IF ASKED about post-unblinding: my original detector only matched set.seed(<lite
 and scored zero hits on the starting package itself; I fixed the rule after
 unblinding. The re-score is a pure function of the package files with no access to
 arm labels, so the timing cannot bias the direction. Full three-way table in backup.
-IF ASKED about the 10/10: an after-the-fact positive control - newer CLI, labels known,
-no judge, and the file contains the answer. It shows the defect is learnable from
-text in context, nothing more.
 :::
 
-## The AI judge measured itself {background-color="#161616" style="color:#FCFCFC"}
+## Then I handed it the answer
+
+::: {style="text-align:center; margin-top:.4em;"}
+A file quoting the reviewer, word for word. Run afterwards.
+:::
+
+::: columns
+::: {.column width="50%" style="text-align:center;"}
+::: {style="font-size:4.5em; font-weight:700; color:#939393; line-height:1.1;"}
+0/10
+:::
+control
+:::
+::: {.column width="50%" style="text-align:center;"}
+::: {.fragment}
+::: {style="font-size:4.5em; font-weight:700; color:#FF4E00; line-height:1.1;"}
+10/10
+:::
+with the file
+:::
+:::
+:::
+
+::: {style="text-align:center; margin-top:.8em; color:#939393; font-size:.8em;"}
+After unblinding, labels known. A ceiling check — the file contains the answer.
+:::
+
+::: notes
+SAY: "So the defect is learnable from text in context. That is all this shows." 20 seconds.
+
+DON'T: call it a skill-file result or say the blinded run would have shown the same -
+newer CLI, labels known, no judge panel, and the file contains the answer.
+
+IF ASKED: two extra runs without a surviving partner (rate limits) were also canonical,
+12 of 12; R CMD check identical across arms. Backup has the detail.
+:::
+
+## The part I did not expect {background-color="#161616" style="color:#FCFCFC"}
 
 ::: {style="font-size:1.15em; margin-top:.4em;"}
-The primary measure. **12 criteria.** Ten never fired.
+My primary measure, the AI judge, had **12 criteria**. Ten never fired.
 :::
 
 ::: {.fragment style="font-size:1.15em; margin-top:.7em;"}
@@ -385,7 +454,7 @@ Every "finding" was my instrument. Not my arms.
 SAY: "Same text, opposite verdicts. I only saw it by reading the judge's own
 justifications - the counts looked like a clean signal."
 
-CHECKPOINT: arrive here by 6:00. Late? Say only the SAY line on this and the next slide.
+CHECKPOINT: arrive here by 6:15. Late? Say only the SAY line on this and the next slide.
 
 DON'T: generalise to all LLM judges - one package, one rubric, one rep per tree.
 
@@ -432,7 +501,7 @@ same experimental unit.
 **2.** Agents do well what a **machine** can check. Invest in **executable checks** first.
 :::
 ::: {.fragment style="margin-top:.4em;"}
-**3.** Check your AI judge **against itself** before you trust it.
+**3.** I set out to measure skill files. My judge **measured itself**.
 :::
 :::
 
