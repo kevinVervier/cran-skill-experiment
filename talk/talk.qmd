@@ -116,7 +116,7 @@ IF ASKED which biomarker: "I can't name it here; the published analysis is in th
 reference on the last slide."
 :::
 
-## orthoMTL: don't average over time {background-color="#F5F5F5"}
+## orthoMTL: don't average over time
 
 ::: columns
 ::: {.column width="38%"}
@@ -205,7 +205,7 @@ Hold "It didn't." for a beat. This is evidence #1 for the take-home.
 DON'T: claim I designed the test - the agent wrote it.
 :::
 
-## Then CRAN rejected us. Twice. {background-color="#F5F5F5"}
+## Then CRAN rejected us. Twice. {background-color="#161616" style="color:#FCFCFC"}
 
 ::: {style="font-size:1.5em; line-height:1.9; margin-top:.5em;"}
 ::: {.fragment}
@@ -491,7 +491,7 @@ IF ASKED about lost runs: 3 died on API rate limits (two at 1 turn, $0.00), so
 same experimental unit.
 :::
 
-## Take home {background-color="#F5F5F5"}
+## Take home {background-color="#161616" style="color:#FCFCFC"}
 
 ::: {style="font-size:1.1em; line-height:1.5;"}
 ::: {.fragment}
