@@ -292,6 +292,7 @@ Would one have got us through CRAN in one shot?
 :::
 :::
 ::: {.column width="60%"}
+::: {style="margin-top:1.6em;"}
 ```markdown
 # CRAN submission notes for this package
 
@@ -321,7 +322,7 @@ demand by a Skill tool.
 ::: {.r-stack}
 ```{r}
 #| fig-width: 12
-#| fig-height: 5.6
+#| fig-height: 6.0
 #| out-width: "100%"
 design_fig(1)
 ```
@@ -329,7 +330,7 @@ design_fig(1)
 ::: {.fragment}
 ```{r}
 #| fig-width: 12
-#| fig-height: 5.6
+#| fig-height: 6.0
 #| out-width: "100%"
 design_fig(2)
 ```
@@ -338,7 +339,7 @@ design_fig(2)
 ::: {.fragment}
 ```{r}
 #| fig-width: 12
-#| fig-height: 5.6
+#| fig-height: 6.0
 #| out-width: "100%"
 design_fig(3)
 ```
