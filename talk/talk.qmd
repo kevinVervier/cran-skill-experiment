@@ -76,8 +76,8 @@ tot_usd <- round(sum(runs$cost))
 # wrapped it in its own untitled <section>, which printed as a blank page 2.
 # Keep notes in an R comment or the YAML, never as a bare HTML comment.
 #
-# OPENING LINE: "Our package found an effect that flips sign halfway through a
-# cancer trial. Then I spent six weeks fighting a LICENSE field."
+# OPENING LINE: delivered as the SAY FIRST line in slide 2's notes (the biomarker
+# slide), where it bridges from the title and plants the agent before slide 3.
 # DISCLOSURE CONSTRAINT: no compound, gene, trial or variable names in this deck.
 # VOCABULARY: "starting package" for the re-broken package the agent receives; never
 # "the seed", which collides with set.seed(). Arms are named by content, not A-codes.
@@ -89,9 +89,14 @@ tot_usd <- round(sum(runs$cost))
 ::: {.column width="36%"}
 In a late-stage oncology trial, one biomarker looked **unrelated to survival**.
 
-Estimated effect: **≈ 0**.
+One Cox coefficient **≈ 0**.
+
+::: {.fragment fragment-index=1 style="margin-top:.5em;"}
+The curve is **orthoMTL**: one estimate per landmark.
+:::
 :::
 ::: {.column width="64%"}
+::: {.fragment fragment-index=1}
 ```{r}
 #| fig-width: 7.0
 #| fig-height: 4.3
@@ -100,17 +105,39 @@ sign_flip_fig()
 ```
 :::
 :::
+:::
 
-::: {.fragment style="text-align:center; font-size:1.0em; margin-top:-.3em;"}
+::: {.fragment fragment-index=2 style="text-align:center; font-size:1.0em; margin-top:-.5em;"}
 **Harmful early. Protective late.** The two halves cancelled out.
 :::
 
+::: {.fragment fragment-index=3 style="text-align:center; font-size:.9em; margin-top:.1em; color:#FF4E00; font-weight:700;"}
+So how does orthoMTL get one estimate per landmark?
+:::
+
 ::: notes
-SAY: open on the curve, not on methods. "Below zero is worse survival." Click.
-Pause after "the two halves cancelled out" - that is the hook.
+SAY FIRST, before the curve - this is the bridge from the title, and the only
+place the agent is named before slide 3: "Our package found an effect that flips
+sign halfway through a cancer trial. Then I spent six weeks fighting a LICENSE
+field - and most of that work was done by an AI agent. This talk is whether the
+agent needed my instructions to do it."
+
+SAY: the slide opens with TEXT ONLY, no figure - set up the puzzle first ("one
+coefficient, essentially zero, so the biomarker looks like nothing"). Click 1
+brings up the orthoMTL line AND the curve together: "below zero is worse
+survival." Click 2 for the hook, pause after "the two halves cancelled out".
+Click 3 is the orange question - walk straight into slide 3, do not add a
+second transition.
 
 DON'T: name any compound, gene, trial or variable. The figure is a redrawn
-schematic, captioned as illustrative.
+schematic, captioned as illustrative - it shows the KIND of output orthoMTL
+gives, it is not a screenshot of a package run. Say "this is the shape orthoMTL
+recovers", never "here is our output". Do NOT say the landmark estimates are
+null - they are not. The ~0 is the single proportional-hazards coefficient
+over all follow-up; the curve beside it is what you see after splitting.
+
+IF ASKED "so the effect is significant at the landmarks?": yes, that is the
+point - one average coefficient hides it, landmark-wise estimates do not.
 
 IF ASKED which biomarker: "I can't name it here; the published analysis is in the
 reference on the last slide."
