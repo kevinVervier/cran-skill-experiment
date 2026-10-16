@@ -498,8 +498,18 @@ Post-hoc, exploratory.
 :::
 
 ::: notes
-SAY: "The one rejection the tool can't see - and here the arms differ. Exploratory:
-a lead, not a result." Then move on.
+SAY: "The one rejection the tool can't see - and here the arms differ."
+
+The slide only says "post-hoc, exploratory", so SAY THE REST OUT LOUD: this
+check was run after unblinding, on one criterion, with no test. "A lead, not a
+result." Then, in the same breath, the thing that defuses it: the re-score
+never used the labels. It is a deterministic rule over the package files,
+blind tree IDs in, hits out. The honest criticism is not bias - it is that
+this was a natural check I should have specified up front and run during the
+blinded review. I did not think of it until the rule was shown to be wrong.
+
+DON'T say "with the labels known" as if the labels fed into the scoring. They
+did not. Say "after unblinding, but label-blind by construction".
 
 DON'T: call this a skill-file win. It is post-hoc, one criterion, n = 9-20, no test.
 
@@ -670,8 +680,10 @@ The handbook arm loaded this text directly into context; the other arms were tol
 ::: notes
 This is the HANDBOOK/COMMUNITY provenance boundary: a criterion derivable from
 these three documents is HANDBOOK, anything else is COMMUNITY.
-If asked why the control is not "no information at all" — because that is not the
+If asked why the control is not "no information at all": because that is not the
 realistic alternative. The real alternative is a competent person with the docs.
+In trial terms this is an add-on design against an ACTIVE control (standard of
+care), not placebo. Pre-specified, and conservative by design.
 :::
 
 ## Backup: the hedges, in their own words {.smaller}
@@ -883,6 +895,12 @@ On the post-unblinding point, say it before anyone asks, and say it in this orde
 tree content, so the timing cannot have biased the direction. rescore_r01.R takes
 a tree path and returns hits; it has no access to arm labels. Validated on 8
 synthetic cases, the starting package (3 hits), baseline and control (0), and a mutant (1).
+
+The fair criticism is NOT that the labels contaminated the scoring - they were
+never an input. It is that this was an obvious check to specify up front and
+run inside the blinded review, and I only thought of it once the original rule
+was shown to miss the very defect it was written for. Concede that version
+plainly; it is a design oversight, not a bias.
 
 I am NOT claiming this as a skill-file win. Two things block that. It is one
 criterion at n=9-10 with no test, and it is a post-hoc re-score. The controls
