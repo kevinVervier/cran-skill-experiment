@@ -339,11 +339,44 @@ SAY, one breath per click: "Same starting package every time." Click: "Five arms
 block-randomised." Click: "Scored blind. We expected the machine check to floor, so
 the AI judge was the primary measure." Do not read the boxes aloud.
 
+Click the last line and STRESS it, pointing at the "One agent, no human" box:
+the packaging you saw on slide 4 was a conversation. These 57 runs were not.
+One frozen prompt in, headless, nobody present to answer a single question.
+Sets up the result.
+
 CHECKPOINT: leave this slide by 4:00.
 
 DON'T: say "nobody measures skill files" - skills are measured; the point is the
 measurements are already conditional.
 
+IF ASKED "isn't giving every arm the CRAN docs stacking the deck against the
+skill files?" - this is the most likely challenge in the room, and the answer
+is a trial analogy. Every arm gets the standard of care (the official CRAN
+documentation at a known path); the arms differ only in whether a skill file is
+added on top. It is an ADD-ON trial against an ACTIVE control, not placebo. The
+question is not "does an agent need CRAN knowledge" - obviously it does - but
+"does a distilled skill file add anything on top of the documentation already
+being there". That is the question a maintainer actually faces.
+
+Say it was pre-specified, because it was: the preregistration says a skill
+effect measured against a handbook-equipped control is a CONSERVATIVE estimate,
+and that handicapping the control by withholding the handbook would produce a
+larger effect and an indefensible one. The choice biases AGAINST my own
+hypothesis, and I made it before unblinding.
+
+CONCEDE, in my own words, before anyone digs: this makes the control stronger
+than my original packaging run was. I only referred to the CRAN docs partly -
+and to be straight about it, what the agent had access to was never a
+consideration back then. That first pass was me trying agentic AI on my own
+package, not running a protocol, so there was no design decision to record and
+nothing to measure. The controlled version is the experiment; the first pass
+was the thing that made me want one. So this is not a replay of our submission:
+it tests a more favourable baseline on purpose. External validity, not a flaw.
+
+DON'T dress the first pass up as an uncontrolled arm or say the trace is
+"lost". There was no protocol, so there was nothing to lose. Equally, do not
+claim the original agent did or did not read the docs - I cannot say, and CRAN
+rules may well be in the model's training data anyway.
 IF ASKED about the literature: SkillDelta and SkillAxe report skills "often provide
 no benefit". SkillsBench finds +16.6 pp, but on 87 tasks admitted only if
 "significantly easier with Skills", top-quartile skills, and none in R; its
@@ -360,17 +393,36 @@ CoryMcCartan/agent-skills (cran-submit); backup arms table.
 `r n_seed`/`r n_runs`
 :::
 ::: {style="font-size:1.3em; margin-top:.2em;"}
-runs fixed all four planted defects — **control included**
+runs fixed all four planted defects, **control included**
 :::
 :::
 
-::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.7em;"}
-No skill file beat **no skill file**. A ceiling — and I'll say it before you do.
+::: {.fragment style="text-align:center; font-size:1.1em; margin-top:.6em;"}
+`R CMD check` clean in **`r n_runs`/`r n_runs`**. Submission-ready, with
+**no human in the loop at all**.
+:::
+
+::: {.fragment style="text-align:center; font-size:1.05em; margin-top:.5em;"}
+The agent did just as well with **no skill file at all**.
 :::
 
 ::: notes
 SAY: let the number sit for two seconds. "Including the control - all twenty runs."
-Click. Say "ceiling" before anyone in the room does.
+
+Click 1 is the one to sell, and it is NOT a skill-file point: every one of the
+57 runs came back clean under R CMD check, starting from a deliberately broken
+package, with one prompt and nobody to ask. The packaging on slide 4 was a
+conversation; this was not. "Zero interaction, submission-ready."
+
+Click 2, then say the ceiling line OUT LOUD - it is no longer on the slide,
+and it has to be you who says it, before anyone in the room does: "that is a
+ceiling, and I'll say it before you do." Everything landed at the top, so
+there was no room for a skill file to show a difference.
+
+DON'T overclaim "ready to publish": R CMD check clean is NOT the same as CRAN
+accepting it - this whole talk is that gap, and our own set.seed rejection
+passed a clean check. Say "clean under R CMD check", never "CRAN would have
+taken it". Also do not say zero notes: the New submission note is normal.
 
 IF ASKED about the LICENSE defect (the one planted defect R CMD check does not report):
 fixed in every run, every arm, control included.

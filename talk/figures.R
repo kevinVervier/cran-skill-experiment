@@ -99,11 +99,11 @@ design_fig <- function(step = 3) {
     y    = c(7.0, 5.7, 4.4, 3.1, 1.8),
     fill = ifelse(names(arm_labels) == "A0", ACCENT, ARM)
   )
-  rules <- c("Pre-registered", "One agent", "Frozen prompt", "Fresh copy each run",
+  rules <- c("Pre-registered", "One agent, no human", "Frozen prompt", "Fresh copy each run",
              "CRAN docs in every arm")
   rx <- 3.3 + 2.76 * (seq_along(rules) - 1)
 
-  p <- ggplot() + coord_cartesian(xlim = c(0, 16), ylim = c(0, 9), expand = FALSE) +
+  p <- ggplot() + coord_cartesian(xlim = c(.1, 15.9), ylim = c(.3, 9.05), expand = FALSE) +
     theme_void(base_size = 18)
 
   # Rules shared by every run.
