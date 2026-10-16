@@ -1,6 +1,6 @@
 ---
 title: "From Research Code to CRAN: LLM-Assisted Refactoring of orthoMTL for Survival Endpoints"
-subtitle: "What actually catches mistakes when an AI agent writes your R package?"
+subtitle: "An agent, a rejected package, and what a skill file did (not) add"
 author:
   - name: "Kevin Vervier"
   - name: "Nadia Solovieff"
