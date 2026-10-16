@@ -112,16 +112,22 @@ design_fig <- function(step = 3) {
   for (i in seq_along(rules)) p <- p + box(rx[i] - 1.3, rx[i] + 1.3, 8.25, 8.85, "white", MUTED)
   p <- p + annotate("text", x = rx, y = 8.55, label = rules, size = 3.9, colour = INK)
 
-  # Starting package.
-  p <- p + box(.2, 3.1, 3.3, 5.5, PANEL) +
-    annotate("text", x = 1.65, y = 5.0, label = "Starting package", fontface = "bold",
+  # Starting package. The four defects are named here rather than counted: three of
+  # the four are machine-visible, which is the headline result's main caveat.
+  p <- p + box(.1, 3.45, 2.6, 5.95, PANEL) +
+    annotate("text", x = 1.775, y = 5.5, label = "Starting package", fontface = "bold",
              size = 5, colour = INK) +
-    annotate("text", x = 1.65, y = 4.05, size = 4.1, colour = INK, lineheight = .95,
-             label = "orthoMTL, re-broken:\n4 planted defects\n+ original set.seed()")
+    annotate("text", x = 1.775, y = 4.0, size = 4.0, colour = INK, lineheight = 1.05,
+             label = paste("orthoMTL, re-broken:",
+                           "no NAMESPACE",
+                           "LICENSE template",
+                           "DESCRIPTION metadata",
+                           "unused Imports",
+                           "+ original set.seed()", sep = "\n"))
   if (step < 2) return(p)
 
   # Block randomisation fan-out.
-  p <- p + arr(3.1, 4.4, 4.5, 4.4) +
+  p <- p + arr(3.45, 4.4, 4.5, 4.4) +
     annotate("text", x = 4.55, y = 8.0, label = "block-randomised\n10 blocks", size = 3.8,
              colour = MUTED, lineheight = .9, vjust = 1) +
     ln(4.55, min(arms$y), 4.55, max(arms$y))
