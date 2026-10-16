@@ -451,7 +451,7 @@ they encode what the check can't see (two slides on); and nobody had measured it
 The agent runs **`R CMD check`** and reads its own failures.
 :::
 ::: {.fragment style="margin-top:.6em;"}
-A machine check beats a checklist: it reflects **this** package, **today**.
+A machine check beats a checklist: it reads **your** package, not a generic one.
 :::
 ::: {.fragment style="margin-top:.6em; color:#FF4E00; font-weight:700;"}
 Skill files add little where a tool already tells the truth.
@@ -461,6 +461,10 @@ Skill files add little where a tool already tells the truth.
 ::: notes
 SAY: three clicks, one line each. Then the bridge: "So a skill file can only help
 where the check is silent."
+
+IF ASKED, the other half of why the check wins (deliberately off the slide, it
+was one word too many): a written checklist also reflects whenever its author
+last updated it, while the check enforces the rules as they currently stand.
 
 DON'T: frame this as against skill files - it is about where they pay.
 
@@ -479,7 +483,7 @@ gained nothing. Reading a skill is not the same as needing one.
 Here, the arms **did** differ.
 
 ::: {style="margin-top:.8em; color:#939393; font-size:.8em;"}
-Exploratory: re-scored after unblinding, no test. A lead, not a result.
+Post-hoc, exploratory.
 :::
 :::
 ::: {.column width="52%"}
