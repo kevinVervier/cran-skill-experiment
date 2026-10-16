@@ -139,7 +139,7 @@ Framing after MTLSA (Li et al., KDD 2016).
 :::
 
 ::: {.fragment style="text-align:center; font-size:1.25em; margin-top:.3em;"}
-**`github.com/Novartis/orthoMTL`** — on CRAN, 2026
+**`github.com/Novartis/orthoMTL`** (on CRAN, 2026)
 :::
 
 ::: notes
@@ -365,7 +365,7 @@ gained nothing. Reading a skill is not the same as needing one.
 
 ::: columns
 ::: {.column width="48%"}
-`set.seed(42)` inside four exported functions — our second rejection.
+`set.seed(42)` inside four exported functions: our second rejection.
 
 `R CMD check` says nothing.
 
@@ -422,7 +422,7 @@ with the file
 :::
 
 ::: {style="text-align:center; margin-top:.8em; color:#939393; font-size:.8em;"}
-After unblinding, labels known. A ceiling check — the file contains the answer.
+After unblinding, labels known. A ceiling check: the file contains the answer.
 :::
 
 ::: notes
@@ -468,7 +468,7 @@ flagged in 23 trees, excused in 2, file never opened in 29 (3 n/a).
 
 ## What I am *not* claiming
 
-- **Not** "skill files are useless" — this is the machine-checkable part of CRAN prep,
+- **Not** "skill files are useless": this is the machine-checkable part of CRAN prep,
   with the docs at hand
 - **N = 1**: one package, one agent model, a judge from the **same vendor**. Not powered;
   n was set by budget
@@ -525,17 +525,17 @@ Earlier closing line, if preferred: "Generation got cheap. Verification did not.
 
 | Arm | Skill file | Source | Runs | Repo code |
 |---|---|---|---|---|
-| Control | none | — | **20** (10 + 10, see below) | A0 (+ A4) |
+| Control | none | n/a | **20** (10 + 10, see below) | A0 (+ A4) |
 | Checklist | `cran-extrachecks` | [posit-dev/skills](https://github.com/posit-dev/skills) | 9 | A1 |
 | Process | `cran-submit` | [CoryMcCartan/agent-skills](https://github.com/CoryMcCartan/agent-skills) | 9 | A2 |
 | General R | `r-package-development` | [posit-dev/skills](https://github.com/posit-dev/skills) | 10 | A3 |
 | Handbook | raw handbook text | CRAN docs, next slide | 9 | A5 |
 
-Every arm — **the control included** — also had the same offline CRAN docs on disk.
+Every arm, **the control included**, also had the same offline CRAN docs on disk.
 57 of 60 planned runs completed; 3 ended on API rate limits.
 
 Agent: Claude Opus 5.5 (`claude-opus-5-5`) in Claude Code 2.1.282–284 (auto-updated mid-experiment).
-Judge: Claude Sonnet 5 — same vendor family as the agent. Skill files were delivered as an
+Judge: Claude Sonnet 5, same vendor family as the agent. Skill files were delivered as an
 always-loaded `CLAUDE.md`, not through the on-demand Skill tool, which the agent did not have.
 The control has 20 runs because a second batch of 10 (repo code A4) was meant to carry a hindsight
 file written from the rejection history and never received it: first-call context was 7,145 tokens
@@ -553,7 +553,7 @@ Snapshot captured **2026-09-18**, identical across all 60 runs.
 | CRAN Submission Checklist | [cran.r-project.org/web/packages/submission_checklist.html](https://cran.r-project.org/web/packages/submission_checklist.html) |
 
 The Cookbook is built from real CRAN re-submissions and co-authored by a member
-of the CRAN team — the closest public thing to the reviewers' own knowledge.
+of the CRAN team: the closest public thing to the reviewers' own knowledge.
 The handbook arm loaded this text directly into context; the other arms were told where it was.
 
 ::: notes
@@ -580,12 +580,12 @@ The headline positive result is **SkillsBench**: curated skills lift pass rate
 33.9% → 50.5% (**+16.6 pp**) across 87 tasks and 18 model–harness configurations.
 I am not disputing it. Three things make it a different question from mine:
 
-- **8 domains** — natural science, media, cybersecurity, industrial, finance, office, software engineering, maths/OR. **No R, no packaging, no CRAN**
+- **8 domains**: natural science, media, cybersecurity, industrial, finance, office, software engineering, maths/OR. **No R, no packaging, no CRAN**
 - Tasks are admitted only if **"significantly easier with Skills"**; no-separation tasks are rejected as low-signal
 - Skills are drawn from the **top quality quartile** (10.1/12 vs ecosystem mean 6.2/12); the authors call this "an optimistic scenario"
 
 Their own domain gradient points my way: **software engineering +11.6 pp**,
-second-lowest of eight, against natural science **+28.8 pp** — "domains with
+second-lowest of eight, against natural science **+28.8 pp**, "domains with
 stronger pretraining and tooling coverage benefit less."
 
 ::: notes
@@ -600,21 +600,21 @@ from opposite ends rather than conflicting.
 
 **Package and method**
 
-- orthoMTL — <https://github.com/Novartis/orthoMTL>
-- Predecessor `orthopen` — <https://github.com/kevinVervier/orthopen>
+- orthoMTL: <https://github.com/Novartis/orthoMTL>
+- Predecessor `orthopen`: <https://github.com/kevinVervier/orthopen>
 - Vervier K., Mahé P., Vert J.-P. (2014). *Benchmark of structured machine
   learning methods for microbial identification from mass-spectrometry data.*
-  Springer. — method origin
+  Springer. Method origin
 - Li Y. et al. (2016). *A Multi-Task Learning Formulation for Survival Analysis.*
-  KDD. — survival-as-multi-task framing (MTLSA), framing behind the landmark diagram
-- Juric D. et al. (2026). *Annals of Oncology.* — clinical application
+  KDD. Survival-as-multi-task framing (MTLSA), framing behind the landmark diagram
+- Juric D. et al. (2026). *Annals of Oncology.* Clinical application
 
 **Skill files under test**
 
-- Posit `skills` — <https://github.com/posit-dev/skills>
-- McCartan C., `agent-skills` — <https://github.com/CoryMcCartan/agent-skills>
+- Posit `skills`: <https://github.com/posit-dev/skills>
+- McCartan C., `agent-skills`: <https://github.com/CoryMcCartan/agent-skills>
 
-**CRAN documentation**: Cookbook, Repository Policy and Submission Checklist — URLs on the handbook slide.
+**CRAN documentation**: Cookbook, Repository Policy and Submission Checklist: URLs on the handbook slide.
 
 ::: notes
 Skill repositories are moving targets. Pin the commit SHA of each skill here
@@ -665,7 +665,7 @@ stack_fig()
 ```
 
 ::: {style="font-size:.85em;"}
-Issues the AI judge flagged, per run. Every run, in every arm, landed on **0–2** — and the
+Issues the AI judge flagged, per run. Every run, in every arm, landed on **0–2**, and the
 flags came from two criteria the judge scored inconsistently on unchanged text (the judge slide).
 :::
 
@@ -732,13 +732,13 @@ dotplot("first_check_evt", "Event index of first R CMD check")
 
 | Defect | Caught by `R CMD check`? | Repaired |
 |:--|:--|:--|
-| `NAMESPACE` deleted | yes — check cannot even run | 57/57 |
-| `usethis` LICENSE template vs GPL-3 DESCRIPTION | **no** — this is rejection **R02** | **57/57** |
+| `NAMESPACE` deleted | yes, check cannot even run | 57/57 |
+| `usethis` LICENSE template vs GPL-3 DESCRIPTION | **no**, this is rejection **R02** | **57/57** |
 | DESCRIPTION metadata (`Authors@R`, title case) | yes | 57/57 |
 | Unused declared `Imports` | yes | 57/57 |
 
-Three of four are machine-visible. Our other real rejection — **R01, the
-hard-coded `set.seed()`** — was left in the starting package as a fifth defect that
+Three of four are machine-visible. Our other real rejection, **R01, the
+hard-coded `set.seed()`**, was left in the starting package as a fifth defect that
 `R CMD check` does not report; it is on the next slide.
 
 Three of four machine-visible is the result's main caveat: this measures the
@@ -755,7 +755,7 @@ easy half of CRAN preparation.
 | Handbook | 9 | 8 | 0 | 1 |
 
 Completed runs; descriptive, no test. "Default kept": `seed = 42` stays but a helper restores the
-user's RNG state — arguably acceptable, not what the reviewer asked for. Control includes the 10
+user's RNG state: arguably acceptable, not what the reviewer asked for. Control includes the 10
 runs whose hindsight file never arrived.
 
 **Re-scored after unblinding.** The original rule only matched `set.seed(<literal>)`, so it scored
