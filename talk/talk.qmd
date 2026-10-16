@@ -41,6 +41,17 @@ execute:
   warning: false
   message: false
   cache: false
+# Title slide had a lot of unused headroom: scale the title block up. Kept here
+# rather than in novartis-style.scss, which is a gitignored corporate asset and
+# does not travel with the repo. Must stay in the YAML: a raw <style> block in
+# the body gets wrapped in its own untitled section and prints as a blank page.
+header-includes: |
+  <style>
+  #title-slide .title    { font-size: 4.0rem !important; }
+  #title-slide .subtitle { font-size: 2.1rem !important; margin-top: .35em; }
+  #title-slide .quarto-title-author-name { font-size: 1.65rem !important; }
+  #title-slide .date     { font-size: 1.6rem !important; }
+  </style>
 ---
 
 ```{r}
