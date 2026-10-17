@@ -152,14 +152,22 @@ changes afterwards) → blocks 2–5.
 The deck is `talk/talk.qmd`. Facts in it are load-bearing — it is a public
 artefact about a null result, so every claim must survive a hostile check.
 
-**Narrative (reframed 2026-10-07, restructured 2026-10-13).** The deck no longer
-ends on "no effect". It is built around one question — *what actually catches
+**Narrative (reframed 2026-10-07, restructured 2026-10-13, re-cut 2026-10-16).** The
+deck no longer ends on "no effect". Subtitle: "An agent, a rejected package, and what
+a skill file did (not) add". It is built around one question — *what actually catches
 mistakes when an AI agent writes your R package?* — and ends on **verification as
 the bottleneck**, with the experiment's own instrument failure as the evidence.
-Arc: shipped science (`orthoMTL` on CRAN) → evidence 1, a unit test the agent wrote
-caught a real 2014 bug → our two CRAN rejections → what a skill file is → the
-design, told as a trial → evidence 2, **57/57: every arm hit the ceiling** because
-the agent runs `R CMD check` → evidence 3, `set.seed()`, where the check is silent
+Arc (13 main slides): biomarker slide, which carries the title-to-science bridge and
+names the agent for the first time (its notes hold the opening line) → `orthoMTL` →
+"From PhD code to CRAN", one slide that now holds the 2014 bug the agent's unit test
+caught **and** the green checks, ending on "Submit" (there is no separate test slide
+any more; the label-flip sketch lives on the correctness backup slide) → our two CRAN
+rejections, which break that happy ending, then "People call that a skill file" → what
+a skill file is → the design, told as a trial, with the **"One agent, no human"** box
+that contrasts the interactive packaging on slide 3 with the headless runs → evidence
+2, **57/57: every arm hit the ceiling**, now framed as **zero interaction**
+(`R CMD check` clean with no human in the loop) rather than as a ceiling caveat on the
+slide; "ceiling" is said aloud from the notes → evidence 3, `set.seed()`, where the check is silent
 and the arms did differ (exploratory) → evidence 4, **the turn**: the AI judge (the
 pre-registered primary measure) had 12 criteria, 10 never fired, and the 2 that did
 were the judge arguing both sides of text no arm had touched → *"Machine checks are
@@ -192,8 +200,31 @@ the click.
   stage. Keep notes short: long notes invite tangents.
 - **Timing.** About 8:40 spoken in a 10-minute slot, with about 1:20 of slack on
   purpose. The budget and two checkpoints (leave the design slide by 4:00, reach
-  the judge slide by 6:15) live in the setup chunk. If running long, "Then I
-  handed it the answer" is the first slide to move back to backup.
+  the judge slide by 6:15) live in the setup chunk, numbered over the 13 main
+  slides. If running long, "Then I handed it the answer" is the first slide to move
+  back to backup.
+- **Active-control framing.** Every arm, the control included, gets the offline CRAN
+  docs. In the notes this is told as an add-on trial against an active control
+  (standard of care), pre-specified and conservative against the hypothesis. The
+  notes concede that this control is stronger than the original interactive packaging
+  run, which was not a protocol. Do not call that first pass an "uncontrolled arm" or
+  a "lost trace", and do not claim the original agent did or did not read the docs.
+- **Say "clean under `R CMD check`", never "CRAN would have taken it".** The check
+  is 0 errors and 0 warnings; one A0 tree has a residual NOTE, and a first
+  submission carries the normal "New submission" NOTE. Do not say "zero notes". The
+  result slide reads "no errors or warnings" in `talk.qmd` (changed 2026-10-17);
+  the committed `talk.pdf` still has the old "clean" / "Submission-ready" wording
+  until it is rebuilt on the internal PC.
+- **Title-slide CSS lives in the YAML `header-includes`**, not in the gitignored
+  `novartis-style.scss` (which does not travel with the repo) and not in the body
+  (a raw `<style>` block becomes an untitled section and prints blank).
+- **No em dashes on rendered slides** (removed 2026-10-16). Colons, commas or full
+  stops instead. Notes and comments may keep them.
+- **The deck cannot be rebuilt off the internal PC.** `talk.qmd` needs the
+  gitignored Novartis assets, and `talk.html` is not shipped because
+  `embed-resources: true` inlines them. Off that machine, edit the source if needed
+  but present from the committed `talk.pdf`. The 2026-10-16 rebuild of `talk.pdf`
+  from this deck is committed (`44317b6`, with `a2e5b22` after it).
 
 - **`talk.pdf` is the only public artefact.** Everything else in `talk/` is
   gitignored: the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
@@ -239,8 +270,11 @@ the click.
   tree content and never reads `.blind_map.csv` — the same code at first
   unblinding gives the same table. The controls (A0, and A4, which had no file) produced the canonical fix **zero**
   times in 20 runs; A2 and A5 mostly did. Still a post-hoc lead, not a result. See `LESSONS_LEARNED.md` §7.3.
-  On slide it is labelled "Exploratory: re-scored after unblinding, no test. A lead,
-  not a result." No take-home may imply prose guidance helps on it.
+  On slide it is labelled only "Post-hoc, exploratory." The rest is said aloud from
+  the notes: run after unblinding on one criterion, no test, "a lead, not a result",
+  label-blind by construction (say that, not "with the labels known"), and the fair
+  criticism is a design oversight, not bias. No take-home may imply prose guidance
+  helps on it.
 - **The undelivered A4 file is a protocol deviation.** On the "not claiming" slide,
   say that one arm's file never reached the model and those 10 runs joined the
   control. It was caught afterwards from the 7,145-token first call.

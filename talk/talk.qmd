@@ -411,7 +411,7 @@ runs fixed all four planted defects, **control included**
 :::
 
 ::: {.fragment style="text-align:center; font-size:1.1em; margin-top:.6em;"}
-`R CMD check` clean in **`r n_runs`/`r n_runs`**. Submission-ready, with
+`R CMD check`: **no errors or warnings** in **`r n_runs`/`r n_runs`** runs, with
 **no human in the loop at all**.
 :::
 
@@ -423,19 +423,20 @@ The agent did just as well with **no skill file at all**.
 SAY: let the number sit for two seconds. "Including the control - all twenty runs."
 
 Click 1 is the one to sell, and it is NOT a skill-file point: every one of the
-57 runs came back clean under R CMD check, starting from a deliberately broken
-package, with one prompt and nobody to ask. The packaging on slide 4 was a
-conversation; this was not. "Zero interaction, submission-ready."
+57 runs came back with no errors or warnings under R CMD check, starting from a
+deliberately broken package, with one prompt and nobody to ask. The packaging on
+slide 3 was a conversation; this was not. "Zero interaction."
 
 Click 2, then say the ceiling line OUT LOUD - it is no longer on the slide,
 and it has to be you who says it, before anyone in the room does: "that is a
 ceiling, and I'll say it before you do." Everything landed at the top, so
 there was no room for a skill file to show a difference.
 
-DON'T overclaim "ready to publish": R CMD check clean is NOT the same as CRAN
+DON'T overclaim "ready to publish": no errors or warnings is NOT the same as CRAN
 accepting it - this whole talk is that gap, and our own set.seed rejection
-passed a clean check. Say "clean under R CMD check", never "CRAN would have
-taken it". Also do not say zero notes: the New submission note is normal.
+passed the check. Say "no errors or warnings", never "CRAN would have taken it"
+and never "submission-ready". Also do not say zero notes: one A0 tree has a
+residual NOTE, and the New submission note is normal.
 
 IF ASKED about the LICENSE defect (the one planted defect R CMD check does not report):
 fixed in every run, every arm, control included.
