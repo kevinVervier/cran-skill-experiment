@@ -561,16 +561,16 @@ IF ASKED: two extra runs without a surviving partner (rate limits) were also can
 ## The part I did not expect {background-color="#161616" style="color:#FCFCFC"}
 
 ::: {style="font-size:1.15em; margin-top:.4em;"}
-My primary measure, the AI judge, had **12 criteria**. Ten never fired.
+The AI judge, my primary measure, applied **12 generic CRAN criteria**. For this package, **ten never fired**.
 :::
 
 ::: {.fragment style="font-size:1.15em; margin-top:.7em;"}
-Our maintainer email, **unchanged in all 57 runs**:<br>
-fine **10** times, a problem **47** times.
+Our maintainer email is a company address, **unchanged in 57/57 runs**:<br>
+judged fine **10** times, a problem **47** times.
 :::
 
 ::: {.fragment style="margin-top:.9em; color:#FF4E00; font-weight:700; text-align:center; font-size:1.15em;"}
-Every "finding" was my instrument. Not my arms.
+Same text, different verdicts. The variation was the **judge**.
 :::
 
 ::: notes
@@ -580,6 +580,10 @@ justifications - the counts looked like a clean signal."
 CHECKPOINT: arrive here by 6:15. Late? Say only the SAY line on this and the next slide.
 
 DON'T: generalise to all LLM judges - one package, one rubric, one rep per tree.
+DON'T: imply a company address breaks CRAN policy. It does not: a named person at a
+company address is compliant. The criterion asks whether the address is appropriate
+and durable, and the judge's "problem" is the job-change and filtering risk. The 10
+"fine" verdicts excuse it because the company is also the copyright holder.
 
 IF ASKED "is the experiment void?": no. The machine-check result came from R CMD check
 and stands. What's void is the idea that the judge added sensitivity - and it was the
