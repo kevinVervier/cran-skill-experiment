@@ -152,14 +152,19 @@ changes afterwards) → blocks 2–5.
 The deck is `talk/talk.qmd`. Facts in it are load-bearing — it is a public
 artefact about a null result, so every claim must survive a hostile check.
 
-**Narrative (reframed 2026-10-07, restructured 2026-10-13, re-cut 2026-10-16).** The
+**Narrative (reframed 2026-10-07, restructured 2026-10-13, re-cut 2026-10-16, timeline and biomarker slide dropped 2026-10-18).** The
 deck no longer ends on "no effect". Subtitle: "An agent, a rejected package, and what
 a skill file did (not) add". It is built around one question — *what actually catches
 mistakes when an AI agent writes your R package?* — and ends on **verification as
 the bottleneck**, with the experiment's own instrument failure as the evidence.
-Arc (13 main slides): biomarker slide, which carries the title-to-science bridge and
-names the agent for the first time (its notes hold the opening line) → `orthoMTL` →
-"From PhD code to CRAN", one slide that now holds the 2014 bug the agent's unit test
+Arc (12 main slides): the `orthoMTL` **timeline**, now the first slide after the title
+(its notes hold the opening line and it names the agent for the first time): one sentence
+on what it does, then five dated nodes with the gaps in orange (Sep 2014 PhD at
+ECML-PKDD, Sep 2024 survival extension + manuscript submitted, Apr 2026 clinical paper
+published, Jun 2026 packaging starts with the agent, Aug 2026 on CRAN). No method
+explanation: the biomarker sign-flip slide and the landmark figure are gone from the
+slides (their helper functions stay in the setup chunk) →
+"Packaging with an agent", one slide that now holds the 2014 bug the agent's unit test
 caught **and** the green checks, ending on "Submit" (there is no separate test slide
 any more; the label-flip sketch lives on the correctness backup slide) → our two CRAN
 rejections, which break that happy ending, then "People call that a skill file" → what
@@ -175,6 +180,15 @@ cheap. Judgement isn't."* That closing line is the thesis, not a sign-off; the
 earlier wording ("Generation got cheap. Verification did not.") is kept in the
 notes as an alternative. See `LESSONS_LEARNED.md` §5 for the full arc and §10 for
 the judge-panel finding.
+
+Timeline discipline: dates are sourced (ECML-PKDD Sep 2014; Juric et al. published
+online 10 Apr 2026; first agent-co-authored commit 2026-06-01; CRAN 2026-08-23). The
+packaging was part-time work, so no duration ("twelve weeks") goes on the slide or in the
+notes: it reads as an effort claim. Sep 2024 is the manuscript submission, from Kevin, not a repo fact. The
+19 months is mostly journal review: say "the paper took 19 months", never "the code
+sat". Never put submission dates or "first try" on that slide (the two rejections must
+stay a surprise on the next slide), and never credit the speed to a skill file: the
+agent in the packaging story had none.
 
 Tone discipline: this is not a null dressed up as an insight. Lead with the
 shipped package, show 57/57 and name it a ceiling before the audience does, then
@@ -198,9 +212,9 @@ the click.
 - **Speaker notes follow SAY / DON'T / IF ASKED.** SAY is the one line to land,
   DON'T is load-bearing precision, IF ASKED is Q&A only and never volunteered on
   stage. Keep notes short: long notes invite tangents.
-- **Timing.** About 8:40 spoken in a 10-minute slot, with about 1:20 of slack on
-  purpose. The budget and two checkpoints (leave the design slide by 4:00, reach
-  the judge slide by 6:15) live in the setup chunk, numbered over the 13 main
+- **Timing.** About 8:00 spoken in a 10-minute slot, with about 2:00 of slack on
+  purpose. The budget and two checkpoints (leave the design slide by 3:20, reach
+  the judge slide by 5:35) live in the setup chunk, numbered over the 12 main
   slides. If running long, "Then I handed it the answer" is the first slide to move
   back to backup.
 - **Active-control framing.** Every arm, the control included, gets the offline CRAN

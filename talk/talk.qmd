@@ -61,23 +61,24 @@ n_runs <- nrow(runs)
 n_seed <- sum(seed_repaired)
 tot_usd <- round(sum(runs$cost))
 
-# TIMING BUDGET -- 10 min slot, ~8:40 spoken, ~1:20 slack ON PURPOSE (re-cut 2026-10-13).
-# The slack is for the pauses, the clicks and the one tangent that will happen anyway.
+# TIMING BUDGET -- 10 min slot, ~8:00 spoken, ~2:00 slack (re-cut 2026-10-18: the
+# biomarker slide is gone, the timeline slide carries the opening line). The slack is
+# for the pauses, the clicks and the one tangent that will happen anyway; spend it on
+# rehearsal findings, not on new slides.
 # Loaded slides are split, not cut: one idea per slide, punch line on the click.
-#   1 Biomarker changes its mind   0:00-0:40
-#   2 orthoMTL                     0:40-1:15
-#   3 From PhD code to CRAN        1:15-1:55   <- ends on "Submit", checks green
-#   4 CRAN rejected us twice       1:55-2:25
-#   5 What is a skill file?        2:25-2:55
-#   6 We ran it like a trial       2:55-3:55   <- CHECKPOINT: leave this slide by 4:00
-#   7 The result                   3:55-4:30
-#   8 Why the control did so well  4:30-5:00
-#   9 Where the check is silent    5:00-5:40
-#  10 Then I handed it the answer  5:40-6:00
-#  11 The part I did not expect    6:00-7:00   <- CHECKPOINT: arrive here by 6:15
-#  12 What I am not claiming       7:00-7:40
-#  13 Take home                    7:40-8:40
-# Running late at a checkpoint: on slides 7-9 say only the SAY line, skip the extras.
+#   1 orthoMTL timeline            0:00-0:40   <- opening line + 5 dates, no method
+#   2 Packaging with an agent      0:40-1:15   <- ends on "Submit", checks green
+#   3 CRAN rejected us twice       1:15-1:45
+#   4 What is a skill file?        1:45-2:15
+#   5 We ran it like a trial       2:15-3:15   <- CHECKPOINT: leave this slide by 3:20
+#   6 The result                   3:15-3:50
+#   7 Why the control did so well  3:50-4:20
+#   8 Where the check is silent    4:20-5:00
+#   9 Then I handed it the answer  5:00-5:20
+#  10 The part I did not expect    5:20-6:20   <- CHECKPOINT: arrive here by 5:35
+#  11 What I am not claiming       6:20-7:00
+#  12 Take home                    7:00-8:00
+# Running late at a checkpoint: on slides 6-8 say only the SAY line, skip the extras.
 #
 # NOTES FORMAT: every slide's notes open with SAY (the one line to land), then DON'T
 # (load-bearing precision), then IF ASKED (Q&A only - never volunteer it on stage).
@@ -86,102 +87,132 @@ tot_usd <- round(sum(runs$cost))
 # wrapped it in its own untitled <section>, which printed as a blank page 2.
 # Keep notes in an R comment or the YAML, never as a bare HTML comment.
 #
-# OPENING LINE: delivered as the SAY FIRST line in slide 2's notes (the biomarker
-# slide), where it bridges from the title and plants the agent before slide 3.
+# OPENING LINE: delivered as the SAY FIRST line in the timeline slide's notes (slide 2
+# counting the title), where it bridges from the title and plants the agent before
+# the packaging slide.
 # DISCLOSURE CONSTRAINT: no compound, gene, trial or variable names in this deck.
 # VOCABULARY: "starting package" for the re-broken package the agent receives; never
 # "the seed", which collides with set.seed(). Arms are named by content, not A-codes.
 ```
 
-## A biomarker that changes its mind
+## orthoMTL: from a PhD idea to CRAN
 
-::: columns
-::: {.column width="36%"}
-In a late-stage oncology trial, one biomarker looked **unrelated to survival**.
-
-One Cox coefficient **≈ 0**.
-
-::: {.fragment fragment-index=1 style="margin-top:.5em;"}
-The curve is **orthoMTL**: one estimate per landmark.
+::: {style="font-size:1.1em; margin-bottom:1.2em;"}
+**orthoMTL** fits several related prediction tasks **together**,
+each with **its own effect**.
 :::
-:::
-::: {.column width="64%"}
-::: {.fragment fragment-index=1}
-```{r}
-#| fig-width: 7.0
-#| fig-height: 4.3
-#| out-width: "100%"
-sign_flip_fig()
+
+```{=html}
+<div style="display:grid; grid-template-columns:repeat(5,1fr); text-align:center; margin-top:.4em;">
+
+  <div>
+    <div style="font-size:1.2em; font-weight:700; height:1.7em;">Sep 2014</div>
+    <div style="display:flex; align-items:center; height:34px;">
+      <div style="flex:1; height:4px;"></div>
+      <div style="width:22px; height:22px; border-radius:50%; background:#161616;"></div>
+      <div style="flex:1; height:4px; background:#161616;"></div>
+    </div>
+    <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">PhD: regression and classification</div>
+  </div>
+
+  <div class="fragment" data-fragment-index="1">
+    <div style="font-size:1.2em; font-weight:700; height:1.7em;">Sep 2024</div>
+    <div style="position:relative; display:flex; align-items:center; height:34px;">
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="width:22px; height:22px; border-radius:50%; background:#161616;"></div>
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">10 years</div>
+    </div>
+    <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Survival extension at Novartis; clinical manuscript submitted</div>
+  </div>
+
+  <div class="fragment" data-fragment-index="2">
+    <div style="font-size:1.2em; font-weight:700; height:1.7em;">Apr 2026</div>
+    <div style="position:relative; display:flex; align-items:center; height:34px;">
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="width:22px; height:22px; border-radius:50%; background:#161616;"></div>
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">19 months</div>
+    </div>
+    <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Clinical paper published; code still internal</div>
+  </div>
+
+  <div class="fragment" data-fragment-index="2">
+    <div style="font-size:1.2em; font-weight:700; height:1.7em;">Jun 2026</div>
+    <div style="position:relative; display:flex; align-items:center; height:34px;">
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="width:22px; height:22px; border-radius:50%; background:#FF4E00;"></div>
+      <div style="flex:1; height:4px; background:#161616;"></div>
+      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">7 weeks</div>
+    </div>
+    <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Packaging starts, with an AI agent</div>
+  </div>
+
+  <div class="fragment" data-fragment-index="3">
+    <div style="font-size:1.2em; font-weight:700; height:1.7em;">Aug 2026</div>
+    <div style="position:relative; display:flex; align-items:center; height:34px;">
+      <div style="flex:1; height:4px; background:#FF4E00;"></div>
+      <div style="width:22px; height:22px; border-radius:50%; background:#FF4E00;"></div>
+      <div style="flex:1; height:4px;"></div>
+    </div>
+    <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;"><b>On CRAN</b></div>
+  </div>
+
+</div>
 ```
-:::
-:::
-:::
 
-::: {.fragment fragment-index=2 style="text-align:center; font-size:1.0em; margin-top:-.5em;"}
-**Harmful early. Protective late.** The two halves cancelled out.
-:::
+::: {.fragment fragment-index=3 style="text-align:center; font-size:.85em; margin-top:1.4em; line-height:1.7;"}
+**Contribute:** `github.com/Novartis/orthoMTL`
 
-::: {.fragment fragment-index=3 style="text-align:center; font-size:.9em; margin-top:.1em; color:#FF4E00; font-weight:700;"}
-So how does orthoMTL get one estimate per landmark?
+**Install:** `install.packages("orthoMTL")` · `CRAN.R-project.org/package=orthoMTL`
 :::
 
 ::: notes
-SAY FIRST, before the curve - this is the bridge from the title, and the only
-place the agent is named before slide 3: "Our package found an effect that flips
-sign halfway through a cancer trial. Then I spent six weeks fighting a LICENSE
-field - and most of that work was done by an AI agent. This talk is whether the
-agent needed my instructions to do it."
+SAY FIRST, before the timeline - this is the bridge from the title, and the only
+place the agent is named before the packaging slide: "This summer I turned my PhD
+code into a CRAN package. I worked with an AI agent, but I made the
+decisions and I checked what it did. This talk asks a narrower question: would
+that agent have done better with written instructions, a skill file?"
 
-SAY: the slide opens with TEXT ONLY, no figure - set up the puzzle first ("one
-coefficient, essentially zero, so the biomarker looks like nothing"). Click 1
-brings up the orthoMTL line AND the curve together: "below zero is worse
-survival." Click 2 for the hook, pause after "the two halves cancelled out".
-Click 3 is the orange question - walk straight into slide 3, do not add a
-second transition.
+SAY: "orthoMTL fits several related prediction tasks together, each with its own
+effect. I wrote it in my PhD for regression and classification, extended it to
+survival at Novartis, and it stayed internal code even after the clinical paper
+came out in April. Then I packaged it with an AI agent, with me in the loop, and
+it reached CRAN in August." Click 1: 2024. Click 2: the
+clinical paper and June. Click 3: August and the two links, GitHub to contribute, CRAN to install. 40 seconds, no more. Do not
+explain the method: nobody in the room needs it for the rest of the talk.
 
-DON'T: name any compound, gene, trial or variable. The figure is a redrawn
-schematic, captioned as illustrative - it shows the KIND of output orthoMTL
-gives, it is not a screenshot of a package run. Say "this is the shape orthoMTL
-recovers", never "here is our output". Do NOT say the landmark estimates are
-null - they are not. The ~0 is the single proportional-hazards coefficient
-over all follow-up; the curve beside it is what you see after splitting.
+DATES (checked against the repo and the papers, 2026-10-18):
+- Sep 2014: Vervier et al., ECML-PKDD 2014, Nancy, 15-19 September 2014
+  (Springer LNCS 8725, pp. 274-289), presented alongside the proceedings.
+  Regression and classification, not survival.
+- Sep 2024: survival extension done at Novartis and the clinical manuscript
+  first submitted to a journal (Kevin, 2026-10-18). The extension itself dates
+  from 2024 or earlier; the slide anchors on the submission, which is the dated event.
+- Apr 2026: Juric et al., Annals of Oncology, DOI 10.1016/j.annonc.2026.04.003,
+  published online 10 April 2026 (Kevin, from the journal page). Sep 2024 to 10 Apr
+  2026 is 19 months, mostly journal review, so say "the paper took 19 months",
+  not "the code sat for 19 months".
+- Jun 2026: the external repo was created 2026-05-29, pushed to GitHub 2026-06-01,
+  and the first agent-co-authored commit is 2026-06-01. So "decision to package"
+  and "agent starts" are the same week. 10 Apr to 1 Jun is 52 days, 7 weeks.
+  If the real agent chat started earlier, adjust.
+- Aug 2026: on CRAN 2026-08-23. 2026-06-01 to 2026-08-23 is 83 days of calendar
+  time, not effort: it was a part-time project, so no duration on the slide or aloud.
 
-IF ASKED "so the effect is significant at the landmarks?": yes, that is the
-point - one average coefficient hides it, landmark-wise estimates do not.
+DON'T: say the speed-up came from a skill file. The experiment found none, and
+the agent here ran with no skill file at all. DON'T quote a duration for the
+packaging ("twelve weeks", "in a summer"): it was spare-time work and a duration
+reads as an effort claim. DON'T mention submission dates, resubmissions or
+"first try": slide 4 breaks the happy ending, this slide must not. DON'T name the
+compound, the trial, the indication or any variable; "a clinical paper" is the
+whole description.
 
-IF ASKED which biomarker: "I can't name it here; the published analysis is in the
-reference on the last slide."
-:::
+IF ASKED when it was submitted: July, accepted 23 August. Leave it there unless
+pressed.
 
-## orthoMTL: don't average over time
-
-::: columns
-::: {.column width="38%"}
-Cut follow-up into **landmarks**: one yes/no task each.
-
-Fit them **together**, each with **its own effect**.
-:::
-::: {.column width="62%"}
-```{r}
-#| fig-width: 6.6
-#| fig-height: 3.9
-#| out-width: "100%"
-landmark_fig()
-```
-
-::: {style="font-size:.5em; color:#939393; text-align:center; margin-top:-.2em;"}
-Framing after MTLSA (Li et al., KDD 2016).
-:::
-:::
-:::
-
-::: {.fragment style="text-align:center; font-size:1.25em; margin-top:.3em;"}
-**`github.com/Novartis/orthoMTL`** (on CRAN, 2026)
-:::
-
-::: notes
-SAY: "If your outcome is time-to-event and you suspect effects change over time,
-this package shows you that." Click for the link. 35 seconds, no more.
+IF ASKED which trial or biomarker: "I can't name it here; the published analysis
+is in the reference on the last slide."
 
 IF ASKED "isn't this just non-proportional hazards - why not coxph with tt(), landmark
 Cox or RMST?": those are right for a handful of covariates with an assumed shape.
@@ -189,16 +220,15 @@ Cox or RMST?": those are right for a handful of covariates with an assumed shape
 are fitted jointly with a penalty, effects can differ between landmarks with no
 parametric time function, and tasks borrow strength where the data agree.
 Refs: Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
+The landmark diagram (framing after MTLSA, Li et al. KDD 2016) and the sign-flip
+curve are not on a slide any more: `landmark_fig()` and `sign_flip_fig()` are
+still in the setup chunk if either goes to backup.
 :::
 
-## From PhD code to CRAN
+## Packaging with an agent
 
-Twelve-year-old research code. 
-
-::: {.fragment style="margin-top:.6em;"}
 An **AI agent**, a language model that edits files
 and runs commands itself, did the packaging, **in a chat, with me in the loop**.
-:::
 
 ::: {.fragment style="margin-top:.6em;"}
 Writing unit tests for the **logistic loss**, it found a **real bug** in my own 2014
@@ -220,7 +250,7 @@ Tests pass. Checks pass. Bundle built. Submit.
 
 ::: notes
 SAY: the story, plainly, then land the green check. Beat on "Submit." - the
-audience should believe this is the happy ending. Slide 5 breaks it.
+audience should believe this is the happy ending. Slide 4 breaks it.
 
 STRESS "with me in the loop": this was interactive, a chat, back and forth,
 me answering its questions. That is the contrast the result slide pays off -
@@ -272,7 +302,7 @@ the people who caught them are volunteers."
 Then the turn, in your own words: neither rejection was a coding failure. Both
 were things the agent simply did not know. That is fixable by writing it down -
 and that is what a skill file is. Land the orange line and go straight to
-slide 6, which defines it.
+slide 5, which defines it.
 
 DON'T: say the skill file would have worked. The whole talk is that question
 being open. Here you are only naming the idea.
@@ -310,7 +340,7 @@ Excerpt (abridged): the file I later wrote from our own two rejections.
 :::
 
 ::: notes
-SAY: answer the question slide 5 just raised - "it is nothing exotic. It is a
+SAY: answer the question slide 4 just raised - "it is nothing exotic. It is a
 Markdown file the agent reads before it starts." Posit and others publish CRAN
 ones, people drop them into their projects. Click: the question. 30 seconds.
 
@@ -324,7 +354,7 @@ demand by a Skill tool.
 ```{r}
 #| fig-width: 12
 #| fig-height: 6.0
-#| out-width: "100%"
+#| out-width: "86%"
 design_fig(1)
 ```
 
@@ -332,7 +362,7 @@ design_fig(1)
 ```{r}
 #| fig-width: 12
 #| fig-height: 6.0
-#| out-width: "100%"
+#| out-width: "86%"
 design_fig(2)
 ```
 :::
@@ -341,10 +371,15 @@ design_fig(2)
 ```{r}
 #| fig-width: 12
 #| fig-height: 6.0
-#| out-width: "100%"
+#| out-width: "86%"
 design_fig(3)
 ```
 :::
+:::
+
+::: {style="font-size:.5em; color:#939393; text-align:center; margin-top:0;"}
+Same contrast as SkillDelta (Xu et al. 2026, arXiv:2609.32274): same agent, same task, with and without a skill.
+They predict the gain across many tasks; we measure it on one package. Prompt, arms and scoring: `github.com/kevinVervier/cran-skill-experiment`
 :::
 
 ::: notes
@@ -353,11 +388,31 @@ block-randomised." Click: "Scored blind. We expected the machine check to floor,
 the AI judge was the primary measure." Do not read the boxes aloud.
 
 Click the last line and STRESS it, pointing at the "One agent, no human" box:
-the packaging you saw on slide 4 was a conversation. These 57 runs were not.
+the packaging you saw on slide 3 was a conversation. These 57 runs were not.
 One frozen prompt in, headless, nobody present to answer a single question.
 Sets up the result.
 
-CHECKPOINT: leave this slide by 4:00.
+CHECKPOINT: leave this slide by 3:20.
+
+REFERENCES ON THIS SLIDE: the repo line is for people who want the frozen prompt,
+the arms and the scoring code. The repo was made public on 2026-10-18 (blinding is
+no longer needed), so the URL resolves and the answer keys are readable by anyone.
+SKILLDELTA CHECK (read 2026-10-18, arXiv:2609.32274v1, HTML version): what is
+shared is the contrast: each task is run under "use" and "skip" with "the same agent
+and execution protocol, differing only in skill injection"; our arms differ only in
+the skill file the same way. What is NOT shared: their paper is a method (a local
+predictor of task-conditional gain, for deciding when to activate a skill) over five
+benchmarks, three agents and many tasks, binary benchmark evaluators, temperature
+zero, mostly one paired run per task; no randomisation, blinding or pre-registration
+described. We run one task many times, block-randomised, blind-scored, pre-registered,
+with an AI judge, and we predict nothing. So say "same contrast", never "same design",
+"replicates" or "paired": our runs are independent within blocks, not matched pairs
+(only the post-hoc delivered-A4 run is paired). The line says "same contrast", not
+"inspired by", on purpose: Xu et al. is dated
+26 Sep 2026 on arXiv and this design was frozen on 21 Sep (commit a37d6df), so a
+hostile reader can test "inspired by" against the dates. If Kevin saw the work
+earlier (a preprint, a talk), switch to "inspired by" and keep the date of first sight
+ready.
 
 DON'T: say "nobody measures skill files" - skills are measured; the point is the
 measurements are already conditional.
@@ -729,7 +784,9 @@ from opposite ends rather than conflicting.
 
 **Package and method**
 
-- orthoMTL: <https://github.com/Novartis/orthoMTL>
+- orthoMTL: <https://github.com/Novartis/orthoMTL> (contribute) ·
+  <https://CRAN.R-project.org/package=orthoMTL> (install)
+- This experiment (prompt, arms, scoring): <https://github.com/kevinVervier/cran-skill-experiment>
 - Predecessor `orthopen`: <https://github.com/kevinVervier/orthopen>
 - Vervier K., Mahé P., Vert J.-P. (2014). *Benchmark of structured machine
   learning methods for microbial identification from mass-spectrometry data.*
