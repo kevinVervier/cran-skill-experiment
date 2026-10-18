@@ -55,9 +55,9 @@ invariant that matters is unchanged: nothing above `$RUNS_ROOT` may carry an ins
 │   ├── KICKOFF.md
 │   ├── skill-experiment-preregistration.md
 │   ├── seed-and-pilot.md
-│   ├── rejection-ledger.md        # ANSWER KEY — never reaches an arm
-│   ├── criterion-corpus.md        # ANSWER KEY
-│   ├── criterion-corpus-longtail.md   # ANSWER KEY
+│   ├── rejection-ledger.md        # ANSWER KEY — never reaches an arm (public since 2026-10-18)
+│   ├── criterion-corpus.md        # ANSWER KEY (public since 2026-10-18)
+│   ├── criterion-corpus-longtail.md   # ANSWER KEY (public since 2026-10-18)
 │   ├── FROZEN_PROMPT.txt
 │   ├── Dockerfile                 # UNUSED for this run — see ENVIRONMENT.md
 │   ├── ENVIRONMENT.md             # native toolchain record, replaces the image digest
@@ -240,10 +240,13 @@ the click.
   but present from the committed `talk.pdf`. The 2026-10-16 rebuild of `talk.pdf`
   from this deck is committed (`44317b6`, with `a2e5b22` after it).
 
-- **`talk.pdf` is the only public artefact.** Everything else in `talk/` is
-  gitignored: the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
+- **The repo went public on 2026-10-18** (the experiment is unblinded and over, so
+  the answer keys no longer need hiding; the slide links it). The answer-key files
+  stay out of any *future* run's arm tree. `talk.pdf` is the only built deck that is
+  published; `talk.qmd` and `figures.R` are tracked source. The rest of `talk/` is
+  gitignored, and the Novartis template assets (`*.scss`, `*.svg`, `*.pptx`,
   `gradient_bar.png`, …) are added on the internal PC and **must never be
-  committed or shipped off this machine**.
+  committed or shipped off this machine**, now more than ever that the repo is public.
 - **Never run `quarto render talk.qmd --to pdf`.** Revealjs decks take the
   LaTeX path under `--to pdf`; it deletes the existing `talk.pdf` and then fails
   (no TeX here). `*.tex` and `talk_files/` are gitignored as of 2026-10-07
