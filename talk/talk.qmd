@@ -97,9 +97,10 @@ tot_usd <- round(sum(runs$cost))
 
 ## orthoMTL: from a PhD idea to CRAN
 
-::: {style="font-size:1.1em; margin-bottom:1.2em;"}
-**orthoMTL** fits several related prediction tasks **together**,
-each with **its own effect**.
+::: {style="font-size:1.0em; margin-bottom:1em; line-height:1.5;"}
+**MTL**, multi-task learning: several related tasks fitted **jointly**.
+
+**ortho**: pairs of tasks are also allowed to have **orthogonal weights**.
 :::
 
 ```{=html}
@@ -174,8 +175,9 @@ code into a CRAN package. I worked with an AI agent, but I made the
 decisions and I checked what it did. This talk asks a narrower question: would
 that agent have done better with written instructions, a skill file?"
 
-SAY: "orthoMTL fits several related prediction tasks together, each with its own
-effect. I wrote it in my PhD for regression and classification, extended it to
+SAY: "The name is the method. MTL is multi-task learning: you fit several related
+tasks jointly. Ortho means the weights of pairs of tasks are also allowed to be
+orthogonal, so the tasks do not have to look alike. I wrote it in my PhD for regression and classification, extended it to
 survival at Novartis, and it stayed internal code even after the clinical paper
 came out in April. Then I packaged it with an AI agent, with me in the loop, and
 it reached CRAN in August." Click 1: 2024. Click 2: the
