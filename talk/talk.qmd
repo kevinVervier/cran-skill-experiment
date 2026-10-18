@@ -865,7 +865,7 @@ flags came from two criteria the judge scored inconsistently on unchanged text (
 ::: notes
 The outcome only ever took three values, so show all three rather than jittered
 dots. This is the judge's output, not R CMD check's - do not show it without
-saying so. Total compute for the whole experiment: about $`r tot_usd` and 12 hours.
+saying so. Total compute for the 57 runs: about $`r tot_usd` and 12 hours.
 :::
 
 ## Backup: our own maintainer address {.smaller}
