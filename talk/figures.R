@@ -145,7 +145,10 @@ design_fig <- function(step = 3) {
 
   p <- p + annotate("text", x = .2, y = .55, hjust = 0, size = 3.6, colour = MUTED,
                     label = paste0("60 runs planned, 3 lost to API rate limits, ", nrow(runs),
-                                   " analysed.   * includes 10 runs whose skill file never arrived."))
+                                   " analysed.   * includes 10 runs whose skill file never arrived.\n",
+                                   sprintf("Average per run: about $%.0f and %.0f min of agent time (cost as reported by Claude Code; judging not included).",
+                                           mean(runs$cost), mean(runs$wall_s) / 60)),
+                    lineheight = 1.15)
   if (step < 3) return(p)
 
   # Collector -> blinded scoring.
