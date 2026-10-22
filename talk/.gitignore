@@ -1,5 +1,8 @@
 # Public artefact is the PDF only. Corporate template code/assets are added
 # on the internal PC and must never be committed from here.
+# Organiser hand-off zips are built from talk.pdf on demand: redundant with the
+# tracked PDF, and a binary that would bloat history.
+*.zip
 _extensions/
 _brand.yml
 assets/

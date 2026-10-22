@@ -76,9 +76,10 @@ tot_usd <- round(sum(runs$cost))
 #   8 Where the check is silent    4:20-5:00
 #   9 Then I handed it the answer  5:00-5:20
 #  10 The part I did not expect    5:20-6:20   <- CHECKPOINT: arrive here by 5:35
-#  11 What I am not claiming       6:20-7:00
-#  12 Take home                    7:00-8:00
+#  11 Take home                    6:20-8:00   <- caveats folded in as point 3
 # Running late at a checkpoint: on slides 6-8 say only the SAY line, skip the extras.
+# The "What I am not claiming" slide was cut 2026-10-19: too much to say, too little
+# on screen. Its content lives in take-home point 2 and the matching backup slide.
 #
 # NOTES FORMAT: every slide's notes open with SAY (the one line to land), then DON'T
 # (load-bearing precision), then IF ASKED (Q&A only - never volunteer it on stage).
@@ -118,33 +119,30 @@ tot_usd <- round(sum(runs$cost))
 
   <div class="fragment" data-fragment-index="1">
     <div style="font-size:1.2em; font-weight:700; height:1.7em;">Sep 2024</div>
-    <div style="position:relative; display:flex; align-items:center; height:34px;">
+    <div style="display:flex; align-items:center; height:34px;">
       <div style="flex:1; height:4px; background:#161616;"></div>
       <div style="width:22px; height:22px; border-radius:50%; background:#161616;"></div>
       <div style="flex:1; height:4px; background:#161616;"></div>
-      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">10 years</div>
     </div>
     <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Survival extension at Novartis; clinical manuscript submitted</div>
   </div>
 
   <div class="fragment" data-fragment-index="2">
     <div style="font-size:1.2em; font-weight:700; height:1.7em;">Apr 2026</div>
-    <div style="position:relative; display:flex; align-items:center; height:34px;">
+    <div style="display:flex; align-items:center; height:34px;">
       <div style="flex:1; height:4px; background:#161616;"></div>
       <div style="width:22px; height:22px; border-radius:50%; background:#161616;"></div>
       <div style="flex:1; height:4px; background:#161616;"></div>
-      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">19 months</div>
     </div>
     <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Clinical paper published; code still internal</div>
   </div>
 
   <div class="fragment" data-fragment-index="2">
     <div style="font-size:1.2em; font-weight:700; height:1.7em;">Jun 2026</div>
-    <div style="position:relative; display:flex; align-items:center; height:34px;">
+    <div style="display:flex; align-items:center; height:34px;">
       <div style="flex:1; height:4px; background:#161616;"></div>
       <div style="width:22px; height:22px; border-radius:50%; background:#FF4E00;"></div>
       <div style="flex:1; height:4px; background:#161616;"></div>
-      <div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%); background:#fff; border:2px solid #FF4E00; border-radius:1em; padding:.05em .7em; font-size:.6em; font-weight:700; color:#FF4E00; white-space:nowrap;">7 weeks</div>
     </div>
     <div style="font-size:.62em; line-height:1.3; margin-top:.7em; padding:0 .5em;">Packaging starts, with an AI agent</div>
   </div>
@@ -152,7 +150,7 @@ tot_usd <- round(sum(runs$cost))
   <div class="fragment" data-fragment-index="3">
     <div style="font-size:1.2em; font-weight:700; height:1.7em;">Aug 2026</div>
     <div style="position:relative; display:flex; align-items:center; height:34px;">
-      <div style="flex:1; height:4px; background:#FF4E00;"></div>
+      <div style="flex:1; height:4px; background:#161616;"></div>
       <div style="width:22px; height:22px; border-radius:50%; background:#FF4E00;"></div>
       <div style="flex:1; height:4px;"></div>
     </div>
@@ -169,62 +167,36 @@ tot_usd <- round(sum(runs$cost))
 :::
 
 ::: notes
-SAY FIRST, before the timeline - this is the bridge from the title, and the only
-place the agent is named before the packaging slide: "This summer I turned my PhD
-code into a CRAN package. I worked with an AI agent, but I made the
-decisions and I checked what it did. This talk asks a narrower question: would
-that agent have done better with written instructions, a skill file?"
+**SAY (bridge, before the timeline):** "This summer I turned my PhD code into a CRAN package. I worked with an AI agent, but I made the decisions and I checked what it did. This talk asks a narrower question: would that agent have done better with written instructions, a skill file?"
 
-SAY: "The name is the method. MTL is multi-task learning: you fit several related
-tasks jointly. Ortho means the weights of pairs of tasks are also allowed to be
-orthogonal, so the tasks do not have to look alike. I wrote it in my PhD for regression and classification, extended it to
-survival at Novartis, and it stayed internal code even after the clinical paper
-came out in April. Then I packaged it with an AI agent, with me in the loop, and
-it reached CRAN in August." Click 1: 2024. Click 2: the
-clinical paper and June. Click 3: August and the two links, GitHub to contribute, CRAN to install. 40 seconds, no more. Do not
-explain the method: nobody in the room needs it for the rest of the talk.
+**SAY (the name):** "The name is the method. MTL is multi-task learning: you fit several related tasks jointly. Ortho means the weights of pairs of tasks are also allowed to be orthogonal, so the tasks do not have to look alike. I wrote it in my PhD for regression and classification, extended it to survival at Novartis, and it stayed internal code even after the clinical paper came out in April. Then I packaged it with an AI agent, with me in the loop, and it reached CRAN in August."
 
-DATES (checked against the repo and the papers, 2026-10-18):
-- Sep 2014: Vervier et al., ECML-PKDD 2014, Nancy, 15-19 September 2014
-  (Springer LNCS 8725, pp. 274-289), presented alongside the proceedings.
-  Regression and classification, not survival.
-- Sep 2024: survival extension done at Novartis and the clinical manuscript
-  first submitted to a journal (Kevin, 2026-10-18). The extension itself dates
-  from 2024 or earlier; the slide anchors on the submission, which is the dated event.
-- Apr 2026: Juric et al., Annals of Oncology, DOI 10.1016/j.annonc.2026.04.003,
-  published online 10 April 2026 (Kevin, from the journal page). Sep 2024 to 10 Apr
-  2026 is 19 months, mostly journal review, so say "the paper took 19 months",
-  not "the code sat for 19 months".
-- Jun 2026: the external repo was created 2026-05-29, pushed to GitHub 2026-06-01,
-  and the first agent-co-authored commit is 2026-06-01. So "decision to package"
-  and "agent starts" are the same week. 10 Apr to 1 Jun is 52 days, 7 weeks.
-  If the real agent chat started earlier, adjust.
-- Aug 2026: on CRAN 2026-08-23. 2026-06-01 to 2026-08-23 is 83 days of calendar
-  time, not effort: it was a part-time project, so no duration on the slide or aloud.
+**CLICKS:** 1 = 2024 · 2 = clinical paper, June · 3 = August + two links (GitHub to contribute, CRAN to install). 40 seconds, no more. Do not explain the method: nobody needs it for the rest of the talk.
 
-DON'T: say the speed-up came from a skill file. The experiment found none, and
-the agent here ran with no skill file at all. DON'T quote a duration for the
-packaging ("twelve weeks", "in a summer"): it was spare-time work and a duration
-reads as an effort claim. DON'T mention submission dates, resubmissions or
-"first try": slide 4 breaks the happy ending, this slide must not. DON'T name the
-compound, the trial, the indication or any variable; "a clinical paper" is the
-whole description.
+**NO DURATION BADGES** (removed 2026-10-19). The timeline used to carry orange pills reading "10 years", "19 months" and "7 weeks". They are gone: Jun → Aug could never carry one (part-time work, a duration reads as an effort claim), and three badges with a conspicuous gap at the end invited exactly that question. The dates are on the slide, so the audience does the arithmetic. The intervals below are still yours to use **aloud** — just keep the packaging one unquantified.
 
-IF ASKED when it was submitted: July, accepted 23 August. Leave it there unless
-pressed.
+**DATES** (checked against repo and papers, 2026-10-18):
 
-IF ASKED which trial or biomarker: "I can't name it here; the published analysis
-is in the reference on the last slide."
+- Sep 2014 — Vervier et al., ECML-PKDD, Nancy 15–19 Sep 2014 (LNCS 8725, 274–289). Regression and classification, not survival. Sep 2014 → Sep 2024 is the 10-year gap.
+- Sep 2024 — survival extension at Novartis; clinical manuscript first submitted. Extension dates from 2024 or earlier; slide anchors on the submission, the dated event.
+- Apr 2026 — Juric et al., Annals of Oncology, doi:10.1016/j.annonc.2026.04.003, online 10 Apr 2026. Sep 2024 → Apr 2026 is 19 months, mostly review: say "the paper took 19 months", not "the code sat for 19 months".
+- Jun 2026 — repo created 2026-05-29, pushed 2026-06-01, first agent commit 2026-06-01. "Decision to package" and "agent starts" are the same week; 10 Apr → 1 Jun is 52 days. If the real agent chat started earlier, adjust.
+- Aug 2026 — on CRAN 2026-08-23. 83 days of calendar time, not effort: part-time, so no duration on the slide or aloud.
 
-IF ASKED "isn't this just non-proportional hazards - why not coxph with tt(), landmark
-Cox or RMST?": those are right for a handful of covariates with an assumed shape.
-[VERIFY BEFORE USE - draft] orthoMTL is for many candidate features: landmark tasks
-are fitted jointly with a penalty, effects can differ between landmarks with no
-parametric time function, and tasks borrow strength where the data agree.
-Refs: Vervier 2014 (method), Juric 2026 Annals of Oncology (application).
-The landmark diagram (framing after MTLSA, Li et al. KDD 2016) and the sign-flip
-curve are not on a slide any more: `landmark_fig()` and `sign_flip_fig()` are
-still in the setup chunk if either goes to backup.
+**DON'T:**
+
+- say the speed-up came from a skill file — the experiment found none, and this agent ran with no skill file at all
+- quote a duration for the packaging ("twelve weeks", "in a summer"): spare-time work, and a duration reads as an effort claim
+- mention submission dates, resubmissions or "first try" — slide 4 breaks the happy ending, this slide must not
+- name the compound, trial, indication or any variable; "a clinical paper" is the whole description
+
+**IF ASKED:**
+
+- *when submitted?* July, accepted 23 August. Leave it there unless pressed.
+- *which trial or biomarker?* "I can't name it here; the published analysis is in the reference on the last slide."
+- *isn't this just non-proportional hazards — why not `coxph` with `tt()`, landmark Cox or RMST?* Those are right for a handful of covariates with an assumed shape. [VERIFY — draft] orthoMTL is for many candidate features: landmark tasks are fitted jointly with a penalty, effects can differ between landmarks with no parametric time function, and tasks borrow strength where the data agree. Refs: Vervier 2014 (method), Juric 2026 (application).
+
+**Note:** the landmark diagram (framing after MTLSA, Li et al. KDD 2016) and the sign-flip curve are off the deck; `landmark_fig()` and `sign_flip_fig()` remain in the setup chunk if either goes to backup.
 :::
 
 ## Packaging with an agent
@@ -233,9 +205,7 @@ An **AI agent**, a language model that edits files
 and runs commands itself, did the packaging, **in a chat, with me in the loop**.
 
 ::: {.fragment style="margin-top:.6em;"}
-Writing unit tests for the **logistic loss**, it found a **real bug** in my own 2014
-gradient: labels were ±1, the code used the 0/1 formula. I checked it by hand.
-It was real and fixed.
+Writing unit tests, it found a **real bug** in my 2014 gradient for classification tasks.
 :::
 
 ::: {.fragment style="margin-top:.7em; font-size:1.15em;"}
@@ -251,25 +221,19 @@ Tests pass. Checks pass. Bundle built. Submit.
 :::
 
 ::: notes
-SAY: the story, plainly, then land the green check. Beat on "Submit." - the
-audience should believe this is the happy ending. Slide 4 breaks it.
+**SAY** the story plainly, then land the green check. Beat on **"Submit."** — the audience should believe this is the happy ending. Slide 4 breaks it.
 
-STRESS "with me in the loop": this was interactive, a chat, back and forth,
-me answering its questions. That is the contrast the result slide pays off -
-the 57 runs had nobody to ask.
+**STRESS "with me in the loop":** interactive, a chat, back and forth, me answering its questions. That is the contrast the result slide pays off — the 57 runs had nobody to ask.
 
-The bug: found while writing unit tests for the logistic loss, I verified by
-hand, the code was fixed. The test was the symmetry check - flip every label,
-the answer must flip. It didn't.
+**The bug — say the specifics, they are no longer on the slide:** found while writing unit tests for the **logistic loss**; labels were **±1** but the code used the **0/1 formula**. I verified it by hand and it was fixed. The test was the symmetry check — flip every label, the answer must flip. It didn't.
 
-DON'T: claim the agent "understood" the maths, and do NOT claim I designed the
-test - the agent wrote it. Precision on the check: it was 0 errors, 0 warnings
-and 1 NOTE ("New submission"), which is normal and expected for a first
-submission. Say "no errors, no warnings" - if anyone asks about the note, that
-is what it was.
+**DON'T:**
 
-IF ASKED for the test: fit on y, fit on -y, predictions must be 1 - p. Full
-sketch is on the correctness backup slide.
+- claim the agent "understood" the maths
+- claim I designed the test — the agent wrote it
+- overstate the check: 0 errors, 0 warnings, **1 NOTE** ("New submission"), normal for a first submission. Say "no errors, no warnings"; if asked about the note, that is what it was.
+
+**IF ASKED for the test:** fit on y, fit on −y, predictions must be 1 − p. Full sketch on the correctness backup slide.
 :::
 
 ## Then CRAN rejected us. Twice. {background-color="#161616" style="color:#FCFCFC"}
@@ -284,7 +248,8 @@ sketch is on the correctness backup slide.
 :::
 
 ::: {.fragment style="font-size:1.15em; margin-top:.7em; color:#FF4E00;"}
-No automated check caught either. **A CRAN volunteer** caught both.
+No automated check flagged either one. **Two different CRAN volunteers** did —
+one issue per submission.
 :::
 
 ::: {.fragment style="font-size:1.1em; margin-top:.6em;"}
@@ -297,20 +262,19 @@ People call that a **skill file**.
 :::
 
 ::: notes
-SAY: open by puncturing the previous slide - "so we submitted, and it came
-back. Twice." Then slow, big pauses. "Each one cost weeks of round-trips - and
-the people who caught them are volunteers."
+**SAY:** open by puncturing the previous slide — "so we submitted, and it came back. Twice." Then slow, big pauses. "Each one cost weeks of round-trips — and the people who caught them are volunteers."
 
-Then the turn, in your own words: neither rejection was a coding failure. Both
-were things the agent simply did not know. That is fixable by writing it down -
-and that is what a skill file is. Land the orange line and go straight to
-slide 5, which defines it.
+**Then the turn,** in your own words: neither rejection was a coding failure. Both were things the agent simply did not know. That is fixable by writing it down — and that is what a skill file is. Land the orange line, go straight to slide 5.
 
-DON'T: say the skill file would have worked. The whole talk is that question
-being open. Here you are only naming the idea.
+**DON'T** say the skill file would have worked. The whole talk is that question being open; here you only name the idea.
 
-IF ASKED: the CRAN Repository Policy's own preamble says CRAN is maintained by
-volunteers and calls their time its most precious resource.
+**DON'T say "caught both"** (changed 2026-10-20). It was two *different* volunteers, one issue each, on two separate submissions — the queue is not assigned per package. Keep the plural, and don't imply either reviewer reviewed the other's finding.
+
+**DON'T treat silence as clearance.** Manual review is a human reading a package with finite time: there is no published checklist, no prescribed order, no requirement to be exhaustive. A reported issue is strong evidence the issue is real; an *unreported* issue is evidence of nothing. So: "these are the issues that were raised", never "the issues that were there". Same reason "accepted" is the right word later, not "passed review" or "certified".
+
+**IF ASKED how CRAN review works:** two stages. Automated incoming checks (`R CMD check --as-cran`, several platforms) run on upload and auto-reject with the log; only what passes reaches the manual queue for new submissions. The manual reply is usually a list rather than stop-at-first-error, but exhaustiveness is not guaranteed — fixing everything and resubmitting can still draw fresh comments, sometimes from a different volunteer. That is exactly what happened to us.
+
+**IF ASKED:** the CRAN Repository Policy's preamble says CRAN is maintained by volunteers and calls their time its most precious resource.
 :::
 
 ## What is a skill file?
@@ -342,12 +306,9 @@ Excerpt (abridged): the file I later wrote from our own two rejections.
 :::
 
 ::: notes
-SAY: answer the question slide 4 just raised - "it is nothing exotic. It is a
-Markdown file the agent reads before it starts." Posit and others publish CRAN
-ones, people drop them into their projects. Click: the question. 30 seconds.
+**SAY:** answer the question slide 4 just raised — "it is nothing exotic. It is a Markdown file the agent reads before it starts." Posit and others publish CRAN ones; people drop them into their projects. Click: the question. 30 seconds.
 
-IF ASKED: in this study the file was always loaded (as CLAUDE.md), not fetched on
-demand by a Skill tool.
+**IF ASKED:** here the file was always loaded (as `CLAUDE.md`), not fetched on demand by a Skill tool.
 :::
 
 ## We ran it like a trial
@@ -380,87 +341,51 @@ design_fig(3)
 :::
 
 ::: {style="font-size:.5em; color:#939393; text-align:center; margin-top:0;"}
-Same contrast as SkillDelta (Xu et al. 2026, arXiv:2609.32274): same agent, same task, with and without a skill.
-They predict the gain across many tasks; we measure it on one package. Prompt, arms and scoring: `github.com/kevinVervier/cran-skill-experiment`
+Prompt, arms and scoring: `github.com/kevinVervier/cran-skill-experiment`
 :::
 
 ::: notes
-SAY, one breath per click: "Same starting package every time." Click: "Five arms,
-block-randomised." Click: "Scored blind. We expected the machine check to floor, so
-the AI judge was the primary measure." Do not read the boxes aloud.
+**SAY, one breath per click:** "Same starting package every time." · "Five arms, block-randomised." · "Scored blind, two ways: the machine check, and an AI judge." Do not read the boxes aloud.
 
-Click the last line and STRESS it, pointing at the "One agent, no human" box:
-the packaging you saw on slide 3 was a conversation. These 57 runs were not.
-One frozen prompt in, headless, nobody present to answer a single question.
-Sets up the result.
+**The scoring boxes no longer say "primary"/"secondary"** (changed 2026-10-19). The judge *was* the pre-registered primary and the machine check the secondary — that is in the preregistration and does not change. The slide now lists them in the order the talk reports them, so the audience is not watching you report the secondary first against a label saying otherwise. **If asked, say so plainly:** "The judge was the pre-registered primary. I report the machine check first because the judge turned out not to be a working endpoint, and that needs its own slide." Never imply the machine check was the primary.
 
-COST (footnote, computed from the run data, not typed, rounded on the slide to "about
-$2"): average $2.33 and 13 minutes per analysed run (median $2.19, range $1.34 to $4.25; 57 runs, about $133 in total).
-By arm the mean runs from $1.86 (Checklist) to $3.23 (Process). DON'T call it what
-CRAN prep costs: it is the agent's own reported cost for one run, with no human time,
-no judge panel, no pilot or supplementary runs. It is Claude Code's reported
-total_cost_usd, a list-price estimate, not necessarily what was billed.
+**Last click — STRESS it,** pointing at "One agent, no human": slide 3 was a conversation; these 57 runs were not. One frozen prompt, headless, nobody to answer a single question. Sets up the result.
 
-CHECKPOINT: leave this slide by 3:20.
+**CHECKPOINT: leave this slide by 3:20.**
 
-REFERENCES ON THIS SLIDE: the repo line is for people who want the frozen prompt,
-the arms and the scoring code. The repo was made public on 2026-10-18 (blinding is
-no longer needed), so the URL resolves and the answer keys are readable by anyone.
-SKILLDELTA CHECK (read 2026-10-18, arXiv:2609.32274v1, HTML version): what is
-shared is the contrast: each task is run under "use" and "skip" with "the same agent
-and execution protocol, differing only in skill injection"; our arms differ only in
-the skill file the same way. What is NOT shared: their paper is a method (a local
-predictor of task-conditional gain, for deciding when to activate a skill) over five
-benchmarks, three agents and many tasks, binary benchmark evaluators, temperature
-zero, mostly one paired run per task; no randomisation, blinding or pre-registration
-described. We run one task many times, block-randomised, blind-scored, pre-registered,
-with an AI judge, and we predict nothing. So say "same contrast", never "same design",
-"replicates" or "paired": our runs are independent within blocks, not matched pairs
-(only the post-hoc delivered-A4 run is paired). The line says "same contrast", not
-"inspired by", on purpose: Xu et al. is dated
-26 Sep 2026 on arXiv and this design was frozen on 21 Sep (commit a37d6df), so a
-hostile reader can test "inspired by" against the dates. If Kevin saw the work
-earlier (a preprint, a talk), switch to "inspired by" and keep the date of first sight
-ready.
+**COST** (footnote computed from run data, rounded to "about $2"):
 
-DON'T: say "nobody measures skill files" - skills are measured; the point is the
-measurements are already conditional.
+- mean $2.33 and 13 min per analysed run; median $2.19, range $1.34–$4.25; 57 runs, ~$133 total
+- by arm: $1.86 (Checklist) to $3.23 (Process)
+- DON'T call it what CRAN prep costs — it is the agent's own reported cost for one run: no human time, no judge panel, no pilot or supplementary runs. Claude Code's `total_cost_usd`, a list-price estimate, not necessarily billed.
 
-IF ASKED "isn't giving every arm the CRAN docs stacking the deck against the
-skill files?" - this is the most likely challenge in the room, and the answer
-is a trial analogy. Every arm gets the standard of care (the official CRAN
-documentation at a known path); the arms differ only in whether a skill file is
-added on top. It is an ADD-ON trial against an ACTIVE control, not placebo. The
-question is not "does an agent need CRAN knowledge" - obviously it does - but
-"does a distilled skill file add anything on top of the documentation already
-being there". That is the question a maintainer actually faces.
+**REPO LINE:** for people who want the frozen prompt, arms and scoring code. Public since 2026-10-18, so the URL resolves and the answer keys are readable by anyone.
 
-Say it was pre-specified, because it was: the preregistration says a skill
-effect measured against a handbook-equipped control is a CONSERVATIVE estimate,
-and that handicapping the control by withholding the handbook would produce a
-larger effect and an indefensible one. The choice biases AGAINST my own
-hypothesis, and I made it before unblinding.
+**SKILLDELTA** (was a footnote on this slide until 2026-10-19; now backup only, so do **not** volunteer it here). If it comes up:
 
-CONCEDE, in my own words, before anyone digs: this makes the control stronger
-than my original packaging run was. I only referred to the CRAN docs partly -
-and to be straight about it, what the agent had access to was never a
-consideration back then. That first pass was me trying agentic AI on my own
-package, not running a protocol, so there was no design decision to record and
-nothing to measure. The controlled version is the experiment; the first pass
-was the thing that made me want one. So this is not a replay of our submission:
-it tests a more favourable baseline on purpose. External validity, not a flaw.
+- shared: the contrast — each task run under "use" and "skip" with the same agent and protocol, "differing only in skill injection"; our arms differ the same way
+- not shared: theirs is a method (local predictor of task-conditional gain) over five benchmarks, three agents, many tasks, binary evaluators, temperature zero, mostly one paired run per task; no randomisation, blinding or pre-registration described
+- ours: one task many times, block-randomised, blind-scored, pre-registered, AI judge, predicting nothing
+- say **"same contrast"**, never "same design", "replicates" or "paired" — runs are independent within blocks (only the post-hoc delivered-A4 run is paired)
+- not "inspired by", on purpose: Xu et al. is dated 26 Sep 2026, this design froze 21 Sep (commit a37d6df). If Kevin saw it earlier, switch to "inspired by" and have the date of first sight ready.
 
-DON'T dress the first pass up as an uncontrolled arm or say the trace is
-"lost". There was no protocol, so there was nothing to lose. Equally, do not
-claim the original agent did or did not read the docs - I cannot say, and CRAN
-rules may well be in the model's training data anyway.
-IF ASKED about the literature: SkillDelta and SkillAxe report skills "often provide
-no benefit". SkillsBench finds +16.6 pp, but on 87 tasks admitted only if
-"significantly easier with Skills", top-quartile skills, and none in R; its
-software-engineering domain gains second-least of eight. Backup has the detail.
-IF ASKED why the control has n = 20: the protocol deviation, "not claiming" slide.
-IF ASKED which skills: posit-dev/skills (cran-extrachecks, r-package-development),
-CoryMcCartan/agent-skills (cran-submit); backup arms table.
+**DON'T** say "nobody measures skill files" — skills are measured; the point is the measurements are already conditional.
+
+**IF ASKED "isn't giving every arm the CRAN docs stacking the deck against the skill files?"** — most likely challenge in the room:
+
+- trial analogy: every arm gets standard of care (official CRAN docs at a known path); arms differ only in whether a skill file is added on top. ADD-ON trial against an ACTIVE control, not placebo.
+- the question is not "does an agent need CRAN knowledge" (obviously) but "does a distilled skill file add anything on top of docs already there" — the question a maintainer actually faces
+- it was pre-specified: the preregistration calls a handbook-equipped control a CONSERVATIVE estimate, and says handicapping the control would give a larger, indefensible effect. Biases AGAINST my own hypothesis, chosen before unblinding.
+
+**CONCEDE before anyone digs:** this makes the control stronger than my original packaging run was. I referred to the CRAN docs only partly — and what the agent had access to was never a consideration back then. That first pass was me trying agentic AI on my own package, not running a protocol: no design decision to record, nothing to measure. The controlled version is the experiment; the first pass is what made me want one. Not a replay of our submission — it tests a more favourable baseline on purpose. External validity, not a flaw.
+
+**DON'T** dress the first pass up as an uncontrolled arm or say the trace is "lost" — there was no protocol, so nothing to lose. Equally, don't claim the original agent did or did not read the docs: I cannot say, and CRAN rules may well be in the model's training data anyway.
+
+**IF ASKED:**
+
+- *the literature?* SkillDelta and SkillAxe report skills "often provide no benefit". SkillsBench finds +16.6 pp, but on 87 tasks admitted only if "significantly easier with Skills", top-quartile skills, none in R; its software-engineering domain gains second-least of eight. Backup has detail.
+- *why n = 20 for the control?* The protocol deviation — "not claiming" slide.
+- *which skills?* posit-dev/skills (`cran-extrachecks`, `r-package-development`), CoryMcCartan/agent-skills (`cran-submit`); backup arms table.
 :::
 
 ## The result {background-color="#161616" style="color:#FCFCFC"}
@@ -484,30 +409,19 @@ The agent did just as well with **no skill file at all**.
 :::
 
 ::: notes
-SAY: let the number sit for two seconds. "Including the control - all twenty runs."
+**SAY:** let the number sit two seconds. "Including the control — all twenty runs."
 
-Click 1 is the one to sell, and it is NOT a skill-file point: every one of the
-57 runs came back with no errors or warnings under R CMD check, starting from a
-deliberately broken package, with one prompt and nobody to ask. The packaging on
-slide 3 was a conversation; this was not. "Zero interaction."
+**Click 1** is the one to sell, and it is NOT a skill-file point: all 57 runs came back with no errors or warnings under `R CMD check`, from a deliberately broken package, one prompt, nobody to ask. Slide 3 was a conversation; this was not. **"Zero interaction."**
 
-Click 2, then say the ceiling line OUT LOUD - it is no longer on the slide,
-and it has to be you who says it, before anyone in the room does: "that is a
-ceiling, and I'll say it before you do." Everything landed at the top, so
-there was no room for a skill file to show a difference.
+**Click 2**, then say the ceiling line OUT LOUD — it is no longer on the slide and it has to be you who says it first: *"that is a ceiling, and I'll say it before you do."* Everything landed at the top, so there was no room for a skill file to show a difference.
 
-DON'T overclaim "ready to publish": no errors or warnings is NOT the same as CRAN
-accepting it - this whole talk is that gap, and our own set.seed rejection
-passed the check. Say "no errors or warnings", never "CRAN would have taken it"
-and never "submission-ready". Also do not say zero notes: one A0 tree has a
-residual NOTE, and the New submission note is normal.
+**DON'T** overclaim "ready to publish": no errors or warnings is NOT CRAN accepting it — this whole talk is that gap, and our own `set.seed` rejection passed the check. Say "no errors or warnings", never "CRAN would have taken it" or "submission-ready". Don't say zero notes: one A0 tree has a residual NOTE, and the New submission note is normal.
 
-IF ASKED about the LICENSE defect (the one planted defect R CMD check does not report):
-fixed in every run, every arm, control included.
-IF ASKED "models keep improving - isn't this moot?": that cuts my way; a better model
-needs the checklist less.
-IF ASKED "then why write CRAN skill files?": most were written for weaker models;
-they encode what the check can't see (two slides on); and nobody had measured it.
+**IF ASKED:**
+
+- *the LICENSE defect* (the planted one `R CMD check` misses): fixed in every run, every arm, control included.
+- *"models keep improving — isn't this moot?"* Cuts my way; a better model needs the checklist less.
+- *"then why write CRAN skill files?"* Most were written for weaker models; they encode what the check can't see (two slides on); nobody had measured it.
 :::
 
 ## Why the control did so well
@@ -525,17 +439,14 @@ Skill files add little where a tool already tells the truth.
 :::
 
 ::: notes
-SAY: three clicks, one line each. Then the bridge: "So a skill file can only help
-where the check is silent."
+**SAY:** three clicks, one line each. Then the bridge: "So a skill file can only help where the check is silent."
 
-IF ASKED, the other half of why the check wins (deliberately off the slide, it
-was one word too many): a written checklist also reflects whenever its author
-last updated it, while the check enforces the rules as they currently stand.
+**DON'T** frame this as against skill files — it is about where they pay.
 
-DON'T: frame this as against skill files - it is about where they pay.
+**IF ASKED:**
 
-IF ASKED: SkillFlow found agents used retrieved skills 70% of the time and still
-gained nothing. Reading a skill is not the same as needing one.
+- the other half of why the check wins (off the slide, one word too many): a written checklist reflects whenever its author last updated it; the check enforces the rules as they currently stand.
+- SkillFlow found agents used retrieved skills 70% of the time and still gained nothing. Reading a skill is not the same as needing one.
 :::
 
 ## Where the check is silent: `set.seed()`
@@ -564,25 +475,17 @@ Post-hoc, exploratory.
 :::
 
 ::: notes
-SAY: "The one rejection the tool can't see - and here the arms differ."
+**SAY:** "The one rejection the tool can't see — and here the arms differ."
 
-The slide only says "post-hoc, exploratory", so SAY THE REST OUT LOUD: this
-check was run after unblinding, on one criterion, with no test. "A lead, not a
-result." Then, in the same breath, the thing that defuses it: the re-score
-never used the labels. It is a deterministic rule over the package files,
-blind tree IDs in, hits out. The honest criticism is not bias - it is that
-this was a natural check I should have specified up front and run during the
-blinded review. I did not think of it until the rule was shown to be wrong.
+**SAY THE REST OUT LOUD** (the slide only says "post-hoc, exploratory"): run after unblinding, one criterion, no test. **"A lead, not a result."** Then, same breath, the defusing fact: the re-score never used the labels — a deterministic rule over package files, blind tree IDs in, hits out. The honest criticism is not bias; it is that this was a natural check I should have specified up front and run during the blinded review. I didn't think of it until the rule was shown to be wrong.
 
-DON'T say "with the labels known" as if the labels fed into the scoring. They
-did not. Say "after unblinding, but label-blind by construction".
+**DON'T:**
 
-DON'T: call this a skill-file win. It is post-hoc, one criterion, n = 9-20, no test.
+- say "with the labels known" as if labels fed the scoring — they did not. Say "after unblinding, but label-blind by construction".
+- call this a skill-file win: post-hoc, one criterion, n = 9–20, no test.
+- present the criterion as a general CRAN standard. It is **one reviewer's finding on one submission**, not a published rule — `R CMD check` is silent, the Repository Policy does not name it, and the `seed = NULL` fix is the remedy that reviewer asked for. An arm scoring 0/20 failed *this* criterion; it did not "fail CRAN". Say "the fix the reviewer asked for", not "the correct fix".
 
-IF ASKED about post-unblinding: my original detector only matched set.seed(<literal>)
-and scored zero hits on the starting package itself; I fixed the rule after
-unblinding. The re-score is a pure function of the package files with no access to
-arm labels, so the timing cannot bias the direction. Full three-way table in backup.
+**IF ASKED about post-unblinding:** the original detector only matched `set.seed(<literal>)` and scored zero hits on the starting package itself; I fixed the rule after unblinding. The re-score is a pure function of package files with no access to arm labels, so the timing cannot bias the direction. Full three-way table in backup.
 :::
 
 ## Then I handed it the answer
@@ -592,13 +495,13 @@ A file quoting the reviewer, word for word. Run afterwards.
 :::
 
 ::: columns
-::: {.column width="50%" style="text-align:center;"}
+::: {.column style="width:50%; text-align:center;"}
 ::: {style="font-size:4.5em; font-weight:700; color:#939393; line-height:1.1;"}
 0/10
 :::
 control
 :::
-::: {.column width="50%" style="text-align:center;"}
+::: {.column style="width:50%; text-align:center;"}
 ::: {.fragment}
 ::: {style="font-size:4.5em; font-weight:700; color:#FF4E00; line-height:1.1;"}
 10/10
@@ -613,13 +516,11 @@ After unblinding, labels known. A ceiling check: the file contains the answer.
 :::
 
 ::: notes
-SAY: "So the defect is learnable from text in context. That is all this shows." 20 seconds.
+**SAY:** "So the defect is learnable from text in context. That is all this shows." 20 seconds.
 
-DON'T: call it a skill-file result or say the blinded run would have shown the same -
-newer CLI, labels known, no judge panel, and the file contains the answer.
+**DON'T** call it a skill-file result or say the blinded run would have shown the same — newer CLI, labels known, no judge panel, and the file contains the answer.
 
-IF ASKED: two extra runs without a surviving partner (rate limits) were also canonical,
-12 of 12; R CMD check identical across arms. Backup has the detail.
+**IF ASKED:** two extra runs without a surviving partner (rate limits) were also canonical, 12 of 12; `R CMD check` identical across arms. Backup has detail.
 :::
 
 ## The part I did not expect {background-color="#161616" style="color:#FCFCFC"}
@@ -638,48 +539,19 @@ Same text, different verdicts. The variation was the **judge**.
 :::
 
 ::: notes
-SAY: "Same text, opposite verdicts. I only saw it by reading the judge's own
-justifications - the counts looked like a clean signal."
+**SAY:** "Same text, opposite verdicts. I only saw it by reading the judge's own justifications — the counts looked like a clean signal."
 
-CHECKPOINT: arrive here by 6:15. Late? Say only the SAY line on this and the next slide.
+**CHECKPOINT: arrive by 6:15.** Late? Say only the SAY line on this and the next slide.
 
-DON'T: generalise to all LLM judges - one package, one rubric, one rep per tree.
-DON'T: imply a company address breaks CRAN policy. It does not: a named person at a
-company address is compliant. The criterion asks whether the address is appropriate
-and durable, and the judge's "problem" is the job-change and filtering risk. The 10
-"fine" verdicts excuse it because the company is also the copyright holder.
+**DON'T:**
 
-IF ASKED "is the experiment void?": no. The machine-check result came from R CMD check
-and stands. What's void is the idea that the judge added sensitivity - and it was the
-pre-registered primary, so on what a human reviewer would object to I have no working
-endpoint.
-IF ASKED about the other criterion that fired: one sentence in the starting package,
-flagged in 23 trees, excused in 2, file never opened in 29 (3 n/a).
-:::
+- generalise to all LLM judges — one package, one rubric, one rep per tree
+- imply a company address breaks CRAN policy. It does not: a named person at a company address is compliant. The criterion asks whether the address is appropriate and durable; the judge's "problem" is job-change and filtering risk. The 10 "fine" verdicts excuse it because the company is also the copyright holder.
 
-## What I am *not* claiming
+**IF ASKED:**
 
-- **Not** "skill files are useless": this is the machine-checkable part of CRAN prep,
-  with the docs at hand
-- **N = 1**: one package, one agent model, a judge from the **same vendor**. Not powered;
-  n was set by budget
-- **A protocol deviation**: one arm's file never reached the model. Those 10 runs
-  joined the control
-
-::: notes
-SAY the three bullets quickly. Credibility is the currency of a null result.
-
-IF ASKED about the deviation: the hindsight arm ran ten times with no file. Its first
-API call was 7,145 tokens in every run - identical to the control - while every real
-skill arm was larger. Caught afterwards from that token count; pooled on that
-evidence, not on outcomes (LESSONS_LEARNED.md section 0).
-IF ASKED about the model: Claude Opus 5.5 in Claude Code; judge Claude Sonnet 5.
-IF ASKED about n: planned 5 per arm; after an unblinded look we extended to 10 because
-budget allowed, not to chase a result. Counts are descriptive, no tests, so there is
-no error rate to inflate. Never call it an interim analysis or a pre-registered n=10.
-IF ASKED about lost runs: 3 died on API rate limits (two at 1 turn, $0.00), so
-`r n_runs` of 60 analysed; excluded, not rerun - a run replayed weeks later is not the
-same experimental unit.
+- *"is the experiment void?"* No. The machine-check result came from `R CMD check` and stands. What's void is the idea that the judge added sensitivity — and it was the pre-registered primary, so on what a human reviewer would object to I have no working endpoint.
+- *the other criterion that fired?* One sentence in the starting package: flagged in 23 trees, excused in 2, file never opened in 29 (3 n/a).
 :::
 
 ## Take home {background-color="#161616" style="color:#FCFCFC"}
@@ -689,21 +561,40 @@ same experimental unit.
 **1.** Effects that change over time hide in averages → `orthoMTL`
 :::
 ::: {.fragment style="margin-top:.4em;"}
-**2.** Agents do well what a **machine** can check. Invest in **executable checks** first.
+**2.** The agent fixed what `R CMD check` told it was broken.
 :::
 ::: {.fragment style="margin-top:.4em;"}
-**3.** I set out to measure skill files. My judge **measured itself**.
+**3.** On the check: **no gain I could detect** — except the seed.
+:::
+::: {.fragment style="margin-top:.4em;"}
+**4.** I set out to measure skill files. I measured my **judge**.
 :::
 :::
 
 ::: {.fragment style="margin-top:.6em; text-align:center; font-size:1.2em; color:#FF4E00; font-weight:700;"}
-Machine checks are cheap. Judgement isn't.
+The cheap half is the half a machine can check.
+:::
+
+::: {.fragment style="margin-top:.5em; text-align:center; font-size:1.6em; font-weight:700;"}
+Thank you
 :::
 
 ::: notes
-SAY: three clicks, one sentence each, then the closing line - slowly. Stop talking.
+**SAY:** four clicks, one sentence each, then the closing line — slowly. Click once more for "Thank you". Stop talking.
 
-Earlier closing line, if preferred: "Generation got cheap. Verification did not."
+**On click 2,** the advice is implied, not stated. If you want it out loud, say it as your own experience — "so the check is the thing I'd write first" — not as a recommendation to the room.
+
+**On click 3,** the slide is deliberately short, so three things go in the spoken sentence: say **"in this one case"**, say **"the random seed"** (never bare "the seed" — it collides with `set.seed()` vs the starting package), and say "nothing **on top of the check** I just showed you". Then the caveats: "one package, one model, and the seed is the exception — post-hoc, one criterion, no test."
+
+**DON'T say "added nothing"** (changed 2026-10-20). That asserts the null; the study was never powered to support it. The arms were indistinguishable **on this endpoint, at this n** — absence of a detected difference, not evidence of absence. Safe phrasings: "no gain I could detect", "nothing I could measure", "the arms came out level". Unsafe: "nothing", "no effect", "they don't work". The ceiling run (10/10 with the answer in the file) is on the record that a file *can* move behaviour, which is another reason not to overclaim here.
+
+**Alternative closing line:** "Generation got cheap. Verification did not."
+
+**IF ASKED** (this replaces the old "not claiming" slide — full detail in backup):
+
+- *not* "skill files are useless": this is the machine-checkable part of CRAN prep, with the docs at hand
+- N = 1: one package, one agent model, a judge from the **same vendor**. Not powered; n was set by budget
+- a protocol deviation: one arm's file never reached the model; those 10 runs joined the control
 :::
 
 ::: {style="font-size:.55em; margin-top:.3em; text-align:center;"}
@@ -711,6 +602,28 @@ Earlier closing line, if preferred: "Generation got cheap. Verification did not.
 :::
 
 # Backup {.unnumbered}
+
+## Backup: what I am *not* claiming {.smaller}
+
+- **Not** "skill files are useless": this is the machine-checkable part of CRAN prep,
+  with the docs at hand
+- **N = 1**: one package, one agent model, a judge from the **same vendor**. Not powered;
+  n was set by budget
+- **A protocol deviation**: one arm's file never reached the model. Those 10 runs
+  joined the control
+- **The seed result is a lead, not a finding**: post-hoc, one criterion, no test
+
+::: notes
+Credibility is the currency of a null result. This was a main-deck slide until 2026-10-19;
+take-home point 3 now carries the claim and these are the Q&A answers behind it.
+
+**IF ASKED:**
+
+- *the deviation?* The hindsight arm ran ten times with no file. Its first API call was 7,145 tokens every run — identical to the control — while every real skill arm was larger. Caught afterwards from that token count; pooled on that evidence, not on outcomes (LESSONS_LEARNED.md §0).
+- *the model?* Claude Opus 5.5 in Claude Code; judge Claude Sonnet 5.
+- *n?* Planned 5 per arm; after an unblinded look we extended to 10 because budget allowed, not to chase a result. Counts are descriptive, no tests, so no error rate to inflate. Never call it an interim analysis or a pre-registered n = 10.
+- *lost runs?* 3 died on API rate limits (two at 1 turn, $0.00), so `r n_runs` of 60 analysed; excluded, not rerun — a run replayed weeks later is not the same experimental unit.
+:::
 
 ## Backup: what the five arms were {.smaller}
 
@@ -722,6 +635,7 @@ Earlier closing line, if preferred: "Generation got cheap. Verification did not.
 | General R | `r-package-development` | [posit-dev/skills](https://github.com/posit-dev/skills) | 10 | A3 |
 | Handbook | raw handbook text | CRAN docs, next slide | 9 | A5 |
 
+::: {style="font-size:.8em;"}
 Every arm, **the control included**, also had the same offline CRAN docs on disk.
 57 of 60 planned runs completed; 3 ended on API rate limits.
 
@@ -730,8 +644,9 @@ Judge: Claude Sonnet 5, same vendor family as the agent. Skill files were delive
 always-loaded `CLAUDE.md`, not through the on-demand Skill tool, which the agent did not have.
 The control has 20 runs because a second batch of 10 (repo code A4) was meant to carry a hindsight
 file written from the rejection history and never received it: first-call context was 7,145 tokens
-in all 10, identical to the control. They are pooled with the control. A later paired run with the file delivered is on
-the last backup slide.
+in all 10, identical to the control. They are pooled with the control. A later paired run with the
+file delivered is on the last backup slide.
+:::
 
 ## Backup: the handbook every arm could read {.smaller}
 
@@ -743,9 +658,11 @@ Snapshot captured **2026-09-18**, identical across all 60 runs.
 | CRAN Repository Policy | [cran.r-project.org/web/packages/policies.html](https://cran.r-project.org/web/packages/policies.html) |
 | CRAN Submission Checklist | [cran.r-project.org/web/packages/submission_checklist.html](https://cran.r-project.org/web/packages/submission_checklist.html) |
 
+::: {style="font-size:.8em;"}
 The Cookbook is built from real CRAN re-submissions and co-authored by a member
 of the CRAN team: the closest public thing to the reviewers' own knowledge.
 The handbook arm loaded this text directly into context; the other arms were told where it was.
+:::
 
 ::: notes
 This is the HANDBOOK/COMMUNITY provenance boundary: a criterion derivable from
@@ -765,7 +682,9 @@ care), not placebo. Pre-specified, and conservative by design.
 | Agents used retrieved skills 70% of the time yet showed **no performance gain** where the corpus lacked good skills for the domain | SkillFlow, Li et al. 2026 |
 | Self-generated skills landed **below** the no-skills baseline (−8 to −11.5 pp) | SkillsBench, Li et al. 2026 |
 
+::: {style="font-size:.8em;"}
 My null is the same shape, in a domain none of them covered.
+:::
 
 ## Backup: the counterweight {.smaller}
 
@@ -880,18 +799,9 @@ from failing all three. **Not a violation today. Changing in 0.2.0 anyway.**
 ::: notes
 Tell only if there is time in Q&A, and tell it precisely or someone will correct me.
 
-It is NOT currently against the rules - a named person at a company address is
-compliant. The exposure is filtering and job changes, both anticipated by the
-policy language. Say "not a violation today" out loud; do not oversell it.
-
-Do NOT say "a newer model spotted this". It is criterion C13, it was in the
-corpus from the start. A broken instrument can still be right once; that is not
-evidence it works.
-
-No arm ever changed the address - it is still the same in all 57 runs. The 10
-COMPLIANT verdicts (7 of them in the handbook arm) are the judge excusing the
-corporate domain because Novartis Pharma AG is also the listed copyright holder.
-That is judge variance on an under-specified criterion, not an arm fixing anything.
+- It is **NOT** currently against the rules — a named person at a company address is compliant. The exposure is filtering and job changes, both anticipated by the policy language. Say "not a violation today" out loud; do not oversell it.
+- Do **NOT** say "a newer model spotted this". It is criterion C13, in the corpus from the start. A broken instrument can still be right once; that is not evidence it works.
+- No arm ever changed the address — still the same in all 57 runs. The 10 COMPLIANT verdicts (7 in the handbook arm) are the judge excusing the corporate domain because Novartis Pharma AG is also the listed copyright holder. Judge variance on an under-specified criterion, not an arm fixing anything.
 :::
 
 ## Backup: cost per run
@@ -930,12 +840,14 @@ dotplot("first_check_evt", "Event index of first R CMD check")
 | DESCRIPTION metadata (`Authors@R`, title case) | yes | 57/57 |
 | Unused declared `Imports` | yes | 57/57 |
 
+::: {style="font-size:.8em;"}
 Three of four are machine-visible. Our other real rejection, **R01, the
 hard-coded `set.seed()`**, was left in the starting package as a fifth defect that
 `R CMD check` does not report; it is on the next slide.
 
 Three of four machine-visible is the result's main caveat: this measures the
 easy half of CRAN preparation.
+:::
 
 ## Backup: the hard-coded seed (R01) {.smaller}
 
@@ -947,6 +859,7 @@ easy half of CRAN preparation.
 | General R | 10 | 0 | 7 | 3 |
 | Handbook | 9 | 8 | 0 | 1 |
 
+::: {style="font-size:.8em;"}
 Completed runs; descriptive, no test. "Default kept": `seed = 42` stays but a helper restores the
 user's RNG state: arguably acceptable, not what the reviewer asked for. Control includes the 10
 runs whose hindsight file never arrived.
@@ -954,53 +867,41 @@ runs whose hindsight file never arrived.
 **Re-scored after unblinding.** The original rule only matched `set.seed(<literal>)`, so it scored
 **zero hits on the starting package itself**. The fixed rule reads package files only and never
 touches the blind map: the same code at first unblinding gives this same table.
+:::
 
 ::: notes
-Be upfront - I planted what I could verify automatically, which is exactly the
-half where the control was always going to do well. The honest version of this
-experiment seeds the other half, and that is the first thing I would change.
+**Be upfront:** I planted what I could verify automatically — exactly the half where the control was always going to do well. The honest version of this experiment seeds the other half; first thing I would change.
 
-On the post-unblinding point, say it before anyone asks, and say it in this order:
-(1) the rule was wrong, (2) here is how it was wrong, (3) it is a pure function of
-tree content, so the timing cannot have biased the direction. rescore_r01.R takes
-a tree path and returns hits; it has no access to arm labels. Validated on 8
-synthetic cases, the starting package (3 hits), baseline and control (0), and a mutant (1).
+**On post-unblinding, say it before anyone asks, in this order:** (1) the rule was wrong, (2) here is how, (3) it is a pure function of tree content, so timing cannot have biased the direction. `rescore_r01.R` takes a tree path and returns hits; no access to arm labels. Validated on 8 synthetic cases, the starting package (3 hits), baseline and control (0), a mutant (1).
 
-The fair criticism is NOT that the labels contaminated the scoring - they were
-never an input. It is that this was an obvious check to specify up front and
-run inside the blinded review, and I only thought of it once the original rule
-was shown to miss the very defect it was written for. Concede that version
-plainly; it is a design oversight, not a bias.
+**The fair criticism** is NOT that labels contaminated the scoring — they were never an input. It is that this was an obvious check to specify up front and run inside the blinded review, and I only thought of it once the original rule was shown to miss the defect it was written for. Concede that version plainly: a design oversight, not a bias.
 
-I am NOT claiming this as a skill-file win. Two things block that. It is one
-criterion at n=9-10 with no test, and it is a post-hoc re-score. The controls
-(n=20, including the 10 runs that never got the hindsight file) produced the canonical fix zero times in 20 runs, which
-makes the process/handbook contrast more interesting, not proven. Report it as the most
-interesting loose end in the dataset and move on.
+**NOT a skill-file win.** Two blockers: one criterion at n = 9–10 with no test, and a post-hoc re-score. The controls (n = 20, including the 10 that never got the hindsight file) produced the canonical fix zero times — which makes the process/handbook contrast more interesting, not proven. The most interesting loose end in the dataset; report it and move on.
 
-If asked why the process and handbook arms and nobody else: the cookbook contains the canonical
-seed = NULL pattern verbatim, in a section every arm could read. The handbook arm had that text
-front-loaded into context rather than pointed at; the process skill is the adversarial-review
-arm. That is a hypothesis about front-loading vs distillation, not a finding.
+**IF ASKED why process and handbook and nobody else:** the cookbook contains the canonical `seed = NULL` pattern verbatim, in a section every arm could read. The handbook arm had that text front-loaded rather than pointed at; the process skill is the adversarial-review arm. A hypothesis about front-loading vs distillation, not a finding.
 :::
 
 ## Backup: positive control, run afterwards (R01) {.smaller}
 
+::: {style="font-size:.8em;"}
 The hindsight file was written from CRAN's own two rejection messages, installed, and checked to
 reach the model (first-call context +1,055 tokens over its paired control). Then a fresh control and the
 hindsight arm were run as 10 interleaved pairs, **after unblinding, labels known**, on a newer
 Claude Code (2.1.294).
+:::
 
 | Arm | n | Canonical fix (`seed = NULL`) | Default kept | Still hard-coded |
 |:--|--:|--:|--:|--:|
 | Fresh control | 10 | 0 | 6 | 4 |
 | Hindsight file delivered | 10 | 10 | 0 | 0 |
 
+::: {style="font-size:.8em;"}
 Two extra hindsight runs without a surviving partner (rate limits) were also canonical: 12 of 12.
 This is a ceiling check, not a skill-file result: the file contains the answer. It shows the
 seed defect is learnable from text in context, which the blinded experiment could not show. Not
 pooled with the 57; no judge panel was run on these trees. `R CMD check` was identical across
 arms: no errors or warnings in any of the 22 trees. Scripts and scores: `supplementary/`.
+:::
 
 ::: notes
 Frame as an afterward positive control. Do NOT say the blinded experiment would have given the

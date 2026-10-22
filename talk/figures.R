@@ -103,7 +103,7 @@ design_fig <- function(step = 3) {
              "CRAN docs in every arm")
   rx <- 3.3 + 2.76 * (seq_along(rules) - 1)
 
-  p <- ggplot() + coord_cartesian(xlim = c(.1, 15.9), ylim = c(.3, 9.05), expand = FALSE) +
+  p <- ggplot() + coord_cartesian(xlim = c(.1, 15.9), ylim = c(.05, 9.05), expand = FALSE) +
     theme_void(base_size = 18)
 
   # Rules shared by every run.
@@ -143,7 +143,9 @@ design_fig <- function(step = 3) {
     annotate("text", x = 9.6, y = arms$y, label = arms$n, hjust = 1,
              fontface = "bold", size = 4.6, colour = "white")
 
-  p <- p + annotate("text", x = .2, y = .55, hjust = 0, size = 3.6, colour = MUTED,
+  # vjust = 1 anchors the two-line caption at its top, so the second line grows
+  # downward into the margin reserved by the ylim lower bound rather than being clipped.
+  p <- p + annotate("text", x = .2, y = .75, hjust = 0, vjust = 1, size = 3.6, colour = MUTED,
                     label = paste0("60 runs planned, 3 lost to API rate limits, ", nrow(runs),
                                    " analysed.   * includes 10 runs whose skill file never arrived.\n",
                                    sprintf("Average per run: about $%.0f and %.0f min of agent time (cost as reported by Claude Code; judging not included).",
@@ -158,15 +160,15 @@ design_fig <- function(step = 3) {
     annotate("text", x = 13.35, y = 7.75, label = "Scored blind to arm", fontface = "bold",
              size = 4.6, colour = INK) +
     box(10.9, 15.8, 4.9, 7.0, PANEL, INK) +
-    annotate("text", x = 13.35, y = 6.45, label = "Primary: AI judge", fontface = "bold",
+    annotate("text", x = 13.35, y = 6.45, label = "Machine check", fontface = "bold",
              size = 5, colour = INK) +
     annotate("text", x = 13.35, y = 5.55, size = 4.1, colour = INK, lineheight = .95,
-             label = "a second model scores\n12 CRAN-reviewer criteria") +
+             label = "R CMD check + scripts:\nplanted defects repaired?") +
     box(10.9, 15.8, 1.8, 3.9, PANEL) +
-    annotate("text", x = 13.35, y = 3.35, label = "Machine check", fontface = "bold",
+    annotate("text", x = 13.35, y = 3.35, label = "AI judge", fontface = "bold",
              size = 5, colour = INK) +
     annotate("text", x = 13.35, y = 2.45, size = 4.1, colour = INK, lineheight = .95,
-             label = "R CMD check + scripts:\nplanted defects repaired?")
+             label = "a second model scores\n12 CRAN-reviewer criteria")
   p
 }
 

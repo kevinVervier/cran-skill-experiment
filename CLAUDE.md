@@ -175,10 +175,12 @@ that contrasts the interactive packaging on slide 3 with the headless runs → e
 slide; "ceiling" is said aloud from the notes → evidence 3, `set.seed()`, where the check is silent
 and the arms did differ (exploratory) → evidence 4, **the turn**: the AI judge (the
 pre-registered primary measure) had 12 criteria, 10 never fired, and the 2 that did
-were the judge arguing both sides of text no arm had touched → *"Machine checks are
-cheap. Judgement isn't."* That closing line is the thesis, not a sign-off; the
+were the judge arguing both sides of text no arm had touched → *"The cheap half is
+the half a machine can check."* That closing line is the thesis, not a sign-off; the
 earlier wording ("Generation got cheap. Verification did not.") is kept in the
-notes as an alternative. See `LESSONS_LEARNED.md` §5 for the full arc and §10 for
+notes as an alternative. The line was reworded on 2026-10-19: the previous version
+("Machine checks are cheap. Judgement isn't.") ended on a bare abstract noun with no
+referent in the deck, which read as a maxim rather than a result. See `LESSONS_LEARNED.md` §5 for the full arc and §10 for
 the judge-panel finding.
 
 Timeline discipline: dates are sourced (ECML-PKDD Sep 2014; Juric et al. published
@@ -186,7 +188,11 @@ online 10 Apr 2026; first agent-co-authored commit 2026-06-01; CRAN 2026-08-23).
 packaging was part-time work, so no duration ("twelve weeks") goes on the slide or in the
 notes: it reads as an effort claim. Sep 2024 is the manuscript submission, from Kevin, not a repo fact. The
 19 months is mostly journal review: say "the paper took 19 months", never "the code
-sat". Never put submission dates or "first try" on that slide (the two rejections must
+sat". As of 2026-10-19 the timeline carries **no duration badges at all** — the orange
+"10 years" / "19 months" / "7 weeks" pills were removed, because the Jun-to-Aug packaging
+interval could never carry one and the resulting gap drew attention to the omission. The
+dates stay on the slide; the intervals may still be spoken, except the packaging one.
+Never put submission dates or "first try" on that slide (the two rejections must
 stay a surprise on the next slide), and never credit the speed to a skill file: the
 agent in the packaging story had none.
 
