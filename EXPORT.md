@@ -19,8 +19,9 @@ history that clones like a normal remote on the far side.
 ```bash
 git clone cran-skill-experiment.bundle cran-skill-experiment
 cd cran-skill-experiment
-git log --oneline -1    # expect e7f606c
-git ls-files | wc -l    # expect 2353
+git log --oneline -1    # tip is the EXPORT.md commit; 2af01c2 is directly below it
+git log --oneline -2 | tail -1   # expect 2af01c2 (the as-delivered deck)
+git ls-files | wc -l    # expect 2362
 ```
 
 The clone sets the bundle as `origin`. That remote is a dead file path — repoint it at GitHub
@@ -30,6 +31,23 @@ The clone sets the bundle as `origin`. That remote is a dead file path — repoi
 git remote set-url origin https://github.com/kevinVervier/cran-skill-experiment.git
 git ls-remote origin   # confirms this machine can reach it
 ```
+
+## Pushing the 2026-10-22 bundle
+
+This bundle was made to carry the as-delivered talk to a machine that can reach GitHub.
+At the time it was cut, `origin/master` was `4d45fd4` and the bundle adds two commits on
+top, `2af01c2` (the deck) and `ac38956` (this file). So on the target machine:
+
+```bash
+git remote set-url origin https://github.com/kevinVervier/cran-skill-experiment.git
+git fetch origin
+git log --oneline origin/master -1   # expect 4d45fd4; if not, see below
+git push origin master
+```
+
+A fast-forward is expected. **If `origin/master` has moved past `4d45fd4`**, someone
+pushed in the meantime: do not force. Rebase `2af01c2` onto the new tip and re-read the
+talk diff before pushing, because the deck is the only thing that commit touches.
 
 ## What is NOT in the bundle, and why
 
